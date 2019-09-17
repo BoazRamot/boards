@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Map from "./components/GoogleMaps/GoogleMap";
-import Fav from "./components/fav";
+// import Fav from "./components/fav";
 import Report from "./components/report";
 import { SwipeableDrawer } from "@material-ui/core";
 
@@ -9,7 +9,7 @@ const App = () => {
   const [lng, setLng] = useState(0);
   const [lat, setLat] = useState(0);
   const [isDrawerOpen, toggleDrawer] = useDrawer();
-  const [favorite, setFavorite] = useState(false);
+  // const [favorite, setFavorite] = useState(false);
 
   return (
     <div className="App d-flex">
@@ -21,8 +21,8 @@ const App = () => {
         <Report
           lng={lng}
           lat={lat}
-          favorite={favorite}
-          setFavorite={setFavorite}
+          // favorite={favorite}
+          // setFavorite={setFavorite}
         />
       </SwipeableDrawer>
       {/*<Map*/}
@@ -32,7 +32,7 @@ const App = () => {
       {/*  onKeyDown={toggleDrawer()}*/}
       {/*/>*/}
       <Map/>
-      <Fav />
+      {/*<Fav />*/}
     </div>
   );
 };
