@@ -1,21 +1,22 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import clsx from 'clsx';
-import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
-import SearchBox from "./SearchBox";
+import {GoogleMap} from "@react-google-maps/api";
 import {
-  createStyles,
+  Button,
+  createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Divider,
   Drawer,
   IconButton,
   InputBase,
   makeStyles,
-  Paper,
+  Paper, TextField,
   Theme,
   useTheme
 } from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
 
 declare global {
   interface Window { google: any; }
@@ -23,15 +24,19 @@ declare global {
 
 window.google = window.google || {};
 
-const drawerWidth = 500;
+const drawerWidth = '35vw';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      height: 'calc(100vh - 72px)',
       display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     paperRoot: {
-      width: 400,
+      // width: 400,
+      width: '30vw',
       display: 'flex',
       alignItems: 'center',
       padding: `0 12px`,
@@ -46,6 +51,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexShrink: 0,
     },
     drawerPaper: {
+      height: 'calc(100% - 64px)',
+      top: 64,
       width: drawerWidth,
     },
     drawerHeader: {
@@ -58,14 +65,13 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       display: "flex",
       flex: 1,
-      height: `100vh`,
-      flexGrow: 1,
+      alignSelf: 'stretch',
       padding: theme.spacing(3),
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      marginLeft: -drawerWidth,
+      marginLeft: '-' + drawerWidth,
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
@@ -96,6 +102,8 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
   const [zoom, setZoom] = useState(11);
   // const [marker, setMarker] = useState();
   const [location, setLocation] = useState();
+  const [login, setlogin] = useState(true);
+  const [openNewBoard, setOpenNewBoard] = useState(false);
   const searchBoxRef = useRef(null);
   const autocompleteBoxRef = useRef(null);
   const mapRef = useRef(null);
@@ -113,26 +121,16 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     setOpen(false);
   }
 
+  const handleNewBoardOpen = () => {
+    setOpenNewBoard(true);
+  };
+
+  const handleNewBoardClose = () => {
+    setOpenNewBoard(false);
+  };
+
   useEffect(() => {
-    // const watchID = navigator.geolocation.watchPosition((position) => {
-    //   console.log('watchID', position.coords.latitude, position.coords.longitude);
-    //   const map = (mapRef.current as any).state.map;
-    //   const { latitude, longitude } = position.coords;
-    //   const bounds = new window.google.maps.LatLngBounds();
-    //   bounds.ja = { g: longitude - 0.001348, h: longitude + 0.001348 };
-    //   bounds.na = { g: latitude - 0.001348, h: latitude + 0.001348 };
-    //   const infoWindow = new window.google.maps.InfoWindow;
-    //   infoWindow.setPosition({lat: latitude, lng: longitude});
-    //   infoWindow.setContent('Location found.');
-    //   infoWindow.open(map);
-    //   map.setCenter({lat: latitude, lng: longitude});
-    //   // reverseGeocoding({lat, lng})
-    //   map.fitBounds(bounds);
-    //   // console.log('mapRef', (mapRef.current as any).state.map)
-    // });
-    // return () => {
-    //   navigator.geolocation.clearWatch(watchID);
-    // };
+
   }, []);
 
   const onLoad = useCallback(
@@ -157,7 +155,7 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     // bounds option in the request.
     autocompleteInput.bindTo('bounds', map);
     autocompleteInput.setFields(['address_components', 'geometry', 'icon', 'name']);
-    autocompleteInput.addListener('place_changed', function() {
+    autocompleteInput.addListener('place_changed', function search() {
       // infowindow.close();
       // marker.setVisible(false);
       const place = autocompleteInput.getPlace();
@@ -245,7 +243,6 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
         map.setZoom(16);
         // reverseGeocoding(map, {lat: latitude, lng: longitude});
         // map.fitBounds(bounds);
-        // rev(latitude, longitude);
         getBoards();
       }, function() {
         handleLocationError(true, infoWindow, map);
@@ -326,55 +323,101 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
       }
     });
   };
-
-  const search = (search: any) => {
-    console.log('search', search)
-    // fetch(`https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q=${search}&format=json&limit=1`)
-    fetch(`https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q=${search}&format=json`)
-      .then(res => res.json())
-      .then(myJson => {
-        console.log(myJson);
-        const map = (mapRef.current as any).state.map;
-        const lat = +myJson[0].lat;
-        const lon = +myJson[0].lon;
-        const bounds = new window.google.maps.LatLngBounds();
-        bounds.ja = { g: lon - 0.001348, h: lon + 0.001348 };
-        bounds.na = { g: lat - 0.001348, h: lat + 0.001348 };
-        const infoWindow = new window.google.maps.InfoWindow;
-        infoWindow.setPosition({lat: lat, lng: lon});
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter({lat: lat, lng: lon});
-        // reverseGeocoding({lat: latitude, lng: longitude});
-        map.fitBounds(bounds);
-
-        // console.log(myJson[0]);
-        // let lat = +myJson[0].lat;
-        // let lon = +myJson[0].lon;
-        // console.log('myMap', myMap);
-        // myMap.setView([lat, lon], 12);
-      }).catch((e) => {
-      console.error('Location Fetch failed', e)
-    });
+  const addBoard = () => {
+    return (
+      <div>
+        <Button variant="outlined" color="primary" onClick={handleNewBoardOpen}>
+          Add Board To This Location
+        </Button>
+        <Divider />
+      </div>
+    )
   };
 
-  const rev = (lat: any, lng: any) => {
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=geojson&lat=${lat}&lon=${lng}`)
-      .then(res => res.json())
-      .then(myJson => {
-        console.log(myJson.features[0]);
-        // console.log(myJson[0]);
-        // let lat = +myJson[0].lat;
-        // let lon = +myJson[0].lon;
-        // console.log('myMap', myMap);
-        // myMap.setView([lat, lon], 12);
-      }).catch((e) => {
-      console.error('Location Fetch failed', e)
-    });
+  const newFormDialog = () => {
+    return (
+      <div>
+        <Dialog open={openNewBoard} onClose={handleNewBoardClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Board Name
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Board Name"
+              type="text"
+              fullWidth
+              defaultValue={location}
+            />
+            <br/>
+            <Divider />
+            <br/>
+            <DialogContentText>
+              Board Address
+            </DialogContentText>
+            <TextField
+              margin="dense"
+              id="address"
+              label="Address"
+              type="text"
+              fullWidth
+              value={location}
+            />
+            <br/>
+            <Divider />
+            <br/>
+            <DialogContentText>
+              Board Description
+            </DialogContentText>
+            <TextField
+              margin="dense"
+              id="description"
+              label="Description"
+              type="text"
+              fullWidth
+              placeholder='Enter Board Description'
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleNewBoardClose} color="primary">
+              Cancel
+            </Button>
+            <Button color="primary" onClick={(event) => {sendNewBoard(event)}}>
+              Subscribe
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  };
+
+  const sendNewBoard = (event: any) => {
+    const form = event.target.parentNode.parentNode.parentNode;
+    const name = form.querySelector('#name').value;
+    const address = form.querySelector('#address').value;
+    const description = form.querySelector('#description').value;
+    console.log(name);
+    console.log(address);
+    const map = (mapRef.current as any).state.map;
+    const latLng = { lat: map.center.lat(), lng: map.center.lng() };
+    const board = {
+      latLng,
+      name,
+      address: location,
+      description
+      // id: 1,
+      // postsId: 1
+    };
+    console.log(board);
+    handleNewBoardClose();
   };
 
   return (
     <div className={classes.root}>
+      {openNewBoard && newFormDialog()}
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -391,6 +434,7 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
           </IconButton>
         </div>
         <Divider />
+        {login && addBoard()}
         <h4>Boards at this location:</h4>
         <h5>results</h5>
         <Divider />
@@ -415,29 +459,6 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
         // onBoundsChanged={onBoundsChanged}
       >
         {console.log("Latitude and longitude:", {lat, lng})}
-
-        {/*<SearchBox handleSearchBox={handleSearchBox} searchBoxRef={searchBoxRef}/>*/}
-        {/*{search("החשמונאים 15 תל אביב")}*/}
-        {/*<input onChange={(e) => search(e.target.value)}*/}
-        {/*       type="text"*/}
-        {/*       placeholder="Search"*/}
-        {/*       style={{*/}
-        {/*         boxSizing: `border-box`,*/}
-        {/*         border: `1px solid transparent`,*/}
-        {/*         width: `240px`,*/}
-        {/*         height: `32px`,*/}
-        {/*         padding: `0 12px`,*/}
-        {/*         borderRadius: `3px`,*/}
-        {/*         boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,*/}
-        {/*         fontSize: `14px`,*/}
-        {/*         outline: `none`,*/}
-        {/*         textOverflow: `ellipses`,*/}
-        {/*         position: "absolute",*/}
-        {/*         left: "50%",*/}
-        {/*         marginLeft: "-120px"*/}
-        {/*       }}*/}
-
-        {/*/>*/}
         <Paper className={classes.paperRoot}>
           <InputBase
             className={classes.input}
@@ -446,11 +467,35 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
             inputProps={{ 'aria-label': 'search google maps' }}
           />
           <Divider className={classes.divider} orientation="vertical" />
-          <IconButton className={classes.iconButton} aria-label="search">
+          <IconButton className={classes.iconButton} aria-label="search"
+                      onClick={(event: any) => {
+                        const input = event.target.parentNode.parentNode.parentNode.querySelector('input');
+                        if (input === null) return;
+                        if (!open) {
+                          // handleDrawerOpen();
+                          const map = (mapRef.current as any).state.map;
+                          console.log(map)
+                          // const val = input.value;
+                          // input.value = '';
+                          // input.value = val;
+                        }
+                        // input.value = '';
+                        // const val = event.target.parentNode.parentNode.parentNode.querySelector('input').value;
+                        // event.target.parentNode.parentNode.parentNode.querySelector('input').value = '';
+                        // event.target.parentNode.parentNode.parentNode.querySelector('input').value = val;
+                      }}>
             <SearchIcon />
           </IconButton>
+          <Divider className={classes.divider} orientation="vertical" />
+          <IconButton className={classes.iconButton} aria-label="clear"
+                      onClick={(event: any) => {
+                        const input = event.target.parentNode.parentNode.parentNode.querySelector('input');
+                        if (input === null) return;
+                        input.value = '';
+                      }}>
+            <ClearIcon />
+          </IconButton>
         </Paper>
-
       </GoogleMap>
     </div>
 

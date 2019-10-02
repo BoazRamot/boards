@@ -2,10 +2,20 @@ import React from "react";
 import {useLoadScript} from "@react-google-maps/api";
 import GoogleMapService from "./GoogleMapService";
 import keys from "../../config/keys";
+import {CircularProgress, createStyles, makeStyles, Theme} from "@material-ui/core";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    progress: {
+      margin: theme.spacing(2),
+    },
+  }),
+);
 
 const libraries = ["places"];
 
 const Map = () => {
+  const classes = useStyles();
   const { isLoaded } = useLoadScript({
     id: "script-loader",
     googleMapsApiKey: keys.googleMapsApiKey,
@@ -14,8 +24,7 @@ const Map = () => {
     language: "en"
   });
 
-
-  return isLoaded ? <GoogleMapService /> : <h1>App doesn't work</h1>;
+  return isLoaded ? <GoogleMapService /> : <CircularProgress className={classes.progress} />;
 };
 
 export default Map;
