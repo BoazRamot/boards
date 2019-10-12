@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState} from "react";
 import clsx from 'clsx';
-import {GoogleMap} from "@react-google-maps/api";
+import {GoogleMap, Marker} from "@react-google-maps/api";
 import {
   Button,
   createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
@@ -13,10 +13,12 @@ import {
   Theme,
   useTheme
 } from "@material-ui/core";
+import {List, ListItem, ListItemText} from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
+import boards from '../../board'
 
 declare global {
   interface Window { google: any; }
@@ -35,8 +37,13 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     paperRoot: {
-      // width: 400,
       width: '30vw',
+      [theme.breakpoints.down('sm')]: {
+        width: '40vw',
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: '80vw',
+      },
       display: 'flex',
       alignItems: 'center',
       padding: `0 12px`,
@@ -94,24 +101,84 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+const mapDrawerReducer = (state: any, action: any) => {
+  switch (action.type) {
+    case 'UPDATE_LOCATION':
+      console.log('action', action)
+      return {
+        ...state,
+        address: action.address,
+        latLng: action.latLng,
+        open: true,
+        marker: [action.marker]
+      };
+    case 'OPEN_DRAWER':
+      return {
+        ...state,
+        open: true
+      };
+    case 'CLOSE_DRAWER':
+      return {
+        ...state,
+        open: false
+      };
+    case 'RESET_SEARCH':
+      return {
+        ...state,
+        marker: [],
+        mapBoards: []
+      };
+    case 'ADD_MARKERS':
+      return {
+        ...state,
+        marker: [...state.marker, ...action.marker]
+      };
+    case 'MAP_BOARDS':
+      return {
+        ...state,
+        mapBoards: [...state.mapBoards, ...action.mapBoards]
+      };
+    default:
+      throw new Error();
+  }
+};
+
+const initialMapDrawerState = {
+  address: '',
+  latLng: {},
+  open: false,
+  marker: [],
+  mapBoards: []
+};
+
 interface IProps {}
 
 const GoogleMapService: React.FC<IProps> = ({  }) => {
   const [lat, setLat] = useState(32.109333);
   const [lng, setLng] = useState(34.855499);
   const [zoom, setZoom] = useState(11);
+  const [autocompleteInput, setAutocompleteInput] = useState(false);
   // const [marker, setMarker] = useState();
   const [location, setLocation] = useState();
   const [login, setlogin] = useState(true);
   const [openNewBoard, setOpenNewBoard] = useState(false);
+  const [openAutocompleteInputDialog, setOpenAutocompleteInputDialog] = useState(false);
+  const [clearButton, setClearButton] = useState(false);
+  // const [mapBoards, setMapBoards] = useState();
+  const [drawerOption, dispatchDrawerOption] = useReducer(mapDrawerReducer, initialMapDrawerState);
   const searchBoxRef = useRef(null);
   const autocompleteBoxRef = useRef(null);
   const mapRef = useRef(null);
+  const markerRef = useRef(null);
 
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const maps = window.google.maps;
+
+  const handleDrawer = () => {
+
+  };
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -129,12 +196,83 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     setOpenNewBoard(false);
   };
 
+  const handleAutocompleteInputDialogOpen = () => {
+    setOpenAutocompleteInputDialog(true);
+  };
+
+  const handleAutocompleteInputDialogClose = () => {
+    setOpenAutocompleteInputDialog(false);
+  };
+
+  const handleInput = () => {
+    const input = (autocompleteBoxRef.current as any).querySelector('input').value;
+    if (input.length !== 0) {
+      setClearButton(true);
+    } else {
+      setClearButton(false);
+    }
+  };
+
+  const handleClear = () => {
+    const input = (autocompleteBoxRef.current as any).querySelector('input').value;
+    console.log('input', input)
+    if (input === null) return;
+    (autocompleteBoxRef.current as any).querySelector('input').value = '';
+    setClearButton(false);
+  };
+
+  useEffect(() => {
+    console.log('useEffect drawerOption', drawerOption)
+    console.log('clearButton', clearButton)
+    if (!clearButton && drawerOption.marker.length !== 0) {
+      console.log('clearButton if', clearButton)
+      console.log('drawerOption.marker', drawerOption.marker)
+      drawerOption.marker.map((marker: any) => {
+        console.log(marker)
+        marker.setMap(null);
+      });
+      dispatchDrawerOption({type: 'RESET_SEARCH'});
+      setAutocompleteInput(false);
+    }
+  }, [clearButton]);
+
   useEffect(() => {
 
-  }, []);
+    // let markers = [];
+    // Clear out the old markers.
+    // markers.forEach(function(marker) {
+    //   marker.setMap(null);
+    // });
+    // markers = [];
+
+    if (drawerOption.mapBoards.length !== 0) {
+      const map = (mapRef.current as any).state.map;
+      const markers: any = [];
+      drawerOption.mapBoards.map((board: any) => {
+        if (isBoardCloseToUser(board)) {
+          const place = {name: board.name, location: board.latLng}
+          const marker = addMarker(place, map);
+          markers.push(marker);
+        }
+      });
+      dispatchDrawerOption({type: 'ADD_MARKERS', marker: markers});
+    }
+  }, [drawerOption.mapBoards]);
+
+  const isBoardCloseToUser = (board: any) => {
+    let result = false;
+    const latLngBounds = 0.002200;
+    const x = Math.abs(board.latLng.lat - drawerOption.latLng.lat);
+    const y = Math.abs(board.latLng.lng - drawerOption.latLng.lng);
+    if (x < latLngBounds && y < latLngBounds) {
+      result = true;
+    }
+    return result;
+  };
 
   const onLoad = useCallback(
     function onLoad(map: any) {
+      console.log('onLoad')
       map.setOptions({
         disableDefaultUI: true
       });
@@ -143,8 +281,10 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     }, []
   );
 
-  const getBoards = () => {
-
+  const getBoards = (latLng: any) => {
+    // fetch("/api/boards/latLng")
+    //   .then()
+    dispatchDrawerOption({type: 'MAP_BOARDS', mapBoards: boards})
   };
 
   const autocomplete = (map: any) => {
@@ -155,45 +295,33 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     // bounds option in the request.
     autocompleteInput.bindTo('bounds', map);
     autocompleteInput.setFields(['address_components', 'geometry', 'icon', 'name']);
-    autocompleteInput.addListener('place_changed', function search() {
-      // infowindow.close();
-      // marker.setVisible(false);
+    const placeListener = (autocompleteInput as any).addListener('place_changed', () => {
+      console.log('place_changed')
+      console.log('drawerOption.marker placeListener', drawerOption.marker)
+      if (drawerOption.marker.length !== 0) {
+        console.log('drawerOption.marker[0].setMap(null)')
+        console.log('drawerOption.marker[0]',drawerOption.marker[0])
+        // drawerOption.marker.map((marker: any) => {
+        //   marker.setMap(null);
+        // });
+        drawerOption.marker[0].setMap(null);
+      }
+      let marker;
       const place = autocompleteInput.getPlace();
       if (!place.geometry) {
         // User entered the name of a Place that was not suggested and
         // pressed the Enter key, or the Place Details request failed.
         console.log("No details available for input: '" + place.name + "'");
+        handleAutocompleteInputDialogOpen();
         return;
       }
 
-      const icon = {
-        url: place.icon,
-        size: new window.google.maps.Size(71, 71),
-        origin: new window.google.maps.Point(0, 0),
-        anchor: new window.google.maps.Point(17, 34),
-        scaledSize: new window.google.maps.Size(25, 25)
-      };
       const { location, viewport } = place.geometry;
+      const name = place.name;
       if (location) {
-        // const map = (mapRef.current as any).state.map;
-        new window.google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        });
-        map.fitBounds(viewport);
+        marker = addMarker({name, location}, map);
       }
-
-      // If the place has a geometry, then present it on a map.
-      // if (place.geometry.viewport) {
-      //   map.fitBounds(place.geometry.viewport);
-      // } else {
-      //   map.setCenter(place.geometry.location);
-      //   map.setZoom(17);  // Why 17? Because it looks good.
-      // }
-      // marker.setPosition(place.geometry.location);
-      // marker.setVisible(true);
+      map.fitBounds(viewport);
 
       let address = '';
       if (place.address_components) {
@@ -203,20 +331,53 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
           (place.address_components[2] && place.address_components[2].short_name || '')
         ].join(' ');
       }
-      console.log('address', address)
-      console.log('place', place)
 
-      // infowindowContent.children['place-icon'].src = place.icon;
-      // infowindowContent.children['place-name'].textContent = place.name;
-      // infowindowContent.children['place-address'].textContent = address;
-      // infowindow.open(map, marker);
-      handleDrawerOpen();
-      setLocation(address);
+      const latLng = { lat: map.center.lat(), lng: map.center.lng() };
+      dispatchDrawerOption({type: 'UPDATE_LOCATION', address: address, latLng: latLng, marker: marker});
+      setAutocompleteInput(true);
       /*
       * send to server
       */
 
+      /*
+      * show boards
+      */
+
+      getBoards(latLng);
+
+      // handleDrawerOpen();
     });
+  };
+
+  const autocompleteInputDialog = () => {
+    return (
+      <div>
+        <Dialog open={openAutocompleteInputDialog} onClose={handleAutocompleteInputDialogClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">PAY ATTENTION</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please Choose Location From The Drop Down List
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleAutocompleteInputDialogClose} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  };
+
+  const addMarker = (place: any, map: any) => {
+    const marker = new window.google.maps.Marker({
+      map: map,
+      // icon: icon,
+      title: place.name,
+      // position: place.geometry.location
+      position: place.location
+    });
+    return marker;
   };
 
   // const onBoundsChanged = useCallback(
@@ -236,14 +397,14 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
         // const latLngBounds = 0.002200;
         bounds.ja = { g: longitude - latLngBounds, h: longitude + latLngBounds };
         bounds.na = { g: latitude - latLngBounds, h: latitude + latLngBounds };
-        infoWindow.setPosition({lat: latitude, lng: longitude});
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
+        // infoWindow.setPosition({lat: latitude, lng: longitude});
+        // infoWindow.setContent('Location found.');
+        // infoWindow.open(map);
         map.setCenter({lat: latitude, lng: longitude});
         map.setZoom(16);
         // reverseGeocoding(map, {lat: latitude, lng: longitude});
         // map.fitBounds(bounds);
-        getBoards();
+        // getBoards();
       }, function() {
         handleLocationError(true, infoWindow, map);
       });
@@ -289,40 +450,6 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     // reverseGeocoding(latLng)
   };
 
-  const handleSearchBox = () => {
-    console.log('searchBox', (searchBoxRef.current as any).state.searchBox)
-    const places = (searchBoxRef.current as any).state.searchBox.getPlaces();
-    console.log('places', places)
-    // console.log('places', places[0].formatted_address)
-    // search(places[0].formatted_address)
-    if (places.length === 0) {
-      return;
-    }
-    places.forEach(function(place: any) {
-      if (!place.geometry) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-      const icon = {
-        url: place.icon,
-        size: new window.google.maps.Size(71, 71),
-        origin: new window.google.maps.Point(0, 0),
-        anchor: new window.google.maps.Point(17, 34),
-        scaledSize: new window.google.maps.Size(25, 25)
-      };
-      const { location, viewport } = place.geometry;
-      if (location) {
-        const map = (mapRef.current as any).state.map;
-        new window.google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        });
-        map.fitBounds(viewport);
-      }
-    });
-  };
   const addBoard = () => {
     return (
       <div>
@@ -350,7 +477,7 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
               label="Board Name"
               type="text"
               fullWidth
-              defaultValue={location}
+              defaultValue={drawerOption.location}
             />
             <br/>
             <Divider />
@@ -364,7 +491,7 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
               label="Address"
               type="text"
               fullWidth
-              value={location}
+              value={drawerOption.location}
             />
             <br/>
             <Divider />
@@ -406,7 +533,7 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     const board = {
       latLng,
       name,
-      address: location,
+      address: address,
       description
       // id: 1,
       // postsId: 1
@@ -415,31 +542,70 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
     handleNewBoardClose();
   };
 
+  const boardsAtThisLocation = () => {
+    const list = drawerOption.mapBoards.filter((board: any) => ((board.latLng.lat === drawerOption.latLng.lat)&&(board.latLng.lng === drawerOption.latLng.lng)));
+    return (
+      boardsList(list)
+    );
+  };
+
+  const boardsCloseToThisLocation = () => {
+    const list = drawerOption.mapBoards.filter((board: any) => ((board.latLng.lat !== drawerOption.latLng.lat)&&(board.latLng.lng !== drawerOption.latLng.lng)));
+    const newList = list.filter((board: any) => {
+      if (isBoardCloseToUser(board)) {
+        return board;
+      }
+    });
+    return (
+      boardsList(newList)
+    );
+  };
+
+  const boardsList = (list: any) => {
+    return (
+      <div>
+        {list && list.map((board: any, index: any) => (
+          <ListItem button key={index} >
+            <ListItemText>{board.name}</ListItemText>
+          </ListItem>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className={classes.root}>
       {openNewBoard && newFormDialog()}
+      {openAutocompleteInputDialog && autocompleteInputDialog()}
       <Drawer
         className={classes.drawer}
         variant="persistent"
         anchor="left"
-        open={open}
+        // open={open}
+        open={drawerOption.open}
         classes={{
           paper: classes.drawerPaper,
         }}
       >
         <div className={classes.drawerHeader}>
-          <h3 style={{alignSelf: "flex-start", alignContent: "center"}}>{location}</h3>
-          <IconButton onClick={handleDrawerClose}>
+          {/*<h3 style={{alignSelf: "flex-start", alignContent: "center"}}>{location}</h3>*/}
+          <h3 style={{alignSelf: "flex-start", alignContent: "center"}}>{drawerOption.address}</h3>
+          {/*<IconButton onClick={handleDrawerClose}>*/}
+          <IconButton onClick={() => dispatchDrawerOption({type: 'CLOSE_DRAWER'})}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
         <Divider />
         {login && addBoard()}
         <h4>Boards at this location:</h4>
-        <h5>results</h5>
+        <List>
+          {boardsAtThisLocation()}
+        </List>
         <Divider />
         <h4>Boards close to this location:</h4>
-        <h5>results</h5>
+        <List>
+          {boardsCloseToThisLocation()}
+        </List>
       </Drawer>
       <GoogleMap
         id="map"
@@ -459,43 +625,36 @@ const GoogleMapService: React.FC<IProps> = ({  }) => {
         // onBoundsChanged={onBoundsChanged}
       >
         {console.log("Latitude and longitude:", {lat, lng})}
-        <Paper className={classes.paperRoot}>
+        {/*<Paper className={classes.paperRoot}>*/}
+        <Paper className={drawerOption.open ? classes.hide : classes.paperRoot}>
           <InputBase
             className={classes.input}
             ref={autocompleteBoxRef}
             placeholder="Search Google Maps"
             inputProps={{ 'aria-label': 'search google maps' }}
+            onChange={handleInput}
+            disabled={autocompleteInput}
           />
+          <IconButton className={clearButton ? classes.iconButton : classes.hide}
+                      aria-label="clear"
+                      onClick={handleClear}
+          >
+            <ClearIcon />
+          </IconButton>
           <Divider className={classes.divider} orientation="vertical" />
           <IconButton className={classes.iconButton} aria-label="search"
-                      onClick={(event: any) => {
-                        const input = event.target.parentNode.parentNode.parentNode.querySelector('input');
-                        if (input === null) return;
-                        if (!open) {
-                          // handleDrawerOpen();
-                          const map = (mapRef.current as any).state.map;
-                          console.log(map)
-                          // const val = input.value;
-                          // input.value = '';
-                          // input.value = val;
-                        }
-                        // input.value = '';
-                        // const val = event.target.parentNode.parentNode.parentNode.querySelector('input').value;
-                        // event.target.parentNode.parentNode.parentNode.querySelector('input').value = '';
-                        // event.target.parentNode.parentNode.parentNode.querySelector('input').value = val;
+                      onClick={() => {
+                        if (!clearButton) return;
+                        // if (drawerOption.location === '') return;
+                        // if (clearButton) return;
+                        // const input = e.target.parentNode.parentNode.parentNode.querySelector('input');
+                        // input.value = drawerOption.location;
+                        dispatchDrawerOption({type: 'OPEN_DRAWER'})
                       }}>
             <SearchIcon />
           </IconButton>
-          <Divider className={classes.divider} orientation="vertical" />
-          <IconButton className={classes.iconButton} aria-label="clear"
-                      onClick={(event: any) => {
-                        const input = event.target.parentNode.parentNode.parentNode.querySelector('input');
-                        if (input === null) return;
-                        input.value = '';
-                      }}>
-            <ClearIcon />
-          </IconButton>
         </Paper>
+
       </GoogleMap>
     </div>
 
