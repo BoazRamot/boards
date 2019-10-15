@@ -6,17 +6,13 @@
     "@material-ui/core": "^4.4.2",
     "@material-ui/icons": "^4.4.1",
     "@react-google-maps/api": "^1.6.0",
-    "@types/googlemaps": "^3.37.5",
-    "@types/jest": "24.0.15",
-    "@types/node": "12.0.12",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4",
-    "@types/react-router-dom": "^5.1.0",
     "google-map-react": "^1.1.4",
+    "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.1",
     "react-scripts": "3.0.1",
+    "react-textarea-autosize": "^7.1.0",
     "typescript": "3.5.2"
   },
   "scripts": {
@@ -41,6 +37,16 @@
     ]
   },
   "devDependencies": {
-    "@types/google-map-react": "^0.23.12"
+    "@types/google-map-react": "^0.23.12",
+    "@types/googlemaps": "^3.37.5",
+    "@types/jest": "24.0.15",
+    "@types/node": "12.0.12",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.4",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/react-textarea-autosize": "^4.3.4",
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.0",
+    "tslint-react": "^4.1.0"
   }
 }

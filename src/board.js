@@ -1,5 +1,3 @@
-"use strict";
-
 const boards = [
   {
     id: 1,

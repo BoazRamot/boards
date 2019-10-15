@@ -1,17 +1,16 @@
-import React, {memo} from "react";
-import {StandaloneSearchBox} from "@react-google-maps/api";
+import {StandaloneSearchBox} from '@react-google-maps/api';
+import React, {memo} from 'react';
 
 interface IProps {
-  handleSearchBox: Function;
-  searchBoxRef: any
+  handleSearchBox: () => void;
+  searchBoxRef: any;
 }
 // const MyComponent = React.memo(function MyComponent(props))
-const SearchBox: React.FC<IProps> = memo(function SearchBox({ handleSearchBox, searchBoxRef }) {
-
+const SearchBox: React.FC<IProps> = memo(({ handleSearchBox, searchBoxRef }) => {
   return (
     <StandaloneSearchBox
       ref={searchBoxRef}
-      onPlacesChanged={() => handleSearchBox()}
+      onPlacesChanged={handleSearchBox}
     >
       <input
         type="text"
@@ -27,9 +26,9 @@ const SearchBox: React.FC<IProps> = memo(function SearchBox({ handleSearchBox, s
           fontSize: `14px`,
           outline: `none`,
           textOverflow: `ellipses`,
-          position: "absolute",
-          left: "50%",
-          marginLeft: "-120px"
+          position: 'absolute',
+          left: '50%',
+          marginLeft: '-120px',
         }}
       />
     </StandaloneSearchBox>
