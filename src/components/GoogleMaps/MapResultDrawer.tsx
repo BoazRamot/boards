@@ -25,11 +25,12 @@ interface IProps {
   closeDrawer: Function
   address: string
   isOpen: boolean
+  isLogin: boolean
   mapRef: any
 }
 
-const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address, isOpen, closeDrawer }) => {
-  const [login, setlogin] = useState(true);
+const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address, isOpen, closeDrawer, isLogin }) => {
+  // const [login, setlogin] = useState(true);
   const [openNewBoard, setOpenNewBoard] = useState(false);
   const classes = useStyles();
   const theme = useTheme();
@@ -63,7 +64,7 @@ const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address,
           </IconButton>
         </div>
         <Divider />
-        {login && 
+        {isLogin && 
         <AddBoard handleNewBoardOpen={handleNewBoardOpen}/>
         }
         <h4>Boards at this location:</h4>
@@ -86,6 +87,7 @@ const mapStateToProps = (state: any) => ({
   latLng: state.map.latLng,
   address: state.map.address,
   isOpen: state.map.open,
+  isLogin: state.login.isLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

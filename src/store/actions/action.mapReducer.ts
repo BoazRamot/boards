@@ -11,9 +11,16 @@ export const ADD_MARKERS = 'ADD_MARKERS';
 export const ADD_BOARDS = 'ADD_BOARDS';
 export const UPDATE_LOCATION = 'UPDATE_LOCATION';
 export const RESET_SEARCH = 'RESET_SEARCH';
+export const SET_REDIRECT = 'SET_REDIRECT';
+export const RESET_REDIRECT = 'RESET_REDIRECT';
+export const UPDATE_REDIRECT = 'UPDATE_REDIRECT';
+export const ADD_PLACE_LISTENER = 'ADD_PLACE_LISTENER';
 
 // action creators
-//  address: address, latLng: latLng, marker: marker});
+
+export const addPlaceListener = (placeListener: any) => {
+  return { type: ADD_PLACE_LISTENER, placeListener }
+};
 
 export const addAddress = (address: string) => {
   return { type: ADD_ADDRESS, address }
@@ -57,4 +64,17 @@ export const addMarkers = (marker: any) => {
 
 export const addBoards = (mapBoards: any) => {
   return { type: ADD_BOARDS, mapBoards }
+};
+
+export const resetRedirect = () => {
+  return { type: RESET_REDIRECT }
+};
+
+
+export const updateRedirect = (address: string, latLng: any, mapBoards: any) => {
+  return { type: UPDATE_REDIRECT, address, latLng, mapBoards }
+};
+
+export const setRedirect = (latLng: any) => {
+  return { type: SET_REDIRECT, latLng }
 };
