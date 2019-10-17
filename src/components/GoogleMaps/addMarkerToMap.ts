@@ -1,4 +1,4 @@
-export const addMarker = (place: any, map: any, maps: any) => {
+export const addMarkerToMap = (place: any, map: any, maps: any) => {
   const marker = new maps.Marker({
     map: map,
     // icon: icon,

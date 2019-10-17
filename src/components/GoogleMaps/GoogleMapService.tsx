@@ -4,15 +4,24 @@ import {GoogleMap} from "@react-google-maps/api";
 import boards from '../../board'
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
-import {addBoards, addMarkers, closeDrawer, openDrawer, resetSearch, updateLocation} from "../../store/actions/action.mapReducer";
+import {
+  addBoards,
+  addLatLng, addMarker,
+  addMarkers, addPlaceListener,
+  closeDrawer,
+  openDrawer,
+  resetSearch,
+  updateLocation
+} from "../../store/actions/action.mapReducer";
 import useStyles from "./useStyles";
 import {isBoardCloseToUser} from "./isBoardCloseToUser";
 import MapResultDrawer from "./MapResultDrawer";
-import {addMarker} from "./addMarker";
+import {addMarkerToMap} from "./addMarkerToMap";
 import AutoCompleteInput from "./AutoCompleteInput";
 import {autocompleteInit} from "./autocompleteInit";
 import AutocompleteInputDialog from "./AutocompleteInputDialog";
 import {findGeolocation} from "./findGeolocation";
+import {store} from "../../index";
 
 declare global {
   interface Window { google: any; }
@@ -30,11 +39,17 @@ interface IProps {
   updateLocation: Function
   openDrawer: Function
   closeDrawer: Function
+  addLatLng: Function
+  addPlaceListener: Function
+  addMarker: Function
   address: string
   isOpen: boolean
+  redirect: boolean
+  isUpdateLocation: boolean
+  isLogin: boolean
 }
 
-const GoogleMapService: React.FC<IProps> = ({ marker, resetSearch, mapBoards, addMarkers, latLng, addBoards, updateLocation, address, isOpen, openDrawer, closeDrawer }) => {
+const GoogleMapService: React.FC<IProps> = ({ addMarker, isLogin, addPlaceListener, isUpdateLocation, redirect, addLatLng, marker, resetSearch, mapBoards, addMarkers, latLng, addBoards, updateLocation, address, isOpen, openDrawer, closeDrawer }) => {
   // const [zoom, setZoom] = useState(11);
   const [autocompleteInput, setAutocompleteInput] = useState(false);
   const [openAutocompleteInputDialog, setOpenAutocompleteInputDialog] = useState(false);
@@ -45,37 +60,67 @@ const GoogleMapService: React.FC<IProps> = ({ marker, resetSearch, mapBoards, ad
   const maps = window.google.maps;
 
   useEffect(() => {
+    if (isUpdateLocation && !redirect) {
+      // const getBoards = (latLng: any)
+      
+      // fetch("/api/boards/latLng")
+      //   .then()
+      addBoards(boards);
+      
+    }
+  }, [isUpdateLocation]);
+  
+  useEffect(() => {
+    // if (!clearButton && marker.length !== 0 ) {
     if (!clearButton && marker.length !== 0) {
       marker.map((marker: any) => marker.setMap(null));
       resetSearch();
       setAutocompleteInput(false);
     }
   }, [clearButton]);
-
+  
   useEffect(() => {
+
+    addBoardsToMap();
+  }, [mapBoards]);
+
+  const onLoad = useCallback(
+    function onLoad(map: any) {
+      console.log('onLoad')
+      map.setOptions({
+        disableDefaultUI: true
+      });
+      if (redirect && address !== '') {
+        map.setCenter({lat: latLng.lat, lng: latLng.lng});
+        map.setZoom(16);
+        const place = {name: address, location: latLng}
+        const newMarker = addMarkerToMap(place, map, maps);
+        // addMarker(newMarker);
+        updateLocation(address, latLng, newMarker);
+        setAutocompleteInput(true);
+        addBoardsToMap();
+      } else {
+        findGeolocation(map, maps);
+      }
+      // findGeolocation(map, maps);
+      autocompleteInit(addPlaceListener, map, autocompleteBoxRef, maps, marker, handleAutocompleteInputDialogOpen, updateLocation, setAutocompleteInput/*, getBoards*/);
+    }, []
+  );
+
+  const addBoardsToMap = () => {
     if (mapBoards.length !== 0) {
       const map = (mapRef.current as any).state.map;
       const markers: any = [];
       mapBoards.map((board: any) => {
         if (isBoardCloseToUser(board, latLng)) {
           const place = {name: board.name, location: board.latLng}
-          const marker = addMarker(place, map, maps);
+          const marker = addMarkerToMap(place, map, maps);
           markers.push(marker);
         }
       });
       addMarkers(markers)
     }
-  }, [mapBoards]);
-
-  const onLoad = useCallback(
-    function onLoad(map: any) {
-      map.setOptions({
-        disableDefaultUI: true
-      });
-      findGeolocation(map, maps);
-      autocompleteInit(map, autocompleteBoxRef, maps, marker, handleAutocompleteInputDialogOpen, updateLocation, setAutocompleteInput, getBoards);
-    }, []
-  );
+  };
 
   const handleAutocompleteInputDialogOpen = () => {
     setOpenAutocompleteInputDialog(true);
@@ -85,16 +130,20 @@ const GoogleMapService: React.FC<IProps> = ({ marker, resetSearch, mapBoards, ad
     setOpenAutocompleteInputDialog(false);
   };
 
-  const getBoards = (latLng: any) => {
-    // fetch("/api/boards/latLng")
-    //   .then()
-    addBoards(boards);
-  };
+  // const getBoards = (latLng: any) => {
+  //   // fetch("/api/boards/latLng")
+  //   //   .then()
+  //   addBoards(boards);
+  // };
 
   // const onBoundsChanged = useCallback(
   //   function onBoundsChanged() {
+  //     console.log('onBoundsChanged')
   //     const map = (mapRef.current as any).state.map;
-  //     (searchBoxRef.current as any).state.searchBox.setBounds(map.getBounds())
+  //     const newLatLng = { lat: map.center.lat(), lng: map.center.lng() };
+  //     addLatLng(newLatLng);
+  //     // const map = (mapRef.current as any).state.map;
+  //     // (searchBoxRef.current as any).state.searchBox.setBounds(map.getBounds())
   //   }, []
   // );
 
@@ -124,7 +173,7 @@ const GoogleMapService: React.FC<IProps> = ({ marker, resetSearch, mapBoards, ad
     const latLng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
     // reverseGeocoding(latLng)
   };
-  
+  const { lat, lng } = latLng;
   return (
     <div className={classes.root}>
       {openAutocompleteInputDialog &&
@@ -157,12 +206,18 @@ const mapStateToProps = (state: any) => ({
   latLng: state.map.latLng,
   address: state.map.address,
   isOpen: state.map.open,
+  redirect: state.map.redirect,
+  isUpdateLocation: state.map.isUpdateLocation,
+  isLogin: state.login.isLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   resetSearch: () => dispatch(resetSearch()),
   closeDrawer: () => dispatch(closeDrawer()),
   openDrawer: () => dispatch(openDrawer()),
+  addPlaceListener: (placeListener: any) => dispatch(addPlaceListener(placeListener)),
+  addMarker: (marker: any) => dispatch(addMarker(marker)),
+  addLatLng: (latLng: any) => dispatch(addLatLng(latLng)),
   addMarkers: (marker: any) => dispatch(addMarkers(marker)),
   addBoards: (mapBoards: any) => dispatch(addBoards(mapBoards)),
   updateLocation: (address: string, latLng: any, marker: any) => dispatch(updateLocation(address, latLng, marker)),

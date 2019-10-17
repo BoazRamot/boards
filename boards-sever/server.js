@@ -11,14 +11,14 @@ const connectDB = require('./db/db');
 const app = express();
 
 // set up session cookies
-app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000,
-  keys: [keys.session.cookieKey]
-}));
+// app.use(cookieSession({
+//   maxAge: 24 * 60 * 60 * 1000,
+//   keys: [keys.session.cookieKey]
+// }));
 
 // initialize passport
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 // Connect to Database
 connectDB();
