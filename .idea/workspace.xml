@@ -1,38 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f9b24acb-17f4-41b6-8df6-7a2df2e60632" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/boards-sever/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/boards-sever/middleware/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Redirect.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/localStorage.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/actions/action.loginReducer.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/actions/action.userReducer.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/map.api.middleware.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/reducers/loginReducer.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/reducers/userReducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards-sever/db/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-sever/db/db.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards-sever/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-sever/models/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards-sever/routes/auth-routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-sever/routes/auth-routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards-sever/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-sever/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards-sever/services/googleStrategy.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-sever/services/googleStrategy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards-sever/services/passport-setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-sever/services/passport-setup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/AutoCompleteInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/AutoCompleteInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/MapResultDrawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/MapResultDrawer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/addMarker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/addMarkerToMap.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/autocompleteInit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/autocompleteInit.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Home.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/action.mapReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.mapReducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/configureStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/configureStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/reducers/mapReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/mapReducer.ts" afterDir="false" />
-    </list>
+    <list default="true" id="f9b24acb-17f4-41b6-8df6-7a2df2e60632" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/node_modules/" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -228,73 +197,6 @@
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
               <item name="boards" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="boards-sever" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="boards-sever" type="462c0819:PsiDirectoryNode" />
-              <item name="middleware" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="boards-sever" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="boards-sever" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="boards-sever" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="GoogleMaps" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="store" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="store" type="462c0819:PsiDirectoryNode" />
-              <item name="actions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
-              <item name="boards" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="store" type="462c0819:PsiDirectoryNode" />
-              <item name="reducers" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -355,12 +257,12 @@
       <workItem from="1571169730047" duration="10373000" />
       <workItem from="1571209925161" duration="15835000" />
       <workItem from="1571244409244" duration="20743000" />
-      <workItem from="1571295781196" duration="16195000" />
+      <workItem from="1571295781196" duration="17064000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138607000" />
+    <option name="totallyTimeSpent" value="139476000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
@@ -380,7 +282,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="TypeScript" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.156013" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.5709643" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
