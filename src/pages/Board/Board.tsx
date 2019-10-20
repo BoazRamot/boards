@@ -3,7 +3,7 @@ import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import {Link as RouterLink} from 'react-router-dom';
-import PostCard from "./PostCard";
+import PostCard from "../../components/PostCard";
 // import {getAllPosts} from '../../services/posts.data.service';
 
 const Board: React.FC = () => {

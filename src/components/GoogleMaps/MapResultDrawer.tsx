@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   Button,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
@@ -14,26 +14,36 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {closeDrawer} from "../../store/actions/action.mapReducer";
-import useStyles from "./useStyles";
+import useStyles from "./GoogleMapService/useStyles";
 import {boardsAtThisLocation, boardsCloseToThisLocation} from "./boardsList";
 import AddBoard from "./AddBoard";
 import AddNewBoard from "./AddNewBoard";
+import {createNewBoard} from "../../store/actions/action.mapApiMiddleware";
 
 interface IProps {
   mapBoards: any
   latLng: any
+  markerLatLng: any
   closeDrawer: Function
+  createNewBoard: any
   address: string
   isOpen: boolean
   isLogin: boolean
-  mapRef: any
+  redirect: boolean
 }
 
-const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address, isOpen, closeDrawer, isLogin }) => {
+const MapResultDrawer: React.FC<IProps> = ({ redirect, markerLatLng, createNewBoard, mapBoards, latLng, address, isOpen, closeDrawer, isLogin }) => {
   // const [login, setlogin] = useState(true);
   const [openNewBoard, setOpenNewBoard] = useState(false);
   const classes = useStyles();
   const theme = useTheme();
+  // let location = latLng;
+  //
+  // useEffect(() => {
+  //   if (redirect) {
+  //     location = markerLatLng;
+  //   }
+  // }, [redirect])
 
   const handleNewBoardOpen = () => {
     setOpenNewBoard(true);
@@ -46,8 +56,12 @@ const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address,
   return (
     <div className={classes.root}>
       {openNewBoard &&
-      <AddNewBoard mapRef={mapRef} handleNewBoardClose={handleNewBoardClose} openNewBoard={openNewBoard} address={address}/>
-      }
+      <AddNewBoard createNewBoard={createNewBoard}
+                   latLng={latLng}
+                   handleNewBoardClose={handleNewBoardClose}
+                   openNewBoard={openNewBoard}
+                   address={address}
+      />}
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -69,12 +83,12 @@ const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address,
         }
         <h4>Boards at this location:</h4>
         <List>
-          {boardsAtThisLocation(mapBoards, latLng)}
+          {boardsAtThisLocation(mapBoards, (redirect ? markerLatLng : latLng))}
         </List>
         <Divider />
         <h4>Boards close to this location:</h4>
         <List>
-          {boardsCloseToThisLocation(mapBoards, latLng)}
+          {boardsCloseToThisLocation(mapBoards, (redirect ? markerLatLng : latLng))}
         </List>
       </Drawer>
     </div>
@@ -83,15 +97,18 @@ const MapResultDrawer: React.FC<IProps> = ({ mapRef, mapBoards, latLng, address,
 };
 
 const mapStateToProps = (state: any) => ({
-  mapBoards: state.map.mapBoards,
+  mapBoards: state.mapBoards,
   latLng: state.map.latLng,
+  markerLatLng: state.map.markerLatLng,
   address: state.map.address,
   isOpen: state.map.open,
-  isLogin: state.login.isLogin,
+  redirect: state.map.redirect,
+  isLogin: state.user.userLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   closeDrawer: () => dispatch(closeDrawer()),
+  createNewBoard: (board: any) => dispatch(createNewBoard(board)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapResultDrawer);

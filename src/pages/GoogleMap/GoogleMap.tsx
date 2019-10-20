@@ -1,6 +1,6 @@
 import React from "react";
 import {useLoadScript} from "@react-google-maps/api";
-import GoogleMapService from "./GoogleMapService";
+import GoogleMapService from "../../components/GoogleMaps/GoogleMapService/GoogleMapService";
 import keys from "../../config/keys";
 import {CircularProgress, createStyles, makeStyles, Theme} from "@material-ui/core";
 

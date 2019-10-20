@@ -1,95 +1,176 @@
-import React from "react";
+import React, {useRef, useState} from "react";
+import clsx from 'clsx';
 import {
   Button,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Divider,
+  Divider, MenuItem,
   TextField,
 } from "@material-ui/core";
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-interface IProps {
-  mapRef: any
-  handleNewBoardClose: Function
-  openNewBoard: boolean
-  address: string
+const community = [
+  { value: 'General Community' },
+  { value: 'Residential Community' },
+  { value: 'Commercial Community' },
+  { value: 'Work Community' },
+  { value: 'School Community' },
+  { value: 'Academic Community' },
+];
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      // width: '35vw'
+    },
+    dense: {
+      marginTop: theme.spacing(2),
+    },
+    menu: {
+      width: 200,
+    },
+  }),
+);
+
+interface State {
+  address: string;
+  name: string;
+  info: string;
+  community: string;
+  description: string;
 }
 
-const AddNewBoard: React.FC<IProps> = ({ mapRef, handleNewBoardClose, openNewBoard, address }) => {
+interface IProps {
+  handleNewBoardClose: any
+  openNewBoard: boolean
+  address: string
+  latLng: any
+  createNewBoard: any
+}
 
-  const sendNewBoard = (event: any) => {
-    const form = event.target.parentNode.parentNode.parentNode;
-    const name = form.querySelector('#name').value;
-    const address = form.querySelector('#address').value;
-    const description = form.querySelector('#description').value;
-    console.log(name);
-    console.log(address);
-    const map = (mapRef.current as any).state.map;
-    const latLng = { lat: map.center.lat(), lng: map.center.lng() };
-    const board = {
-      latLng,
-      name,
-      address: address,
-      description
-      // id: 1,
-      // postsId: 1
-    };
-    console.log(board);
-    handleNewBoardClose();
+const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardClose, openNewBoard, address }) => {
+  const formEl = useRef<HTMLFormElement>(null);
+  const classes = useStyles();
+  const [values, setValues] = useState<State>({
+    address: address,
+    name: address,
+    info: '',
+    community: 'General Community',
+    description: '',
+  });
+
+  const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [name]: event.target.value });
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    const board = {
+      name: values.name,
+      community: values.community,
+      description: values.description,
+      location: {
+        address: values.address,
+        info: values.info,
+        latitude: latLng.lat ,
+        longitude: latLng.lng
+      },
+    };
+    console.log('board', board)
+    createNewBoard(board);
+  };
+  
   return (
     <div>
-      <Dialog open={openNewBoard} onClose={() => handleNewBoardClose()} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Board Name
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Board Name"
-            type="text"
-            fullWidth
-            defaultValue={address}
-          />
-          <br/>
-          <Divider />
-          <br/>
-          <DialogContentText>
-            Board Address
-          </DialogContentText>
-          <TextField
-            margin="dense"
-            id="address"
-            label="Address"
-            type="text"
-            fullWidth
-            value={address}
-          />
-          <br/>
-          <Divider />
-          <br/>
-          <DialogContentText>
-            Board Description
-          </DialogContentText>
-          <TextField
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            placeholder='Enter Board Description'
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleNewBoardClose()} color="primary">
-            Cancel
-          </Button>
-          <Button color="primary" onClick={(event) => {sendNewBoard(event)}}>
-            Subscribe
-          </Button>
-        </DialogActions>
+      <Dialog open={openNewBoard} onClose={handleNewBoardClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
+        <form autoComplete="off" onSubmit={handleSubmit} ref={formEl} className={classes.container}>
+          <DialogContent>
+            <TextField
+              id="outlined-read-only-input"
+              label="The Board Address Is"
+              value={values.address}
+              className={classes.textField}
+              margin="normal"
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+              fullWidth
+            />
+            <TextField
+              id="outlined-name"
+              label="More Location Info"
+              className={classes.textField}
+              value={values.info}
+              onChange={handleChange('info')}
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              placeholder="For Example Floor Level, Office or Classroom"
+            />
+            <TextField
+              required
+              id="outlined-name"
+              label="Board Name"
+              className={classes.textField}
+              value={values.name}
+              onChange={handleChange('name')}
+              margin="normal"
+              variant="outlined"
+              fullWidth
+            />
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="Community Category"
+              className={classes.textField}
+              value={values.community}
+              onChange={handleChange('community')}
+              SelectProps={{
+                MenuProps: {
+                  className: classes.menu,
+                },
+              }}
+              helperText="Please Select Your Community Category"
+              margin="normal"
+              variant="outlined"
+            >
+              {community.map((option, index) => (
+                <MenuItem key={index} value={option.value}>
+                  {option.value}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              id="outlined-dense-multiline"
+              label="Board Description"
+              className={clsx(classes.textField, classes.dense)}
+              margin="dense"
+              variant="outlined"
+              multiline
+              fullWidth
+              rowsMax="4"
+              value={values.description}
+              onChange={handleChange('description')}
+            />
+            {/*add static map*/}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleNewBoardClose} color="primary">
+              Cancel
+            </Button>
+            <Button variant="contained" color="primary" type="submit">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

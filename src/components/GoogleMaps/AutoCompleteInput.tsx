@@ -4,12 +4,12 @@ import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
-import {openDrawer} from "../../store/actions/action.mapReducer";
-import useStyles from "./useStyles";
-import {store} from "../../index";
+import {openDrawer, resetAddress, resetRedirect} from "../../store/actions/action.mapReducer";
+import useStyles from "./GoogleMapService/useStyles";
 
 interface IProps {
   openDrawer: Function
+  resetAddress: Function
   isOpen: boolean
   autocompleteBoxRef: any
   setClearButton: any
@@ -19,19 +19,13 @@ interface IProps {
   address: string
 }
 
-const AutoCompleteInput: React.FC<IProps> = ({ address, redirect, isOpen, openDrawer, autocompleteBoxRef, setClearButton, autocompleteInput, clearButton }) => {
+const AutoCompleteInput: React.FC<IProps> = ({ resetAddress, address, redirect, isOpen, openDrawer, autocompleteBoxRef, setClearButton, autocompleteInput, clearButton }) => {
   const classes = useStyles();
-  console.log('AutoCompleteInput useEffect autocompleteBoxRef', autocompleteBoxRef)
 
   useEffect(() => {
-
-    console.log('AutoCompleteInput useEffect', redirect)
-    if (redirect) {
-
+    if (redirect && address) {
       (autocompleteBoxRef.current as any).querySelector('input').value = address;
       setClearButton(true);
-      // (autocompleteBoxRef.current as any).querySelector('input').focus();
-      console.log('AutoCompleteInput useEffect autocompleteBoxRef', autocompleteBoxRef)
     }
   }, [redirect]);
 
@@ -49,7 +43,13 @@ const AutoCompleteInput: React.FC<IProps> = ({ address, redirect, isOpen, openDr
     console.log('input', input)
     if (input === null) return;
     (autocompleteBoxRef.current as any).querySelector('input').value = '';
+    resetAddress();
     setClearButton(false);
+  };
+
+  const handleSearch = () => {
+    if (!clearButton) return;
+    openDrawer();
   };
   
   return (
@@ -62,8 +62,6 @@ const AutoCompleteInput: React.FC<IProps> = ({ address, redirect, isOpen, openDr
           inputProps={{ 'aria-label': 'search google maps' }}
           onChange={handleInput}
           disabled={autocompleteInput}
-          // defaultValue={redirect ? address : null}
-
         />
         <IconButton className={clearButton ? classes.iconButton : classes.hide}
                     aria-label="clear"
@@ -72,16 +70,9 @@ const AutoCompleteInput: React.FC<IProps> = ({ address, redirect, isOpen, openDr
           <ClearIcon />
         </IconButton>
         <Divider className={classes.divider} orientation="vertical" />
-        <IconButton className={classes.iconButton} aria-label="search"
-                    onClick={() => {
-                      if (!clearButton) return;
-                      // if (drawerOption.location === '') return;
-                      // if (clearButton) return;
-                      // const input = e.target.parentNode.parentNode.parentNode.querySelector('input');
-                      // input.value = drawerOption.location;
-                      // dispatchDrawerOption({type: 'OPEN_DRAWER'})
-                      openDrawer()
-                    }}>
+        <IconButton className={classes.iconButton}
+                    aria-label="search"
+                    onClick={handleSearch}>
           <SearchIcon />
         </IconButton>
       </Paper>
@@ -97,6 +88,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   openDrawer: () => dispatch(openDrawer()),
+  resetAddress: () => dispatch(resetAddress()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AutoCompleteInput);
