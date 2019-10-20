@@ -8,21 +8,22 @@ const googleStrategy = new GoogleStrategy({
   clientSecret: keys.google.clientSecret,
   callbackURL: '/api/auth/google/redirect'
 },
-  (accessToken, refreshToken, profile, done) => {
+  (accessToken, refreshToken, email, done) => {
   // passport callback function
   // check if user already exists in our own db
-  User.findOne({googleId: profile.id}).then((currentUser) => {
+  User.findOne({googleId: email.id}).then((currentUser) => {
     if(currentUser){
       // already have this user
       console.log('user is: ', currentUser);
       done(null, currentUser);
     } else {
       // if not, create user in our db
-      console.log('profile', profile)
+      console.log('email', email)
       new User({
-        googleId: profile.id,
-        username: profile.displayName,
-        avatar: profile.photos[0].value
+        googleId: email.id,
+        name: email.displayName,
+        avatar: email.photos[0].value,
+        email: email.emails[0].value
       }).save().then((newUser) => {
         console.log('created new user: ', newUser);
         done(null, newUser);

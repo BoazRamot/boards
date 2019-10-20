@@ -1,22 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {
-  AppBar, Avatar,
-  Button,
-  createStyles,
+import React, {useState} from 'react';
+import {AppBar, Avatar, Button, createStyles,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  IconButton,
-  makeStyles, Menu, MenuItem,
-  Theme,
-  Toolbar,
-  Typography
-} from '@material-ui/core';
+  IconButton, makeStyles, Menu, MenuItem,
+  Theme, Toolbar, Typography} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {Dispatch} from "redux";
-import {userLogin, userLogout} from "../store/actions/action.loginReducer";
 import {connect} from "react-redux";
-import {resetRedirect, setRedirect} from "../store/actions/action.mapReducer";
-import {saveMapState} from "./localStorage";
+import {resetRedirect} from "../store/actions/action.mapReducer";
+import {logoutUser} from "../store/actions/action.userDataReducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,43 +31,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-  isOpen: boolean
-  redirect: boolean
   isLogin: boolean
   userName: string
-  Id: string
   avatar: string
-  address: string
-  latLng: any
-  mapBoards: any
-  marker: any
-  userLogout: Function
-  setRedirect: Function
   resetRedirect: Function
+  logoutUser: Function
 }
 
-const Header: React.FC<IProps> = ({ resetRedirect, marker, latLng, address, mapBoards, isOpen, setRedirect, redirect, isLogin, avatar, Id, userName, userLogout }) => {
+const Header: React.FC<IProps> = ({logoutUser, resetRedirect, isLogin, avatar, userName }) => {
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
-
-  useEffect(() => {
-    if (redirect && !isLogin) {
-      try {
-        const serializedState = JSON.stringify({address, latLng, mapBoards});
-        localStorage.setItem('boards-map-state', serializedState);
-      } catch (err) {
-        console.log('setItem err', err);
-        // ignore write errors
-      }
-      window.location.href = `http://localhost:5000/api/auth/google`;
-    }
-    return () => {
-      // clearInterval(google);
-    }
-  }, [redirect, isLogin]);
-
+  
   const handleLoginDialogOpen = () => {
     setOpenLoginDialog(true);
   };
@@ -85,7 +53,21 @@ const Header: React.FC<IProps> = ({ resetRedirect, marker, latLng, address, mapB
   };
 
   const handleGoogle = () => {
-    setRedirect(latLng);
+    window.location.href = `http://localhost:5000/api/auth/google`;
+  };
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('boards-token');
+    logoutUser();
+    resetRedirect();
   };
 
   const loginDialog = () => {
@@ -117,21 +99,7 @@ const Header: React.FC<IProps> = ({ resetRedirect, marker, latLng, address, mapB
       </div>
     );
   };
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('boards-token');
-    userLogout();
-    resetRedirect();
-  };
-
+  
   return (
     <div className={classes.root}>
       {openLoginDialog && loginDialog()}
@@ -178,22 +146,18 @@ const Header: React.FC<IProps> = ({ resetRedirect, marker, latLng, address, mapB
 };
 
 const mapStateToProps = (state: any) => ({
-  isLogin: state.login.isLogin,
-  userName: state.user.userName,
-  Id: state.user.Id,
-  avatar: state.user.avatar,
+  isLogin: state.user.userLogin,
+  userName: state.user.userData.name,
+  avatar: state.user.userData.avatar,
   redirect: state.map.redirect,
   isOpen: state.map.open,
   address: state.map.address,
-  latLng: state.map.latLng,
-  mapBoards: state.map.mapBoards,
-  marker: state.map.marker,
+  mapBoards: state.mapBoards,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  logoutUser: () => dispatch(logoutUser()),
   resetRedirect: () => dispatch(resetRedirect()),
-  userLogout: () => dispatch(userLogout()),
-  setRedirect: (latLng: any) => dispatch(setRedirect(latLng)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
