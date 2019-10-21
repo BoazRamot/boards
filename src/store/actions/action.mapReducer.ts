@@ -9,6 +9,10 @@ export const UPDATE_LOCATION = 'UPDATE_LOCATION';
 export const SET_REDIRECT = 'SET_REDIRECT';
 export const RESET_REDIRECT = 'RESET_REDIRECT';
 export const ADD_MARKER_LAT_LNG = 'ADD_MARKER_LAT_LNG';
+export const SET_FIND_LOCATION = 'SET_FIND_LOCATION';
+export const RESET_FIND_LOCATION = 'RESET_FIND_LOCATION';
+export const SET_POPSTATE = 'SET_POPSTATE';
+export const RESET_POPSTATE = 'RESET_POPSTATE';
 
 // action creators
 
@@ -46,4 +50,20 @@ export const addMarkerLatLng = (latLng: any) => {
 
 export const setRedirect = (bounds: any, latLng: any, mapCentre: any, mapZoom: any, numOfMarkers: any, address: string) => {
   return { type: SET_REDIRECT, bounds, latLng, mapCentre, mapZoom, numOfMarkers, address }
+};
+
+export const setFindLocation = () => {
+  return { type: SET_FIND_LOCATION }
+};
+
+export const resetFindLocation = () => {
+  return { type: RESET_FIND_LOCATION }
+};
+
+export const setPopstate = () => {
+  return { type: SET_POPSTATE }
+};
+
+export const resetPopstate = () => {
+  return { type: RESET_POPSTATE }
 };

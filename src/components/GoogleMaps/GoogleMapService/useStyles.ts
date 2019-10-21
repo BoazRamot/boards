@@ -11,12 +11,18 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     paperRoot: {
-      width: '30vw',
-      [theme.breakpoints.down('sm')]: {
-        width: '40vw',
-      },
-      [theme.breakpoints.down('xs')]: {
+      // width: '30vw',
+      [theme.breakpoints.between('xs', 'sm')]: {
         width: '80vw',
+      },
+      [theme.breakpoints.between('sm', 'md')]: {
+        width: '60vw',
+      },
+      [theme.breakpoints.between('md', 'lg')]: {
+        width: '50vw',
+      },
+      [theme.breakpoints.between('lg', 'xl')]: {
+        width: '45vw',
       },
       display: 'flex',
       alignItems: 'center',

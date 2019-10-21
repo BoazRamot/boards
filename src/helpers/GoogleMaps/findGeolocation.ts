@@ -3,19 +3,9 @@ export const findGeolocation = (map: any, maps: any) => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       const { latitude, longitude } = position.coords;
-      const bounds = new maps.LatLngBounds();
-      const latLngBounds = 0.001348;
-      // const latLngBounds = 0.002200;
-      bounds.ja = { g: longitude - latLngBounds, h: longitude + latLngBounds };
-      bounds.na = { g: latitude - latLngBounds, h: latitude + latLngBounds };
-      // infoWindow.setPosition({lat: latitude, lng: longitude});
-      // infoWindow.setContent('Location found.');
-      // infoWindow.open(map);
-      map.setCenter({lat: latitude, lng: longitude});
+      map.panTo({lat: latitude, lng: longitude});
       map.setZoom(16);
-      // reverseGeocoding(map, {lat: latitude, lng: longitude});
-      // map.fitBounds(bounds);
-      // getBoards();
+      console.log();
     }, function() {
       handleLocationError(true, infoWindow, map);
     });

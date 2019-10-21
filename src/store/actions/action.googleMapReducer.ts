@@ -5,6 +5,7 @@ export const RESET_MARKER = 'RESET_MARKER';
 export const ADD_MARKERS = 'ADD_MARKERS';
 export const ADD_PLACE_LISTENER = 'ADD_PLACE_LISTENER';
 export const ADD_MAP = 'ADD_MAP';
+export const RESET_STATE = 'RESET_STATE';
 
 // action creators
 
@@ -26,4 +27,8 @@ export const addMarkers = (marker: any) => {
 
 export const addMap = (map: any) => {
   return { type: ADD_MAP, map }
+};
+
+export const resetState = () => {
+  return { type: RESET_STATE }
 };

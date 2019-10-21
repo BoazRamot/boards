@@ -89,22 +89,16 @@ router
       const { name, location, community, description } = req.body;
       const users = [req.user.id];
       const boardFields = { name, community, description, location, users };
-      // const {  } = req.body
-      // const boardFields = { ...req.body };
-
-      // boardFields.user = req.user.id;
-      // boardFields.title = title;
-      // boardFields.text = text;
-      // boardFields.location = location;
-      // if (boardFields) boardFields.kind = kind;
   
       // Create board
       try {
         const board = new Board(boardFields);
         await board.save();
+        // Add board id to user boards[]
         const user = await User.findOne({ _id: req.user.id });
         user.boards = [...user.boards, board._id];
         await user.save();
+        // res.redirect(`http://localhost:3000/board/${board._id}`);
         res.json(board);
       } catch (error) {
         console.error(error.message);

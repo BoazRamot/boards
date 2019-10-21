@@ -1,13 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {
-  Button,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Divider,
-  Drawer,
-  IconButton,
-  TextField,
-  useTheme
-} from "@material-ui/core";
+import React, {ReactEventHandler, useState} from "react";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Divider, Drawer, IconButton, useTheme} from "@material-ui/core";
 import {List} from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -19,31 +12,28 @@ import {boardsAtThisLocation, boardsCloseToThisLocation} from "./boardsList";
 import AddBoard from "./AddBoard";
 import AddNewBoard from "./AddNewBoard";
 import {createNewBoard} from "../../store/actions/action.mapApiMiddleware";
+import {Link as RouterLink} from 'react-router-dom';
 
 interface IProps {
-  mapBoards: any
-  latLng: any
-  markerLatLng: any
-  closeDrawer: Function
-  createNewBoard: any
+  mapBoards: any // todo: type
+  board: any // todo: type
+  latLng: any // todo: type
+  markerLatLng: any // todo: type
+  closeDrawer: ReactEventHandler;
+  createNewBoard: any // todo: type
   address: string
-  isOpen: boolean
-  isLogin: boolean
-  redirect: boolean
+  isOpen: boolean;
+  isLogin: boolean;
+  redirect: boolean;
 }
 
-const MapResultDrawer: React.FC<IProps> = ({ redirect, markerLatLng, createNewBoard, mapBoards, latLng, address, isOpen, closeDrawer, isLogin }) => {
-  // const [login, setlogin] = useState(true);
+const MapResultDrawer: React.FC<IProps> = ({ board, redirect, markerLatLng, createNewBoard, mapBoards, 
+                                             latLng, address, isOpen, closeDrawer, isLogin }) => {
+  
   const [openNewBoard, setOpenNewBoard] = useState(false);
+  const [newBoardCreated, setNewBoardCreated] = useState(false);
   const classes = useStyles();
   const theme = useTheme();
-  // let location = latLng;
-  //
-  // useEffect(() => {
-  //   if (redirect) {
-  //     location = markerLatLng;
-  //   }
-  // }, [redirect])
 
   const handleNewBoardOpen = () => {
     setOpenNewBoard(true);
@@ -52,15 +42,47 @@ const MapResultDrawer: React.FC<IProps> = ({ redirect, markerLatLng, createNewBo
   const handleNewBoardClose = () => {
     setOpenNewBoard(false);
   };
+
+  const handleNewBoardCreatedOpen = () => {
+    setNewBoardCreated(true);
+  };
+
+  const handleNewBoardCreatedClose = () => {
+    setNewBoardCreated(false);
+  };
+
+  // const handleGoToBoard = () => {
+  //   handleNewBoardCreatedClose();
+  // };
   
   return (
     <div className={classes.root}>
+      {newBoardCreated && <Dialog open={newBoardCreated} onClose={handleNewBoardCreatedClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">New Board Community Created</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Congratulations You Have Created New Board Community: 
+            {board.name}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <RouterLink to={`/board/${board._id}`}>
+            <Button variant="contained" color="primary" onClick={handleNewBoardCreatedClose}>
+              Go To Board Now!
+            </Button>
+          </RouterLink>
+          <Button onClick={handleNewBoardCreatedClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>}
       {openNewBoard &&
       <AddNewBoard createNewBoard={createNewBoard}
                    latLng={latLng}
                    handleNewBoardClose={handleNewBoardClose}
                    openNewBoard={openNewBoard}
                    address={address}
+                   handleNewBoardCreatedOpen={handleNewBoardCreatedOpen}
       />}
       <Drawer
         className={classes.drawer}
@@ -73,7 +95,7 @@ const MapResultDrawer: React.FC<IProps> = ({ redirect, markerLatLng, createNewBo
       >
         <div className={classes.drawerHeader}>
           <h3 style={{alignSelf: "flex-start", alignContent: "center"}}>{address}</h3>
-          <IconButton onClick={() => closeDrawer()}>
+          <IconButton onClick={closeDrawer}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
@@ -97,7 +119,8 @@ const MapResultDrawer: React.FC<IProps> = ({ redirect, markerLatLng, createNewBo
 };
 
 const mapStateToProps = (state: any) => ({
-  mapBoards: state.mapBoards,
+  mapBoards: state.mapBoards.mapBoards,
+  board: state.mapBoards.board,
   latLng: state.map.latLng,
   markerLatLng: state.map.markerLatLng,
   address: state.map.address,

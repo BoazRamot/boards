@@ -46,14 +46,16 @@ interface State {
 }
 
 interface IProps {
-  handleNewBoardClose: any
+  handleNewBoardClose: any // todo: type
   openNewBoard: boolean
   address: string
-  latLng: any
-  createNewBoard: any
+  latLng: any // todo: type
+  createNewBoard: any // todo: type
+  handleNewBoardCreatedOpen: any // todo: type
 }
 
-const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardClose, openNewBoard, address }) => {
+const AddNewBoard: React.FC<IProps> = ({ handleNewBoardCreatedOpen, createNewBoard, latLng, handleNewBoardClose, openNewBoard, address }) => {
+  
   const formEl = useRef<HTMLFormElement>(null);
   const classes = useStyles();
   const [values, setValues] = useState<State>({
@@ -63,6 +65,8 @@ const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardC
     community: 'General Community',
     description: '',
   });
+
+  
 
   const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [name]: event.target.value });
@@ -84,6 +88,8 @@ const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardC
     };
     console.log('board', board)
     createNewBoard(board);
+    handleNewBoardClose();
+    handleNewBoardCreatedOpen();
   };
   
   return (
@@ -160,7 +166,7 @@ const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardC
               value={values.description}
               onChange={handleChange('description')}
             />
-            {/*add static map*/}
+            {/* todo: add static map*/}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleNewBoardClose} color="primary">

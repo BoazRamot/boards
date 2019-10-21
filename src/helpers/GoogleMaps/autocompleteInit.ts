@@ -26,7 +26,10 @@ export const autocompleteInit = (autocompleteActions: any, addPlaceListener: any
     if (location) {
       newMarker = addMarkerToMap({name, location}, map, maps);
     }
-    map.fitBounds(viewport);
+    // map.setCenter(location);
+    // map.setZoom(16);
+    map.panTo(location)
+    // map.fitBounds(viewport);
 
     let address = '';
     if (place.address_components) {

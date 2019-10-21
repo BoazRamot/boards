@@ -1,6 +1,7 @@
 import React from "react";
-import {ListItem, ListItemText} from "@material-ui/core";
+import {createStyles, ListItem, ListItemText, makeStyles, Theme} from "@material-ui/core";
 import {isBoardCloseToUser} from "../../helpers/GoogleMaps/isBoardCloseToUser";
+import {Link as RouterLink} from "react-router-dom";
 
 export const boardsAtThisLocation = (mapBoards: any, latLng: any) => {
   const list = mapBoards.filter((board: any) =>
@@ -19,12 +20,24 @@ export const boardsCloseToThisLocation = (mapBoards: any, latLng: any) => {
   );
 };
 
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     root: {
+//       width: '100%',
+//       maxWidth: 360,
+//       backgroundColor: theme.palette.background.paper,
+//     },
+//   }),
+// );
+
+// const classes = useStyles();
+
 const boardsList = (list: any) => {
   return (
     <div>
       {list && list.map((board: any) => (
         <ListItem button key={board._id} >
-          <ListItemText>{board.name}</ListItemText>
+          <RouterLink to={`/board/${board._id}`} style={{ textDecoration: 'none' }}><ListItemText>{board.name}</ListItemText></RouterLink>
         </ListItem>
       ))}
     </div>

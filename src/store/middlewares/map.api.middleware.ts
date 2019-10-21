@@ -1,6 +1,6 @@
 import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
 import {MAP_API_CREATE_BOARD, MAP_API_GET_BOARDS} from "../actions/action.mapApiMiddleware";
-import {mapBoardsDataSet} from "../actions/action.boardsDataReducer";
+import {addMapBoardData, mapBoardsDataSet} from "../actions/action.boardsDataReducer";
 import {store} from "../../index";
 
 const getMapBoards: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch) => action => {
@@ -34,6 +34,7 @@ const createMapBoard: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatc
         });
         const boardData = await res.json();
         console.log('new board Data: ', boardData)
+        dispatch(addMapBoardData(boardData));
         // dispatch(mapBoardsDataSET(boardsData));
       } catch (e) {
         console.error('Board Create Failed', e)

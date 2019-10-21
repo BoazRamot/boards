@@ -152,7 +152,7 @@ const mapStateToProps = (state: any) => ({
   redirect: state.map.redirect,
   isOpen: state.map.open,
   address: state.map.address,
-  mapBoards: state.mapBoards,
+  mapBoards: state.mapBoards.mapBoards,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
