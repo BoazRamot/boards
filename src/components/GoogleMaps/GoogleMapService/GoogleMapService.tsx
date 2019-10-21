@@ -8,7 +8,7 @@ import {
   addLatLng, addMarkerLatLng,
   closeDrawer,
   openDrawer,
-  resetAddress, resetRedirect,
+  resetAddress, resetFindLocation, resetRedirect,
   updateLocation
 } from "../../../store/actions/action.mapReducer";
 import useStyles from "./useStyles";
@@ -20,7 +20,7 @@ import {autocompleteInit} from "../../../helpers/GoogleMaps/autocompleteInit";
 import AutocompleteInputDialog from "../AutocompleteInputDialog";
 import {findGeolocation} from "../../../helpers/GoogleMaps/findGeolocation";
 import {getAllBoards} from "../../../store/actions/action.mapApiMiddleware";
-import {resetMapBoardsData} from "../../../store/actions/action.boardsDataReducer";
+import {mapBoardsDataSet, resetMapBoardsData} from "../../../store/actions/action.boardsDataReducer";
 import {addMap, addMarker, addMarkers, addPlaceListener, resetMarker} from "../../../store/actions/action.googleMapReducer";
 
 declare global {
@@ -48,7 +48,7 @@ interface IProps {
   redirect: boolean
   isUpdateLocation: boolean
   isLogin: boolean
-  recover: boolean
+  findLocation: boolean
   addMap: Function
   map: any
   bounds: any
@@ -58,9 +58,11 @@ interface IProps {
   resetAddress: Function
   resetRedirect: Function
   addAddress: Function
+  resetFindLocation: Function
+  mapBoardsDataSet: Function
 }
 
-const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRedirect, resetAddress, mapZoom, numOfMarkers, mapCentre, bounds, recover, map, addMap, getAllBoards, addMarker, isLogin, addPlaceListener, isUpdateLocation, redirect, addLatLng, marker, resetSearch, mapBoards, addMarkers, latLng, updateLocation, address, isOpen, openDrawer, closeDrawer }) => {
+const GoogleMapService: React.FC<IProps> = ({ mapBoardsDataSet, resetFindLocation, markerLatLng, addAddress, resetRedirect, resetAddress, mapZoom, numOfMarkers, mapCentre, bounds, findLocation, map, addMap, getAllBoards, addMarker, isLogin, addPlaceListener, isUpdateLocation, redirect, addLatLng, marker, resetSearch, mapBoards, addMarkers, latLng, updateLocation, address, isOpen, openDrawer, closeDrawer }) => {
   // autocompleteInput disabled
   const [autocompleteInput, setAutocompleteInput] = useState(false);
   // autocompleteInput select list alert
@@ -71,6 +73,17 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
   const mapRef = useRef(null);
   const classes = useStyles();
   const maps = window.google.maps;
+
+  // useEffect(() => {
+  //   if (mapBoards !== 0 && map) {
+  //     console.log(map.getBounds())
+  //     const boards = mapBoards.map((board: any) => {
+  //       map.getBounds().contains({lat: board.location.latitude , lng: board.location.longitude})
+  //     });
+  //     console.log('board', boards)
+  //   }
+  //
+  // });
 
   const handleAutocompleteInputDialogOpen = () => {
     setOpenAutocompleteInputDialog(true);
@@ -84,14 +97,25 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
     if (mapBoards.length !== 0) {
       // const map = (mapRef.current as any).state.map;
       const markers: any = [];
+      // const reduceBoards = mapBoards.map((board: any) => {
       mapBoards.map((board: any) => {
+        // search within area
         if (isBoardCloseToUser(board, latLng)) {
           const location = { lat: board.location.latitude, lng: board.location.longitude };
           const place = {name: board.name, location};
+
+          // // todo: display only what on user view
+          // const userView = map.getBounds();
+          // if (userView.contains(location)) {
+          //   console.log(board.name)
+          // }
+
           const marker = addMarkerToMap(place, map, maps);
           markers.push(marker);
+          // return board;
       }});
-      addMarkers(markers)
+      addMarkers(markers);
+      // mapBoardsDataSet(reduceBoards);
     }
   };
   
@@ -105,6 +129,11 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
   }, [clearButton]);
   
   useEffect(() => {
+
+    // if ( ( persistedState.mapBoards.mapBoards.length === 0 ) && (store.getState().googleMap.marker.length > 1 ) ) {
+    //   console.log('test persistedState')
+    // }
+    
     if (mapBoards.length !== 0) {
       addBoardsToMap(map, mapBoards, latLng);
     }
@@ -113,9 +142,6 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
   const onLoad = useCallback(
     function onLoad(map: any) {
       console.log('onLoad')
-      map.setOptions({
-        disableDefaultUI: true
-      });
       if (redirect) {
         map.setCenter(latLng);
         map.setZoom(mapZoom);
@@ -144,48 +170,37 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
     }, []
   );
 
-
-
-
-
-
-
-  // const onBoundsChanged = useCallback(
-  //   function onBoundsChanged() {
-  //     console.log('onBoundsChanged')
-  //     const map = (mapRef.current as any).state.map;
-  //     const newLatLng = { lat: map.center.lat(), lng: map.center.lng() };
-  //     addLatLng(newLatLng);
-  //     // const map = (mapRef.current as any).state.map;
-  //     // (searchBoxRef.current as any).state.searchBox.setBounds(map.getBounds())
-  //   }, []
-  // );
-
   const reverseGeocoding = (map: any, latLng: any) => {
-    // const map = (mapRef.current as any).state.map;
     const geocoder = new maps.Geocoder;
-    geocoder.geocode({'location': latLng}, function(results: any, status: any) {
+    geocoder.geocode({'location': latLng}, (results: any, status: any) => {
       if (status === 'OK') {
         console.log(results)
-        // if (results[0]) {
-        //   const infoWindow = new window.google.maps.InfoWindow;
-        //   infoWindow.setPosition(latLng);
-        //   infoWindow.setContent('Location found.');
-        //   infoWindow.open(map);
-        //   map.setCenter(latLng);
-        //   map.fitBounds(results[0].geometry.viewport);
-        // } else {
-        //   // window.alert('No results found');
-        // }
+        if (results[0]) {
+          map.panTo(latLng);
+          const address = results[0].formatted_address;
+          const place = {name: address, location: markerLatLng};
+          const newMarker = addMarkerToMap(place, map, maps);
+          updateLocation(address, latLng, newMarker);
+          setAutocompleteInput(true);
+          getAllBoards();
+          (autocompleteBoxRef.current as any).querySelector('input').value = address;
+          setClearButton(true);
+        } else {
+          window.alert('No results found');
+        }
       } else {
-        // window.alert('Geocoder failed due to: ' + status);
+        window.alert('Geocoder failed due to: ' + status);
       }
     });
+    resetFindLocation();
+    map.setOptions({draggableCursor: undefined});
+    setAutocompleteInput(false);
   };
 
   const handleClick = (e: any) => {
+    if (!findLocation) return;
     const latLng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-    // reverseGeocoding(latLng)
+    reverseGeocoding(map, latLng)
   };
   
   return (
@@ -197,20 +212,28 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
       <GoogleMap
         id="map"
         ref={mapRef}
-        // zoom={zoom}
-        // center={{lat, lng}}
+        center={latLng}
+        zoom={13}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          mapTypeControl: true,
+          mapTypeControlOptions: {
+            position: maps.ControlPosition.LEFT_BOTTOM
+          },
+        }}
         mapContainerClassName={clsx(classes.content, {
           [classes.contentShift]: isOpen,
         })}
-        onClick={e => handleClick(e)}
+        onClick={handleClick}
         onLoad={onLoad}
-        // onBoundsChanged={onBoundsChanged}
       >
         <AutoCompleteInput
           autocompleteBoxRef={autocompleteBoxRef}
           setClearButton={setClearButton}
           autocompleteInput={autocompleteInput}
           clearButton={clearButton}
+          setAutocompleteInput={setAutocompleteInput}
         />
       </GoogleMap>
     </div>
@@ -219,7 +242,7 @@ const GoogleMapService: React.FC<IProps> = ({ markerLatLng, addAddress, resetRed
 
 const mapStateToProps = (state: any) => ({
   marker: state.googleMap.marker,
-  recover: state.map.recover,
+  findLocation: state.map.findLocation,
   latLng: state.map.latLng,
   markerLatLng: state.map.markerLatLng,
   mapCentre: state.map.mapCentre,
@@ -231,13 +254,15 @@ const mapStateToProps = (state: any) => ({
   redirect: state.map.redirect,
   isUpdateLocation: state.map.isUpdateLocation,
   isLogin: state.user.userLogin,
-  mapBoards: state.mapBoards,
+  mapBoards: state.mapBoards.mapBoards,
   map: state.googleMap.map,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  mapBoardsDataSet: (boards: any) => dispatch(mapBoardsDataSet(boards)),
   addAddress: (address: any) => dispatch(addAddress(address)),
   addMap: (map: any) => dispatch(addMap(map)),
+  resetFindLocation: () => dispatch(resetFindLocation()),
   getAllBoards: () => dispatch(getAllBoards()),
   resetRedirect: () => dispatch(resetRedirect()),
   resetSearch: () => {

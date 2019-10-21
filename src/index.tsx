@@ -5,16 +5,23 @@ import * as serviceWorker from './serviceWorker';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Provider} from "react-redux";
 import configureStore from "./store/configureStore";
-import {saveState} from "./helpers/localStorage";
+import {saveStateToLocalStorage, saveStateToSessionStorage} from "./helpers/localStorage";
 import {throttle} from 'lodash'
 
 export const store = configureStore();
 store.subscribe(throttle(() => {
-  saveState({
+  saveStateToSessionStorage({
     map: store.getState().map,
     user: store.getState().user,
     mapBoards: store.getState().mapBoards,
   });
+}, 1000));
+store.subscribe(throttle(() => {
+  saveStateToLocalStorage({
+    map: store.getState().map,
+    mapBoards: store.getState().mapBoards,
+  });
+  console.log('index saveStateToLocalStorage')
 }, 1000));
 
 ReactDOM.render(

@@ -2,22 +2,29 @@ import React, {useEffect, useState} from 'react';
 import {Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, RouteComponentProps} from 'react-router-dom';
 import PostCard from "../../components/PostCard";
 // import {getAllPosts} from '../../services/posts.data.service';
 
-const Board: React.FC = () => {
-  // updateRequired value is updates counter - just to force re-render (can be done with empty object as well)
-  const [updateRequired, setUpdateRequired] = useState(0);
-  const [posts, setPosts] = useState();
+interface IProps {
+}
 
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     const result = await getAllPosts();
-  //     setPosts(result);
-  //   };
-  //   getPosts();
+const Board: React.FC<IProps & RouteComponentProps> = ({ match}) => {
+  // updateRequired value is updates counter - just to force re-render (can be done with empty object as well)
+  // const [updateRequired, setUpdateRequired] = useState(0);
+  // const [posts, setPosts] = useState();
+
+  useEffect(() => {
+    const boardId = (match.params as any).id;
+    console.log('boardId', boardId)
+    // getBoardPosts();
+    // const getPosts = async () => {
+    //   const result = await getAllPosts();
+    //   setPosts(result);
+    // };
+    // getPosts();
   // }, [updateRequired]);
+  }, []);
 
   return (
     <Grid container justify="center">

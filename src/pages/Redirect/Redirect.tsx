@@ -17,17 +17,6 @@ const Redirect: React.FC<IProps & RouteComponentProps> = ({ match}) => {
     if (token) {
       localStorage.setItem('boards-token', token);
     }
-    // try {
-      // const serializedState: any = localStorage.getItem('boards-map-state');
-      // const state = JSON.parse(serializedState);
-      // console.log('state', state)
-      // resetRedirect(state.address, state.latLng, state.marker, state.mapBoards, state.open);
-      // updateRedirect(state.address, state.latLng);
-      // updateRedirect();
-    // } catch (err) {
-    //   console.log('getItem err', err);
-    // }
-
     history.push("/");
   });
   
