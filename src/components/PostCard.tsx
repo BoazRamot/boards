@@ -34,7 +34,7 @@ const PostCard: React.FC<IProps & RouteComponentProps> = ({
       <Redirect
         push={true}
         to={{
-          pathname: `${apiURL}${match.url}/${post._id}`,
+          pathname: `${apiURL}${match.url}/posts/${post._id}`,
           state: { post },
         }}
       />

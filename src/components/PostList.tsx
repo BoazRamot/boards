@@ -1,7 +1,6 @@
 import React from 'react';
 import ILookup from '../models/ILookup';
 import IPost from '../models/IPost';
-// import Loading from './Loading';
 import PostCard from './PostCard';
 
 interface IProps {
@@ -10,10 +9,6 @@ interface IProps {
 }
 
 const PostList: React.FC<IProps> = ({ postList, onPostDelete }) => {
-  // if (!postList) {
-  //   return <Loading />;
-  // }
-
   return (
     <section className="post-list">
       {Object.values(postList)

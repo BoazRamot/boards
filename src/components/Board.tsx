@@ -10,7 +10,10 @@ import Loading from './Loading';
 
 const Board: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const [board, setBoard] = useState<IBoard>();
-  const boardDataService = new BoundDataService<IBoard>('', DataCollections.Boards);
+  const boardDataService = new BoundDataService<IBoard>(
+    '',
+    DataCollections.Boards,
+  );
   // get data on mount
   useEffect(() => {
     const getBoard = async (id: string) => {
@@ -30,12 +33,10 @@ const Board: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   }
 
   return (
-    <Grid container={true} justify="center">
-      <Grid item={true} xs={10}>
-        <BoardDetails board={board} />
-        <BoardFeed board={board} />
-      </Grid>
-    </Grid>
+    <section className="board">
+      <BoardDetails board={board} />
+      <BoardFeed board={board} />
+    </section>
   );
 };
 

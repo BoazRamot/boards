@@ -1,6 +1,15 @@
-import React from 'react';
-import {AppBar, Button, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography} from '@material-ui/core';
+import {
+  AppBar,
+  Button,
+  createStyles,
+  IconButton,
+  makeStyles,
+  Theme,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,9 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      position:'fixed',
-      left:0,
-      top:0,
+      position: 'fixed',
+      left: 0,
+      top: 0,
     },
   }),
 );
@@ -29,7 +38,12 @@ const Header = () => {
     <div className={classes.root}>
       <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
@@ -39,7 +53,7 @@ const Header = () => {
         </Toolbar>
       </AppBar>
     </div>
-  )
+  );
 };
 
 export default Header;

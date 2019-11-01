@@ -16,10 +16,10 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
   match,
   location,
 }) => {
-  const post = (location.state || {}) as IPost;
+  const post = location.state as IPost;
   const [title, setTitle] = useState('');
   const [content, setContent] = useState();
-  const [files, setFiles] = useState();
+  const [files, setFiles] = useState([] as File[]);
   const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
   const [isUpdateDone, setIsUpdateDone] = useState(false);
 
@@ -59,7 +59,7 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
         if (e && e.target && e.target.result) {
           setFilesDataURIs([...filesDataURIs, e.target.result]);
         }
-        setFiles([...files, ...(element.files as FileList)]);
+        setFiles([...(files || []), ...(element.files as FileList)]);
       };
       Object.values(element.files).forEach(file => {
         reader.readAsDataURL(file);
@@ -74,7 +74,7 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
   return (
     <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
       {post ? <header>Edit Post</header> : <header>Create Post</header>}
-      <input name="title" value={title} onChange={onTitleChange} />
+      <input name="title" value={title} placeholder="title..." onChange={onTitleChange} />
       <TextareaAutosize
         name="content"
         minRows={5}
@@ -82,7 +82,7 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
         autoFocus={true}
         spellCheck={true}
         useCacheForDOMMeasurements={true}
-        placeholder="Enter your text here..."
+        placeholder="content..."
         value={content}
         onChange={onContentChange}
       />
