@@ -27,20 +27,3 @@ export const promisify = (param: object | Function) => {
       throw new Error('param must be of type object or Function');
   }
 };
-
-// returns a copy of the input object containing only the fields in fieldsToKeep
-export function filterObj(
-  obj: { [index: string]: any },
-  fieldsToKeep: string[],
-) {
-  if (!fieldsToKeep || fieldsToKeep.length === 0) {
-    return obj;
-  }
-  const result: { [index: string]: any } = {};
-  Object.keys(obj).forEach(key => {
-    if (fieldsToKeep && fieldsToKeep.includes(key)) {
-      result[key] = obj[key];
-    }
-  });
-  return result;
-}

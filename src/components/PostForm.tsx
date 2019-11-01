@@ -1,71 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect, RouteComponentProps, withRouter } from 'react-router';
 import TextareaAutosize from 'react-textarea-autosize';
-import { postsDataService } from '../App';
 import IPost from '../models/IPost';
-import { imagesURL } from '../services/data.service';
+import BoundDataService from '../services/BoundDataService';
+import { apiURL } from '../services/data.service';
 
 interface IProps {
+  postDataService: BoundDataService<IPost>;
   onSubmit: (post: IPost) => void;
 }
-const PostForm: React.FC<IProps & RouteComponentProps<{ id: string }>> = ({
+
+const PostForm: React.FC<IProps & RouteComponentProps> = ({
+  postDataService,
   onSubmit,
   match,
+  location,
 }) => {
-  const [post, setPost] = useState<IPost>();
-  const [text, setText] = useState('');
-  const [file, setFile] = useState();
-  const [fileDataURI, setFileDataURI] = useState();
+  const post = (location.state || {}) as IPost;
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState();
+  const [files, setFiles] = useState();
+  const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
   const [isUpdateDone, setIsUpdateDone] = useState(false);
-  // get data on mount
-  useEffect(() => {
-    const getPost = async (id: string) => {
-      postsDataService.getById(id).then(data => {
-        if (data) {
-          setPost(data);
-          setText(data.text);
-        }
-      });
-    };
-    if (match.params.id) {
-      getPost(match.params.id);
-    }
-  }, [match.params.id]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formElement = event.target as HTMLFormElement;
     const formData = new FormData(formElement);
     if (post) {
-      await postsDataService.update(post._id, formData);
+      await postDataService.update(post._id, formData);
       setIsUpdateDone(true);
     } else {
-      formData.append('createdAt', new Date().toISOString());
-      const newPost = await postsDataService.insert(formData);
+      const newPost = await postDataService.insert(formData);
       formElement.reset();
-      setPost(undefined);
-      setText('');
-      setFileDataURI(undefined);
+      setTitle('');
+      setContent('');
+      setFilesDataURIs([]);
       onSubmit(newPost);
     }
   };
 
-  const onTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const element = event.target as HTMLInputElement;
+    setTitle(element.value);
+  };
+
+  const onContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const element = event.target as HTMLTextAreaElement;
-    setText(element.value);
+    setContent(element.value);
   };
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const element = event.target as HTMLInputElement;
-    const selectedFile = element.files && element.files[0];
-    if (selectedFile) {
-      // convert to data URI. see: https://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded
+    if (element.files && element.files.length > 0) {
+      // convert to data URI for preview
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        setFileDataURI(e && e.target && e.target.result);
-        setFile(selectedFile);
+        if (e && e.target && e.target.result) {
+          setFilesDataURIs([...filesDataURIs, e.target.result]);
+        }
+        setFiles([...files, ...(element.files as FileList)]);
       };
-      reader.readAsDataURL(selectedFile);
+      Object.values(element.files).forEach(file => {
+        reader.readAsDataURL(file);
+      });
     }
   };
 
@@ -76,30 +74,41 @@ const PostForm: React.FC<IProps & RouteComponentProps<{ id: string }>> = ({
   return (
     <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
       {post ? <header>Edit Post</header> : <header>Create Post</header>}
+      <input name="title" value={title} onChange={onTitleChange} />
       <TextareaAutosize
-        name="text"
+        name="content"
         minRows={5}
         maxRows={10}
         autoFocus={true}
         spellCheck={true}
         useCacheForDOMMeasurements={true}
         placeholder="Enter your text here..."
-        value={text}
-        onChange={onTextChange}
+        value={content}
+        onChange={onContentChange}
       />
-      {fileDataURI && <img src={fileDataURI} alt={text} />}
-      {!fileDataURI && post && post.image && (
-        <img src={`${imagesURL}/${post.image}`} alt={text} />
-      )}
+      {filesDataURIs.length > 0 &&
+        filesDataURIs.map((dataURI, index) => (
+          <img key={index} src={dataURI} alt={`${index}`} />
+        ))}
+      {filesDataURIs.length === 0 &&
+        post &&
+        post.images &&
+        post.images.map(image => (
+          <img
+            key={image._id}
+            src={`${apiURL}${match.url}/posts/${post._id}/images/${image._id}/image`}
+            alt={`${image.description}`}
+          />
+        ))}
       <input
         type="file"
-        name="image"
+        name="images"
         accept="image/*"
         onChange={onFileChange}
       />
       <button
         type="submit"
-        disabled={!text || (post && post.text === text && !file)}
+        disabled={!title || (post && post.title === title && !files)}
       >
         Submit
       </button>

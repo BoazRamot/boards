@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import IPost from '../models/IPost';
-import { imagesURL } from '../services/data.service';
+import { apiURL } from '../services/data.service';
 import MenuMoreVertical from './MenuMoreVertical';
 
 interface IProps {
+  post: IPost;
   onDelete: (id: string) => void;
 }
 
-const PostCard: React.FC<IPost & IProps> = ({
-  _id,
-  text,
-  createdAt,
-  image,
+const PostCard: React.FC<IProps & RouteComponentProps> = ({
+  post,
   onDelete,
+  match,
 }) => {
   const [isEditSelected, setIsEditSelected] = useState(false);
 
@@ -23,7 +22,7 @@ const PostCard: React.FC<IPost & IProps> = ({
         setIsEditSelected(true);
         break;
       case 'delete':
-        onDelete(_id);
+        onDelete(post._id);
         break;
       default:
         break;
@@ -31,14 +30,22 @@ const PostCard: React.FC<IPost & IProps> = ({
   };
 
   if (isEditSelected) {
-    return <Redirect push={true} to={`/${_id}`} />;
+    return (
+      <Redirect
+        push={true}
+        to={{
+          pathname: `${apiURL}${match.url}/${post._id}`,
+          state: { post },
+        }}
+      />
+    );
   }
 
   return (
     <section className="post-card">
       <section className="post-card-header">
         <div className="post-card-date">
-          {new Date(createdAt).toLocaleString('default', {
+          {new Date(post.createdAt).toLocaleString('default', {
             weekday: 'short',
             year: 'numeric',
             month: 'long',
@@ -50,10 +57,18 @@ const PostCard: React.FC<IPost & IProps> = ({
         </div>
         <MenuMoreVertical onItemClick={onMenuClick} />
       </section>
-      <header>{text}</header>
-      {image && <img src={`${imagesURL}/${image}`} alt={text} />}
+      <header>{post.title}</header>
+      {post.content && <p>{post.content}</p>}
+      {post.images &&
+        post.images.map(image => (
+          <img
+            key={image._id}
+            src={`${apiURL}${match.url}/posts/${post._id}/images/${image._id}/image`}
+            alt={image.description}
+          />
+        ))}
     </section>
   );
 };
 
-export default PostCard;
+export default withRouter(PostCard);

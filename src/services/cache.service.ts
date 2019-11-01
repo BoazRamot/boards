@@ -12,7 +12,7 @@ const idFields = new Map<string, string>();
 export default class CacheService {
   public addCollection<T extends ICachedCollection>(
     collectionName: string,
-    idField: string
+    idField: string,
   ) {
     if (!cache.has(collectionName)) {
       cache.set(collectionName, new Map<any, T>());
@@ -74,7 +74,7 @@ export default class CacheService {
 
   public setMany<T extends ICachedCollection>(
     collectionName: string,
-    data: T[]
+    data: T[],
   ) {
     if (!cache.has(collectionName)) {
       throw COLLECTION_DOES_NOT_EXIST(collectionName);

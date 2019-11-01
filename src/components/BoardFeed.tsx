@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { postsDataService } from '../App';
+import IBoard from '../models/IBoard';
+import ILookup from '../models/ILookup';
 import IPost from '../models/IPost';
-import IPostList from '../models/IPostList';
+import BoundDataService from '../services/BoundDataService';
+import { DataCollections } from '../services/data.service';
+import Loading from './Loading';
 import PostForm from './PostForm';
 import PostList from './PostList';
 
-const BoardFeed: React.FC = () => {
-  const [postList, setPostList] = useState<IPostList>({});
+interface IProps {
+  board: IBoard;
+}
+
+const BoardFeed: React.FC<IProps> = ({ board }) => {
+  const [postList, setPostList] = useState<ILookup<IPost>>({});
+  const postDataService = new BoundDataService<IPost>(
+    `${DataCollections.Boards}/${board._id}`,
+    DataCollections.Posts,
+  );
   useEffect(() => {
     const getPostList = async () => {
-      const posts = await postsDataService.get();
-      const list: IPostList = {};
-      posts.forEach(post => (list[post._id] = post));
-      setPostList(list);
+      const posts = await postDataService.get();
+      const postLookup: ILookup<IPost> = {};
+      posts.forEach(post => (postLookup[post._id] = post));
+      setPostList(postLookup);
     };
     getPostList();
   }, []);
@@ -22,14 +33,18 @@ const BoardFeed: React.FC = () => {
   };
 
   const onPostDelete = async (id: string) => {
-    await postsDataService.remove(id);
+    await postDataService.remove(id);
     delete postList[id];
     setPostList({ ...postList });
   };
 
+  if (!postList) {
+    return <Loading />;
+  }
+
   return (
     <section className="board-feed">
-      <PostForm onSubmit={onNewPost} />
+      <PostForm postDataService={postDataService} onSubmit={onNewPost} />
       <PostList postList={postList} onPostDelete={onPostDelete} />
     </section>
   );
