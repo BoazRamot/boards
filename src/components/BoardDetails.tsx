@@ -8,9 +8,9 @@ interface IProps {
 
 const BoardDetails: React.FC<IProps> = ({ board }) => {
   return (
-    <Grid container={true} justify="center">
-      <Grid item={true} xs={10} />
-    </Grid>
+    <section className="board-details">
+      <span>Board Details</span>
+    </section>
   );
 };
 

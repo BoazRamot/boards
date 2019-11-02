@@ -73,8 +73,8 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
 
   return (
     <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
-      {post ? <header>Edit Post</header> : <header>Create Post</header>}
-      <input name="title" value={title} placeholder="title..." onChange={onTitleChange} />
+      {/* {post ? <header>Edit Post</header> : <header>Create Post</header>} */}
+      <input name="title" value={title} placeholder="What's on your mind?" onChange={onTitleChange} />
       <TextareaAutosize
         name="content"
         minRows={5}
@@ -82,7 +82,7 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
         autoFocus={true}
         spellCheck={true}
         useCacheForDOMMeasurements={true}
-        placeholder="content..."
+        placeholder="Can you elaborate?"
         value={content}
         onChange={onContentChange}
       />

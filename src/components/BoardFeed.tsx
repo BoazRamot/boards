@@ -29,7 +29,7 @@ const BoardFeed: React.FC<IProps> = ({ board }) => {
   }, []);
 
   const onNewPost = (newPost: IPost) => {
-    setPostList({ [newPost._id]: newPost, ...postList });
+    setPostList({ ...postList, [newPost._id]: newPost });
   };
 
   const onPostDelete = async (id: string) => {
