@@ -6,8 +6,6 @@ const { check, validationResult } = require('express-validator');
 const Board = require('../models/board');
 const User = require('../models/user');
 
-const app = express();
-
 
 router
   // @route   GET api/boards
@@ -18,6 +16,28 @@ router
       const boards = await Board.find()
         .sort({ created: -1 })
         .populate('user', ['name', 'avatar']);
+      return res.json(boards);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send('Server Error');
+    }
+  })
+
+  // @route   GET api/boards
+  // @desc    Get boards by location
+  // @access  Public
+  .get('/:latLng', async (req, res) => {
+    const {lat, lng} = JSON.parse(req.params.latLng);
+    try {
+      const boards = await Board.find(
+        { geoLocation:
+            { $near :
+                { $geometry: { type: 'Point',  coordinates: [ lng, lat ] },
+                  $maxDistance: 1500
+                }
+            }
+        }
+      ).populate('user', ['name', 'avatar']);
       return res.json(boards);
     } catch (error) {
       console.error(error.message);
@@ -86,9 +106,9 @@ router
         return res.status(400).json({ errors: errors.array() });
       }
   
-      const { name, location, community, description } = req.body;
+      const { name, geoLocation, location, community, description } = req.body;
       const users = [req.user.id];
-      const boardFields = { name, community, description, location, users };
+      const boardFields = { name, community, description, location, geoLocation, users };
   
       // Create board
       try {
@@ -135,80 +155,6 @@ router
     }
   })
 
-  // @route   POST api/boards/:board_id/post
-  // @desc    Create post
-  // @access  Private
-  .post(
-    '/:board_id/post',
-    [
-      auth,
-      [
-        check('text', 'Text is required')
-          .not()
-          .isEmpty(),
-      ],
-    ],
-    async (req, res) => {
-      const errors = await validationResult(req);
-  
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-  
-      //const user = await User.findById(req.user.id).select('-password');
-      const board = await Board.findById(req.params.board_id);
-  
-      const newPost = {
-        user: req.user.id,
-        text: req.body.text,
-      };
-  
-      board.posts.unshift(newPost);
-  
-      // Add post
-      try {
-        await board.save();
-        res.json(board.posts);
-      } catch (error) {
-        console.error(error.message);
-        res.status(500).send('Server Error');
-      }
-    }
-  )
-
-  // @route   PUT api/boards/:board_id/post/:post_id/like
-  // @desc    Like a post
-  // @access  Private
-  .put('/:board_id/post/:post_id/like', auth, async (req, res) => {
-    try {
-      const board = await Board.findById(req.params.board_id);
-  
-      if (!board) {
-        return res.status(404).json('Board not found');
-      }
-  
-      const post = board.posts.find(post => post._id === req.params.post_id);
-  
-      if (!post) {
-        return res.status(404).json('Post not found');
-      }
-  
-      //Check if the post has already been liked
-      if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
-        return res.json({ msg: 'Post already liked' });
-      }
-  
-      const postIndex = board.posts.findIndex(post => post.id === req.params.post_id);
-  
-      board.posts[postIndex].likes.unshift({ user: req.user.id });
-      await board.save();
-      res.json(board.posts[postIndex]);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server Error');
-    }
-  })
-
   // @route   PUT api/boards/:board_id/post/:post_id/unlike
   // @desc    Unlike a board
   // @access  Private
@@ -240,41 +186,6 @@ router
       console.error(error.message);
       res.status(500).send('Server Error');
     }
-  })
-
-  // @route   POST api/boards/:board_id/pots/:post_id
-  // @desc    Create comment for post
-  // @access  Private
-  .post(
-    '/:board_id/post/:post_id',
-    [
-      auth,
-      [
-        check('text', 'Text is required')
-          .not()
-          .isEmpty(),
-      ],
-    ],
-    async (req, res) => {
-      const errors = await validationResult(req);
-  
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
-  
-      const user = await User.findById(req.user.id).select('-password');
-      const board = await Board.findById(req.params.board_id);
-      const postIndex = board.posts.findIndex(post => post._id == req.params.post_id);
-  
-      const newComment = {
-        user: req.user.id,
-        name: user.name,
-        avatar: user.avatar,
-        text: req.body.text,
-      };
-  
-      board.posts[postIndex].comments.unshift(newComment);
-    }
-  );
+  });
 
 module.exports = router;

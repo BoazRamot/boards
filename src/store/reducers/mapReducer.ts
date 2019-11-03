@@ -17,11 +17,12 @@ import {
 
 const mapInitState: any = {
   address: '',
+  markerAddress: '',
   latLng: { lat: 32.109333, lng: 34.855499 },
   open: false,
   redirect: false,
   isUpdateLocation: false,
-  bounds: {},
+  bounds: null,
   findLocation: false,
   mapCentre: null,
   mapZoom: null,
@@ -61,6 +62,7 @@ const mapReducer = (state = mapInitState, action: any) => {
       return {
         ...state,
         address: action.address,
+        markerAddress: action.address,
         latLng: action.latLng,
         open: true,
         isUpdateLocation: true
@@ -86,6 +88,7 @@ const mapReducer = (state = mapInitState, action: any) => {
         numOfMarkers: action.numOfMarkers,
         address: action.address,
       };
+      
     case RESET_REDIRECT:
       return {
         ...state,
@@ -105,6 +108,9 @@ const mapReducer = (state = mapInitState, action: any) => {
       return {
         ...state,
         popstate: false,
+        bounds: null,
+        markerLatLng: action.boardLatLng,
+        markerAddress: action.boardAddress,
       };
     default:
       return state;

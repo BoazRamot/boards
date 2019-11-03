@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.scss';
 import App from './pages/App/App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter as Router} from 'react-router-dom';
@@ -9,6 +10,7 @@ import {saveStateToLocalStorage, saveStateToSessionStorage} from "./helpers/loca
 import {throttle} from 'lodash'
 
 export const store = configureStore();
+
 store.subscribe(throttle(() => {
   saveStateToSessionStorage({
     map: store.getState().map,
@@ -16,13 +18,13 @@ store.subscribe(throttle(() => {
     mapBoards: store.getState().mapBoards,
   });
 }, 1000));
-store.subscribe(throttle(() => {
-  saveStateToLocalStorage({
-    map: store.getState().map,
-    mapBoards: store.getState().mapBoards,
-  });
-  console.log('index saveStateToLocalStorage')
-}, 1000));
+
+// store.subscribe(throttle(() => {
+//   saveStateToLocalStorage({
+//     map: store.getState().map,
+//     mapBoards: store.getState().mapBoards,
+//   });
+// }, 1000));
 
 ReactDOM.render(
   <Provider store={store}>

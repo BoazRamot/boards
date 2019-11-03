@@ -1,14 +1,8 @@
-import {
-  ADD_MAP,
-  ADD_MARKER,
-  ADD_MARKERS,
-  ADD_PLACE_LISTENER,
-  RESET_MARKER,
-  RESET_STATE
+import {ADD_MAP, ADD_MARKER, ADD_PLACE_LISTENER, RESET_MARKER, RESET_STATE
 } from "../actions/action.googleMapReducer";
 
 const mapInitState: any = {
-  marker: [],
+  markersMap: new Map(),
   placeListener: null,
   map: null
 };
@@ -28,23 +22,20 @@ const googleMapReducer = (state = mapInitState, action: any) => {
     case ADD_MARKER:
       return {
         ...state,
-        marker: [action.marker]
+        markersMap: action.marker
       };
     case RESET_MARKER:
       return {
         ...state,
-        marker: [],
-      };
-    case ADD_MARKERS:
-      return {
-        ...state,
-        marker: [...state.marker, ...action.marker]
+        // markersMap: new Map(),
+        markersMap: state.markersMap.clear(),
       };
     case RESET_STATE:
       return {
         ...state,
         map: null,
-        marker: [],
+        // markersMap: new Map(),
+        markersMap: state.markersMap.clear(),
         placeListener: null,
       };
     default:

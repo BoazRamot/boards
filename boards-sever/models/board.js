@@ -1,10 +1,26 @@
 const mongoose = require('mongoose');
+const postSchema = require('./post');
 const Schema = mongoose.Schema;
 
 const boardSchema = new Schema({
   name: {
     type: String,
     // required: true,
+  },
+  geoLocation: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      // required: true
+    },
+    coordinates: {
+      type: [Number],
+      // required: true
+    },
+    index: {
+      type: String,
+      default: '2dsphere'
+    }
   },
   location: {
     address: {
@@ -30,10 +46,7 @@ const boardSchema = new Schema({
   description: {
     type: String,
   },
-  posts: [{
-    type: Schema.Types.ObjectId,
-    ref: 'post',
-  }],
+  posts: [postSchema],
   users: [{
     type: Schema.Types.ObjectId,
     ref: 'user',
@@ -43,6 +56,8 @@ const boardSchema = new Schema({
     default: Date.now,
   },
 });
+
+boardSchema.index({geoLocation: "2dsphere"});
 
 const Board = mongoose.model('board', boardSchema);
 

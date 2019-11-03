@@ -2,7 +2,6 @@
 
 export const ADD_MARKER = 'ADD_MARKER';
 export const RESET_MARKER = 'RESET_MARKER';
-export const ADD_MARKERS = 'ADD_MARKERS';
 export const ADD_PLACE_LISTENER = 'ADD_PLACE_LISTENER';
 export const ADD_MAP = 'ADD_MAP';
 export const RESET_STATE = 'RESET_STATE';
@@ -19,10 +18,6 @@ export const addMarker = (marker: any) => {
 
 export const resetMarker = () => {
   return { type: RESET_MARKER }
-};
-
-export const addMarkers = (marker: any) => {
-  return { type: ADD_MARKERS, marker }
 };
 
 export const addMap = (map: any) => {
