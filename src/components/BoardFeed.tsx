@@ -26,6 +26,7 @@ const BoardFeed: React.FC<IProps> = ({ board }) => {
       setPostList(postLookup);
     };
     getPostList();
+    // eslint-disable-next-line
   }, []);
 
   const onNewPost = (newPost: IPost) => {

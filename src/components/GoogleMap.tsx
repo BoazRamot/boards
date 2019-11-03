@@ -6,8 +6,8 @@ import {
 } from '@material-ui/core';
 import { useLoadScript } from '@react-google-maps/api';
 import React from 'react';
-import keys from '../../config/keys';
-import GoogleMapService from './GoogleMapService';
+import keys from '../config/keys';
+import GoogleMapService from './GoogleMaps/GoogleMapService/GoogleMapService';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

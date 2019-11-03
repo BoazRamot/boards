@@ -26,6 +26,7 @@
         "radix": false,
         "jsx-boolean-value": false,
         "ban-types": false,
-        "array-callback-return": false
+        "array-callback-return": false,
+        "only-arrow-functions": false
     }
 }

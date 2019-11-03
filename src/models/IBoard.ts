@@ -7,12 +7,17 @@ import IUser from './IUser';
 export default interface IBoard {
   _id: string;
   name: string;
-  latLng: { lat: number; lng: number };
+  location: {
+    address?: string;
+    info?: string;
+    latitude: number;
+    longitude: number;
+  };
+  // community: string; // same as members?
   createdBy: string;
   createdAt: string;
   updatedAt: string;
   description?: string;
-  address?: string;
   images?: IImage[];
   posts?: IPost[];
   members?: IUser[];

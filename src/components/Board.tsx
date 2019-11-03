@@ -1,6 +1,6 @@
-import { Grid } from '@material-ui/core';
+// import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import IBoard from '../models/IBoard';
 import BoundDataService from '../services/BoundDataService';
 import { DataCollections } from '../services/data.service';
@@ -26,6 +26,7 @@ const Board: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
     if (match.params.id) {
       getBoard(match.params.id);
     }
+    // eslint-disable-next-line
   }, [match.params.id]);
 
   if (!board) {

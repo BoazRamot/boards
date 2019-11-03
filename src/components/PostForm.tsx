@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect, RouteComponentProps, withRouter } from 'react-router';
+import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import IPost from '../models/IPost';
 import BoundDataService from '../services/BoundDataService';
