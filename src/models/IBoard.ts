@@ -13,10 +13,10 @@ export default interface IBoard {
     latitude: number;
     longitude: number;
   };
-  // community: string; // same as members?
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  community?: string;
   description?: string;
   images?: IImage[];
   posts?: IPost[];
