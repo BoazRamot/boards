@@ -24,29 +24,17 @@ interface IProps {
   resetState: Function;
   getAllBoards: Function;
   setPopstate: Function;
-  resetPopstate: Function;
-  marker: any
   redirect: any
   placeListener: any
-  popstate: any
 }
 
-const App: React.FC<IProps> = ({ popstate, resetPopstate, setPopstate, getAllBoards, resetState, placeListener, resetMarker, loadMapDataNow, redirect, marker, saveMapDataNow, getAllUserData }) => {
-
-  useEffect(() => {
-    if (popstate) {
-      const persistedState = loadStateFromLocalStorage();
-      window.google.maps.event.removeListener(placeListener);
-      // marker.map((marker: any) => marker.setMap(null));
-      resetState();
-      loadMapDataNow(persistedState);
-    }
-  }, [popstate]);
+const App: React.FC<IProps> = ({ resetState, placeListener, loadMapDataNow, saveMapDataNow,
+                                 getAllUserData }) => {
   
   useEffect(() => {
     console.log('app up')
     window.addEventListener('beforeunload', saveOnRefresh);
-    window.addEventListener('popstate', saveOnRefresh.bind(null, 'popstate'));
+    window.addEventListener('popstate', saveOnRefresh);
     const token = localStorage.getItem('boards-token');
     if (token) getAllUserData(token);
 
@@ -55,12 +43,13 @@ const App: React.FC<IProps> = ({ popstate, resetPopstate, setPopstate, getAllBoa
       window.removeEventListener("beforeunload", saveOnRefresh);
       window.removeEventListener("popstate", saveOnRefresh);
       window.google.maps.event.removeListener(placeListener);
-      localStorage.removeItem('boardsMapStateLocal');
+      // localStorage.removeItem('boardsMapStateLocal');
     }
   }, []);
 
-  const saveOnRefresh = (popstate: any = null) => {
-    saveMapDataNow(popstate);
+  const saveOnRefresh = () => {
+    console.log('saveOnRefresh')
+    saveMapDataNow();
   };
 
   const theme = createMuiTheme({
@@ -89,21 +78,19 @@ const App: React.FC<IProps> = ({ popstate, resetPopstate, setPopstate, getAllBoa
 };
 
 const mapStateToProps = (state: any) => ({
-  marker: state.googleMap.marker,
   placeListener: state.googleMap.placeListener,
   redirect: state.map.redirect,
   popstate: state.map.popstate,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveMapDataNow: (popstate: any) => dispatch(saveMapDataNow(popstate)),
+  saveMapDataNow: () => dispatch(saveMapDataNow()),
   loadMapDataNow: (persistedState: any) => dispatch(loadMapDataNow(persistedState)),
   resetMarker: () => dispatch(resetMarker()),
   resetState: () => dispatch(resetState()),
   getAllUserData: (token: any) => dispatch(getAllUserData(token)),
   getAllBoards: () => dispatch(getAllBoards()),
   setPopstate: () => dispatch(setPopstate()),
-  resetPopstate: () => dispatch(resetPopstate()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

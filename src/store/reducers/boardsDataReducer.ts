@@ -1,5 +1,5 @@
 import {
-  ADD_MAP_BOARD_DATA,
+  ADD_MAP_BOARD_DATA, BOARD_DATA_SET,
   BOARD_POSTS_DATA_SET,
   MAP_BOARDS_DATA_SET,
   RESET_MAP_BOARDS_DATA
@@ -37,6 +37,12 @@ const boardsDataReducer = (state: any = boardsDataInitState, action: any) => {
       return {
         ...state,
         posts: action.payload,
+      };
+
+    case BOARD_DATA_SET:
+      return {
+        ...state,
+        board: action.payload,
       };
 
     default:

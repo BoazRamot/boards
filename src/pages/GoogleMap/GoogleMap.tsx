@@ -21,7 +21,7 @@ const Map = () => {
     googleMapsApiKey: keys.googleMapsApiKey,
     version: "weekly",
     libraries: libraries,
-    language: "en"
+    // language: "en"
   });
 
   return isLoaded ? <GoogleMapService /> : <CircularProgress className={classes.progress} />;

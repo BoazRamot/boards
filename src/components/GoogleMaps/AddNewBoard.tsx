@@ -1,10 +1,8 @@
 import React, {useRef, useState} from "react";
 import clsx from 'clsx';
 import {
-  Button,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Divider, MenuItem,
-  TextField,
+  Button, Dialog, DialogActions, DialogContent, 
+  DialogTitle, MenuItem, TextField,
 } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
@@ -79,6 +77,10 @@ const AddNewBoard: React.FC<IProps> = ({ handleNewBoardCreatedOpen, createNewBoa
       name: values.name,
       community: values.community,
       description: values.description,
+      geoLocation: {
+        type : 'Point',
+        coordinates : [latLng.lng, latLng.lat]
+      },
       location: {
         address: values.address,
         info: values.info,

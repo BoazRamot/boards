@@ -1,44 +1,57 @@
 import React from "react";
-import {createStyles, ListItem, ListItemText, makeStyles, Theme} from "@material-ui/core";
-import {isBoardCloseToUser} from "../../helpers/GoogleMaps/isBoardCloseToUser";
+import {ListItem, ListItemText,} from "@material-ui/core";
 import {Link as RouterLink} from "react-router-dom";
 
-export const boardsAtThisLocation = (mapBoards: any, latLng: any) => {
-  const list = mapBoards.filter((board: any) =>
-    ((board.location.latitude === latLng.lat)&&(board.location.longitude === latLng.lng)));
-  return (
-    boardsList(list)
-  );
+export const boardsAtThisLocation = (mapBoards: any, latLng: any, markersMap: any, boardDataSet: Function) => {
+  const list = mapBoards.filter((board: any) => (
+    (board.location.latitude.toFixed(3) === latLng.lat.toFixed(3))&&
+    (board.location.longitude.toFixed(3) === latLng.lng.toFixed(3))
+  ));
+  return ( list.length !== 0 ? boardsList(list, markersMap, boardDataSet) : "No Community Boards At This Location");
 };
 
-export const boardsCloseToThisLocation = (mapBoards: any, latLng: any) => {
-  const list = mapBoards.filter((board: any) =>
-    ((board.location.latitude !== latLng.lat)&&(board.location.longitude !== latLng.lng)));
-  const newList = list.filter((board: any) => {return (isBoardCloseToUser(board, latLng) ? board : null)});
-  return (
-    boardsList(newList)
-  );
+export const boardsCloseToThisLocation = (mapBoards: any, latLng: any, markersMap: any, boardDataSet: Function) => {
+  const list = mapBoards.filter((board: any) => (
+    (board.location.latitude.toFixed(4) !== latLng.lat.toFixed(4))&&
+      (board.location.longitude.toFixed(4) !== latLng.lng.toFixed(4))
+  ));
+  return ( list.length !== 0 ? boardsList(list, markersMap, boardDataSet) : "No Community Boards Close To This Location" );
 };
 
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     root: {
-//       width: '100%',
-//       maxWidth: 360,
-//       backgroundColor: theme.palette.background.paper,
-//     },
-//   }),
-// );
+const boardsList = (list: any, markersMap: any, boardDataSet: Function) => {
 
-// const classes = useStyles();
+  const handleMouseEnter = (boardId: any) => {
+    const marker = markersMap.get(boardId);
+    if (marker) {
+      marker.setIcon("");
+    }
+  };
 
-const boardsList = (list: any) => {
+  const handleMouseLeave = (boardId: any) => {
+    const marker = markersMap.get(boardId);
+    if (marker) {
+      marker.setIcon("http://s3.amazonaws.com/besport.com_images/status-pin.png");
+    }
+  };
+
+  const handleClick = (board: any) => {
+    boardDataSet(board);
+  };
+
   return (
     <div>
       {list && list.map((board: any) => (
-        <ListItem button key={board._id} >
-          <RouterLink to={`/board/${board._id}`} style={{ textDecoration: 'none' }}><ListItemText>{board.name}</ListItemText></RouterLink>
-        </ListItem>
+        <RouterLink key={board._id}
+                    // to={`/board/${board._id}`}
+                    to={`/board/${board.name}`}
+                    onMouseEnter={handleMouseEnter.bind(null, board._id)}
+                    onMouseLeave={handleMouseLeave.bind(null, board._id)}
+                    onClick={handleClick.bind(null, board)}
+        >
+          <ListItem button >
+            <ListItemText primary={board.name} secondary={board.location.address}/>
+          </ListItem>
+        </RouterLink>
       ))}
     </div>
   );
