@@ -10,7 +10,7 @@ export enum DataCollections {
   Users = 'users',
 }
 
-const PORT = 4000;
+const PORT = 5000;
 const baseURL = `http://localhost:${PORT}`;
 export const apiURL = `${baseURL}/api`;
 

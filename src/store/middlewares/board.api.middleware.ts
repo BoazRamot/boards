@@ -9,7 +9,7 @@ const getUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
 //     const token = action.token;
 //     (async () => {
 //       try {
-//         const url = "http://localhost:4000/api/auth/login";
+//         const url = "http://localhost:5000/api/auth/login";
 //         let res = await fetch(url, {method: 'GET', headers: {'X-Auth-Token': token}});
 //         let userData = await res.json();
 //         dispatch(userDataSet(userData));

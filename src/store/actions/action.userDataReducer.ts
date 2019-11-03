@@ -6,14 +6,14 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 
 // action creators
 
-export const userDataSet = (payload: any) => {
+export const userDataSetAction = (payload: any) => {
   return { type: USER_DATA_SET, payload };
 };
 
-export const resetUserData = () => {
+export const resetUserDataAction = () => {
   return { type: RESET_USER_DATA };
 };
 
-export const logoutUser = () => {
+export const logoutUserAction = () => {
   return { type: LOGOUT_USER };
 };

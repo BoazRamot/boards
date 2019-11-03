@@ -16,7 +16,7 @@ const getMapBoards: Middleware = ({ dispatch }: MiddlewareAPI) => (
   if (action.type === MAP_API_GET_BOARDS) {
     (async () => {
       try {
-        const url = 'http://localhost:4000/api/boards';
+        const url = 'http://localhost:5000/api/boards';
         const res = await fetch(url);
         const boardsData = await res.json();
         dispatch(mapBoardsDataSetAction(boardsData));
@@ -36,7 +36,7 @@ const createMapBoard: Middleware = ({ dispatch }: MiddlewareAPI) => (
     const board = JSON.stringify(action.board);
     (async () => {
       try {
-        const url = 'http://localhost:4000/api/boards';
+        const url = 'http://localhost:5000/api/boards';
         const res = await fetch(url, {
           method: 'POST',
           headers: {
