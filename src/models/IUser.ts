@@ -12,7 +12,7 @@ export default interface IUser {
   email: string;
   createdAt: string;
   updatedAt: string;
-  avatar?: IImage;
+  avatar?: string;
   images?: IImage[];
   boards?: string[] | IBoard[];
   posts?: IPost[];
