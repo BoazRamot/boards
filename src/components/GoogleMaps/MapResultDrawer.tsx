@@ -1,14 +1,17 @@
-import { List } from '@material-ui/core';
 import {
+  AppBar,
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
   Drawer,
+  Grid,
   IconButton,
+  List,
+  ListItemText,
   useTheme,
 } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -17,6 +20,8 @@ import React, { ReactEventHandler, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import boardImg from '../../boardImg.jpg';
+import { boardDataSetAction } from '../../store/actions/action.boardsDataReducer';
 import { createNewBoardAction } from '../../store/actions/action.mapApiMiddleware';
 import { closeDrawerAction } from '../../store/actions/action.mapReducer';
 import AddBoard from './AddBoard';
@@ -25,6 +30,7 @@ import { boardsAtThisLocation, boardsCloseToThisLocation } from './boardsList';
 import useStyles from './GoogleMapService/useStyles';
 
 interface IProps {
+  markersMap: any; // todo: type
   mapBoards: any; // todo: type
   board: any; // todo: type
   latLng: any; // todo: type
@@ -35,9 +41,12 @@ interface IProps {
   isOpen: boolean;
   isLogin: boolean;
   redirect: boolean;
+  boardDataSet: Function;
 }
 
 const MapResultDrawer: React.FC<IProps> = ({
+  boardDataSet,
+  markersMap,
   board,
   redirect,
   markerLatLng,
@@ -92,7 +101,7 @@ const MapResultDrawer: React.FC<IProps> = ({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <RouterLink to={`/board/${board._id}`}>
+            <RouterLink to={`/boards/${board._id}`}>
               <Button
                 variant="contained"
                 color="primary"
@@ -122,36 +131,76 @@ const MapResultDrawer: React.FC<IProps> = ({
         variant="persistent"
         anchor="left"
         open={isOpen}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
+        classes={{ paper: classes.drawerPaper }}
       >
-        <div className={classes.drawerHeader}>
-          <h3 style={{ alignSelf: 'flex-start', alignContent: 'center' }}>
-            {address}
-          </h3>
-          <IconButton onClick={closeDrawer}>
-            {theme.direction === 'ltr' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
+        <div
+          className={classes.drawerRoot}
+          style={{ backgroundImage: `url(${boardImg})` }}
+        >
+          <AppBar
+            position="static"
+            color="default"
+            className={classes.drawerHeader}
+          >
+            <h3>{address}</h3>
+            <IconButton onClick={closeDrawer}>
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </AppBar>
+          <div className={classes.drawerHeaderButton} style={{ flexShrink: 0 }}>
+            {isLogin && <AddBoard handleNewBoardOpen={handleNewBoardOpen} />}
+          </div>
+          <Grid
+            container
+            style={{
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 0,
+            }}
+          >
+            <Grid
+              item
+              style={{
+                backgroundColor: 'default',
+                flexGrow: 1,
+                overflow: 'auto' /*minHeight: 'calc(100%)'*/,
+              }}
+            >
+              <Box m={2}>
+                <ListItemText
+                  secondary={'Boards Community at this location:'}
+                />
+                <List>
+                  {boardsAtThisLocation(
+                    mapBoards,
+                    redirect ? markerLatLng : latLng,
+                    markersMap,
+                    boardDataSet,
+                  )}
+                  {/*{boardsAtThisLocation(mapBoards, latLng, markersMap, boardDataSet)}*/}
+                </List>
+                <br />
+                <ListItemText
+                  secondary={'Boards Community close to this location:'}
+                />
+                <List>
+                  {boardsCloseToThisLocation(
+                    mapBoards,
+                    redirect ? markerLatLng : latLng,
+                    markersMap,
+                    boardDataSet,
+                  )}
+                  {/*{boardsCloseToThisLocation(mapBoards, latLng, markersMap, boardDataSet)}*/}
+                </List>
+              </Box>
+            </Grid>
+          </Grid>
         </div>
-        <Divider />
-        {isLogin && <AddBoard handleNewBoardOpen={handleNewBoardOpen} />}
-        <h4>Boards at this location:</h4>
-        <List>
-          {boardsAtThisLocation(mapBoards, redirect ? markerLatLng : latLng)}
-        </List>
-        <Divider />
-        <h4>Boards close to this location:</h4>
-        <List>
-          {boardsCloseToThisLocation(
-            mapBoards,
-            redirect ? markerLatLng : latLng,
-          )}
-        </List>
       </Drawer>
     </div>
   );
@@ -166,11 +215,13 @@ const mapStateToProps = (state: any) => ({
   isOpen: state.map.open,
   redirect: state.map.redirect,
   isLogin: state.user.userLogin,
+  markersMap: state.googleMap.markersMap,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   closeDrawer: () => dispatch(closeDrawerAction()),
   createNewBoard: (board: any) => dispatch(createNewBoardAction(board)),
+  boardDataSet: (board: any) => dispatch(boardDataSetAction(board)),
 });
 
 export default connect(

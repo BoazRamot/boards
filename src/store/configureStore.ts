@@ -1,9 +1,5 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
-import {
-  // loadStateFromLocalStorage,
-  loadStateFromSessionStorage,
-} from '../helpers/localStorage';
-// import { store } from '../index';
+import { loadStateFromSessionStorage } from '../helpers/localStorage';
 import { mapBoardsMiddleware } from './middlewares/map.api.middleware';
 import { mapDataMiddleware } from './middlewares/map.data.middleware';
 import { userMiddleware } from './middlewares/user.api.middleware';
@@ -19,9 +15,6 @@ export default function configureStore() {
     ...mapDataMiddleware,
   ];
   const middlewareEnhancer = applyMiddleware(...middleware);
-  // const session = loadStateFromSessionStorage();
-  // const local = loadStateFromLocalStorage();
-  // const persistedState = {...session, ...local};
   const persistedState = loadStateFromSessionStorage();
 
   console.log('persistedState', persistedState);
@@ -34,5 +27,4 @@ export default function configureStore() {
   });
 
   return createStore(rootReducer, persistedState, middlewareEnhancer);
-  // return createStore(rootReducer, {}, middlewareEnhancer)
 }

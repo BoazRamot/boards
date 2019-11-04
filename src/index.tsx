@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import {
-  saveStateToLocalStorage,
+  // saveStateToLocalStorage,
   saveStateToSessionStorage,
 } from './helpers/localStorage';
+import './index.scss';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';
 
@@ -22,15 +23,14 @@ store.subscribe(
   }, 1000),
 );
 
-store.subscribe(
-  throttle(() => {
-    saveStateToLocalStorage({
-      map: store.getState().map,
-      mapBoards: store.getState().mapBoards,
-    });
-    console.log('index saveStateToLocalStorage');
-  }, 1000),
-);
+// store.subscribe(
+//   throttle(() => {
+//     saveStateToLocalStorage({
+//       map: store.getState().map,
+//       mapBoards: store.getState().mapBoards,
+//     });
+//   }, 1000),
+// );
 
 ReactDOM.render(
   <Provider store={store}>

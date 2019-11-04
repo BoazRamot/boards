@@ -1,4 +1,10 @@
-import { Divider, IconButton, InputBase, Paper } from '@material-ui/core';
+import {
+  Divider,
+  IconButton,
+  InputBase,
+  Paper,
+  Tooltip,
+} from '@material-ui/core';
 import AddLocationIcon from '@material-ui/icons/AddLocation';
 import ClearIcon from '@material-ui/icons/Clear';
 import LocationOffIcon from '@material-ui/icons/LocationOff';
@@ -8,16 +14,21 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { findGeolocation } from '../../helpers/GoogleMaps/findGeolocation';
+import { resetMapBoardsDataAction } from '../../store/actions/action.boardsDataReducer';
+import { resetMarkerAction } from '../../store/actions/action.googleMapReducer';
 import {
   openDrawerAction,
   resetAddressAction,
   resetFindLocationAction,
+  // resetPopstateAction,
   // resetRedirectAction,
   setFindLocationAction,
 } from '../../store/actions/action.mapReducer';
 import useStyles from './GoogleMapService/useStyles';
 
 interface IProps {
+  reverseGeocoding: Function;
+  resetSearch: Function;
   resetFindLocation: Function;
   setFindLocation: Function;
   openDrawer: Function;
@@ -32,9 +43,15 @@ interface IProps {
   address: string;
   map: any;
   setAutocompleteInput: any;
+  markersMap: any;
+  maps: any;
 }
 
 const AutoCompleteInput: React.FC<IProps> = ({
+  reverseGeocoding,
+  maps,
+  markersMap,
+  resetSearch,
   setAutocompleteInput,
   resetFindLocation,
   findLocation,
@@ -75,12 +92,17 @@ const AutoCompleteInput: React.FC<IProps> = ({
   const handleClear = () => {
     const input = (autocompleteBoxRef.current as any).querySelector('input')
       .value;
-    console.log('input', input);
     if (input === null) {
       return;
     }
     (autocompleteBoxRef.current as any).querySelector('input').value = '';
     resetAddress();
+    if (markersMap && markersMap.size !== 0) {
+      markersMap.forEach((marker: any, user: any) => marker.setMap(null));
+      // clear marker && mapBoards
+      resetSearch();
+      setAutocompleteInput(false);
+    }
     setClearButton(false);
   };
 
@@ -89,11 +111,22 @@ const AutoCompleteInput: React.FC<IProps> = ({
       return;
     }
     openDrawer();
+    if (markersMap.size > 1) {
+      const bounds = new maps.LatLngBounds();
+      markersMap.forEach((marker: any, user: any) => {
+        bounds.extend(marker.getPosition());
+      });
+      map.fitBounds(bounds);
+    } else {
+      const userMarker = markersMap.get('user');
+      const latLng = userMarker.getPosition();
+      map.panTo(latLng);
+    }
   };
 
   const handleFindMyLocation = () => {
-    findGeolocation(map, window.google.maps);
     handleClear();
+    findGeolocation(map, window.google.maps, reverseGeocoding);
   };
 
   const handleFindLocation = () => {
@@ -118,8 +151,8 @@ const AutoCompleteInput: React.FC<IProps> = ({
         <InputBase
           className={classes.input}
           ref={autocompleteBoxRef}
-          placeholder="Search Google Maps"
-          inputProps={{ 'aria-label': 'search google maps' }}
+          placeholder="Search Boards Community"
+          inputProps={{ 'aria-label': 'search boards community' }}
           onChange={handleInput}
           disabled={autocompleteInput}
         />
@@ -131,29 +164,35 @@ const AutoCompleteInput: React.FC<IProps> = ({
           <ClearIcon />
         </IconButton>
         <Divider className={classes.divider} orientation="vertical" />
-        <IconButton
-          className={classes.iconButton}
-          aria-label="search"
-          onClick={handleSearch}
-        >
-          <SearchIcon />
-        </IconButton>
+        <Tooltip title="Open Search Results">
+          <IconButton
+            className={classes.iconButton}
+            aria-label="search"
+            onClick={handleSearch}
+          >
+            <SearchIcon />
+          </IconButton>
+        </Tooltip>
         <Divider className={classes.divider} orientation="vertical" />
-        <IconButton
-          className={classes.iconButton}
-          aria-label="search"
-          onClick={handleFindMyLocation}
-        >
-          <MyLocationIcon />
-        </IconButton>
+        <Tooltip title="Find My Location">
+          <IconButton
+            className={classes.iconButton}
+            aria-label="find"
+            onClick={handleFindMyLocation}
+          >
+            <MyLocationIcon />
+          </IconButton>
+        </Tooltip>
         <Divider className={classes.divider} orientation="vertical" />
-        <IconButton
-          className={classes.iconButton}
-          aria-label="location"
-          onClick={handleFindLocation}
-        >
-          {findLocation ? <LocationOffIcon /> : <AddLocationIcon />}
-        </IconButton>
+        <Tooltip title="Search Location In a Click">
+          <IconButton
+            className={classes.iconButton}
+            aria-label="location"
+            onClick={handleFindLocation}
+          >
+            {findLocation ? <LocationOffIcon /> : <AddLocationIcon />}
+          </IconButton>
+        </Tooltip>
       </Paper>
     </div>
   );
@@ -165,13 +204,22 @@ const mapStateToProps = (state: any) => ({
   address: state.map.address,
   redirect: state.map.redirect,
   findLocation: state.map.findLocation,
+  popstate: state.map.popstate,
+
+  markersMap: state.googleMap.markersMap,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  // resetPopstate: () => dispatch(resetPopstate()),
   openDrawer: () => dispatch(openDrawerAction()),
   resetAddress: () => dispatch(resetAddressAction()),
   setFindLocation: () => dispatch(setFindLocationAction()),
   resetFindLocation: () => dispatch(resetFindLocationAction()),
+
+  resetSearch: () => {
+    dispatch(resetMarkerAction());
+    dispatch(resetMapBoardsDataAction());
+  },
 });
 
 export default connect(

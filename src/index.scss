@@ -15,11 +15,21 @@ code {
 // global classes
 .nav-link {
   text-decoration: none;
-  color: lightgray;
+  color: saddlebrown;
   &:hover {
-    color: white;
+    color: gold;
   }
   &.nav-link-active {
     color: gold;
   }
+}
+
+// .list-item {
+// }
+
+a {
+  //color: saddlebrown;
+  color: black;
+  text-decoration: none;
+  display: block;
 }

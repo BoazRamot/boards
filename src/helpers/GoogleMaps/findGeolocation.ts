@@ -1,14 +1,20 @@
-export const findGeolocation = (map: any, maps: any) => {
+export const findGeolocation = (
+  map: any,
+  maps: any,
+  locationCB: any = null,
+) => {
   const infoWindow = new maps.InfoWindow();
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      function(position) {
         const { latitude, longitude } = position.coords;
         map.panTo({ lat: latitude, lng: longitude });
         map.setZoom(16);
-        console.log();
+        if (locationCB) {
+          locationCB(map, { lat: latitude, lng: longitude }, maps);
+        }
       },
-      () => {
+      function() {
         handleLocationError(true, infoWindow, map);
       },
     );

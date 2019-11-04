@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 const drawerWidth = '35vw';
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: `0 12px`,
       textOverflow: `ellipses`,
-      position: "absolute",
+      position: 'absolute',
     },
     hide: {
       display: 'none',
@@ -37,20 +37,32 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
       flexShrink: 0,
     },
+    drawerRoot: {
+      height: 'calc(100%)',
+      display: 'flex',
+      flexDirection: 'column',
+    },
     drawerPaper: {
       height: 'calc(100% - 64px)',
       top: 64,
       width: drawerWidth,
     },
     drawerHeader: {
+      // width: `calc(${drawerWidth} - 8px)`,
+      // position:'fixed',
       display: 'flex',
+      flexFlow: 'row',
       alignItems: 'center',
       padding: theme.spacing(0, 1),
       ...theme.mixins.toolbar,
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
+    },
+    drawerHeaderButton: {
+      alignSelf: 'center',
+      padding: theme.spacing(1),
     },
     content: {
-      display: "flex",
+      display: 'flex',
       flex: 1,
       alignSelf: 'stretch',
       padding: theme.spacing(3),

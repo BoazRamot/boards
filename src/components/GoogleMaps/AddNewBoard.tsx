@@ -3,9 +3,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  // DialogContentText,
   DialogTitle,
-  // Divider,
   MenuItem,
   TextField,
 } from '@material-ui/core';
@@ -87,9 +85,14 @@ const AddNewBoard: React.FC<IProps> = ({
     event.preventDefault();
 
     const board = {
+      _id: values.name,
       name: values.name,
       community: values.community,
       description: values.description,
+      geoLocation: {
+        type: 'Point',
+        coordinates: [latLng.lng, latLng.lat],
+      },
       location: {
         address: values.address,
         info: values.info,

@@ -1,4 +1,7 @@
-import { GoogleMap } from '@react-google-maps/api';
+import {
+  GoogleMap,
+  // InfoWindow,
+} from '@react-google-maps/api';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
@@ -6,7 +9,6 @@ import { Dispatch } from 'redux';
 import { addMarkerToMap } from '../../../helpers/GoogleMaps/addMarkerToMap';
 import { autocompleteInit } from '../../../helpers/GoogleMaps/autocompleteInit';
 import { findGeolocation } from '../../../helpers/GoogleMaps/findGeolocation';
-import { isBoardCloseToUser } from '../../../helpers/GoogleMaps/isBoardCloseToUser';
 import {
   mapBoardsDataSetAction,
   resetMapBoardsDataAction,
@@ -14,11 +16,13 @@ import {
 import {
   addMapAction,
   addMarkerAction,
-  addMarkersAction,
   addPlaceListenerAction,
   resetMarkerAction,
 } from '../../../store/actions/action.googleMapReducer';
-import { getAllBoardsAction } from '../../../store/actions/action.mapApiMiddleware';
+import {
+  getAllBoardsAction,
+  getBoardsByPointAction,
+} from '../../../store/actions/action.mapApiMiddleware';
 import {
   addAddressAction,
   addLatLngAction,
@@ -27,6 +31,7 @@ import {
   openDrawerAction,
   resetAddressAction,
   resetFindLocationAction,
+  resetPopstateAction,
   resetRedirectAction,
   updateLocationAction,
 } from '../../../store/actions/action.mapReducer';
@@ -45,69 +50,58 @@ declare global {
 window.google = window.google || {};
 
 interface IProps {
-  marker: any;
+  markersMap: any;
   markerLatLng: any;
   resetSearch: Function;
   mapBoards: any;
-  addMarkers: Function;
   latLng: any;
   updateLocation: Function;
-  openDrawer: Function;
-  closeDrawer: Function;
-  addLatLng: Function;
   addPlaceListener: Function;
   addMarker: Function;
   getAllBoards: Function;
+  getBoardsByPoint: Function;
   address: string;
+  markerAddress: string;
   isOpen: boolean;
   redirect: boolean;
-  isUpdateLocation: boolean;
-  isLogin: boolean;
+  popstate: boolean;
   findLocation: boolean;
   addMap: Function;
   map: any;
-  bounds: any;
-  mapCentre: any;
   mapZoom: any;
   numOfMarkers: any;
-  resetAddress: Function;
-  resetRedirect: Function;
+  board: any;
   addAddress: Function;
   resetFindLocation: Function;
-  mapBoardsDataSet: Function;
+  resetPopstate: Function;
+  resetMarker: Function;
 }
 
 const GoogleMapService: React.FC<IProps> = ({
-  mapBoardsDataSet,
+  board,
+  markerAddress,
+  resetMarker,
+  popstate,
+  resetPopstate,
+  getBoardsByPoint,
   resetFindLocation,
   markerLatLng,
-  addAddress,
-  resetRedirect,
-  resetAddress,
   mapZoom,
   numOfMarkers,
-  mapCentre,
-  bounds,
   findLocation,
   map,
   addMap,
   getAllBoards,
   addMarker,
-  isLogin,
   addPlaceListener,
-  isUpdateLocation,
   redirect,
-  addLatLng,
-  marker,
+  markersMap,
   resetSearch,
   mapBoards,
-  addMarkers,
   latLng,
   updateLocation,
   address,
   isOpen,
-  openDrawer,
-  closeDrawer,
 }) => {
   // autocompleteInput disabled
   const [autocompleteInput, setAutocompleteInput] = useState(false);
@@ -123,17 +117,6 @@ const GoogleMapService: React.FC<IProps> = ({
   const classes = useStyles();
   const maps = window.google.maps;
 
-  // useEffect(() => {
-  //   if (mapBoards !== 0 && map) {
-  //     console.log(map.getBounds())
-  //     const boards = mapBoards.map((board: any) => {
-  //       map.getBounds().contains({lat: board.location.latitude , lng: board.location.longitude})
-  //     });
-  //     console.log('board', boards)
-  //   }
-  //
-  // });
-
   const handleAutocompleteInputDialogOpen = () => {
     setOpenAutocompleteInputDialog(true);
   };
@@ -142,115 +125,114 @@ const GoogleMapService: React.FC<IProps> = ({
     setOpenAutocompleteInputDialog(false);
   };
 
-  const addBoardsToMap = (_map: any, _mapBoards: any, _latLng: any) => {
+  const addBoardsToMap = (
+    _map: any,
+    _mapBoards: any,
+    _latLng: any,
+    _markersMap: any,
+  ) => {
     if (_mapBoards.length !== 0) {
-      // const map = (mapRef.current as any).state.map;
-      const markers: any = [];
-      // const reduceBoards = mapBoards.map((board: any) => {
-      // eslint-disable-next-line
-      _mapBoards.map(function(board: any) {
-        // search within area
-        if (isBoardCloseToUser(board, _latLng)) {
+      let bounds: any;
+      if (_map && _markersMap.size !== 0) {
+        bounds = new maps.LatLngBounds();
+        const marker = _markersMap.get('user');
+        bounds.extend(marker.getPosition());
+        // eslint-disable-next-line
+        _mapBoards.map((_board: any) => {
           const location = {
-            lat: board.location.latitude,
-            lng: board.location.longitude,
+            lat: _board.location.latitude,
+            lng: _board.location.longitude,
           };
-          const place = { name: board.name, location };
-
-          // // todo: display only what on user view
-          // const userView = map.getBounds();
-          // if (userView.contains(location)) {
-          //   console.log(board.name)
-          // }
-
-          const _marker = addMarkerToMap(place, _map, maps);
-          markers.push(_marker);
-          // return board;
-        }
-      });
-      addMarkers(markers);
-      // mapBoardsDataSet(reduceBoards);
+          const place = { name: _board.name, location };
+          const _marker = addMarkerToMap(place, _map, maps, true);
+          _markersMap.set(_board._id, _marker);
+          bounds.extend(_marker.getPosition());
+        });
+      }
+      addMarker(_markersMap);
+      // if (map && markersMap.size > 1 && !redirect) {
+      if (_map && _markersMap.size > 1) {
+        _map.fitBounds(bounds);
+      }
     }
   };
 
   useEffect(() => {
-    if (!clearButton && marker.length !== 0) {
-      marker.map((_marker: any) => _marker.setMap(null));
-      // clear marker && mapBoards
-      resetSearch();
-      setAutocompleteInput(false);
-    }
-    // eslint-disable-next-line
-  }, [clearButton]);
-
-  useEffect(() => {
-    // if ( ( persistedState.mapBoards.mapBoards.length === 0 ) && (store.getState().googleMap.marker.length > 1 ) ) {
-    //   console.log('test persistedState')
-    // }
     if (mapBoards.length !== 0) {
-      addBoardsToMap(map, mapBoards, latLng);
+      addBoardsToMap(map, mapBoards, latLng, markersMap);
     }
     // eslint-disable-next-line
   }, [mapBoards]);
 
   const onLoad = useCallback(function _onLoad(_map: any) {
     console.log('onLoad');
+    console.log('onLoad popstate', popstate);
     if (redirect) {
+      console.log('onLoad redirect');
+      const newMarkersMap = new Map();
       _map.setCenter(latLng);
       _map.setZoom(mapZoom);
-      if (numOfMarkers > 0) {
-        const place = { name: address, location: markerLatLng };
+      if (numOfMarkers > 0 && address) {
+        let place = {};
+        if (popstate) {
+          const boardLatLng = {
+            lat: board.location.latitude,
+            lng: board.location.longitude,
+          };
+          place = { name: board.address, location: boardLatLng };
+          getBoardsByPoint(boardLatLng);
+          resetPopstate(board.address, boardLatLng);
+        } else {
+          place = { name: markerAddress, location: markerLatLng };
+        }
         const newMarker = addMarkerToMap(place, _map, maps);
-        addMarker(newMarker);
+        newMarkersMap.set('user', newMarker);
+        addMarker(newMarkersMap);
         setAutocompleteInput(true);
       }
       if (numOfMarkers > 1) {
-        addBoardsToMap(_map, mapBoards, markerLatLng);
+        addBoardsToMap(_map, mapBoards, markerLatLng, newMarkersMap);
       }
-      // resetRedirect();
     } else {
       findGeolocation(_map, maps);
     }
-    // findGeolocation(map, maps);
     const autocompleteActions = {
       getAllBoards,
       handleAutocompleteInputDialogOpen,
       updateLocation,
       setAutocompleteInput,
-    };
-    autocompleteInit(
-      autocompleteActions,
       addPlaceListener,
-      _map,
-      autocompleteBoxRef,
-      maps,
-    );
+      getBoardsByPoint,
+    };
+    autocompleteInit(autocompleteActions, _map, autocompleteBoxRef, maps);
     addMap(_map);
     // eslint-disable-next-line
   }, []);
 
-  const reverseGeocoding = (_map: any, _latLng: any) => {
-    const geocoder = new maps.Geocoder();
+  const reverseGeocoding = (_map: any, _latLng: any, _maps: any) => {
+    const geocoder = new _maps.Geocoder();
     geocoder.geocode({ location: _latLng }, (results: any, status: any) => {
       if (status === 'OK') {
         console.log(results);
         if (results[0]) {
+          const newMarkersMap = new Map();
           _map.panTo(_latLng);
           const _address = results[0].formatted_address;
-          const place = { name: _address, location: markerLatLng };
-          const newMarker = addMarkerToMap(place, _map, maps);
-          updateLocation(_address, _latLng, newMarker);
+          const place = { name: _address, location: _latLng };
+          const newMarker = addMarkerToMap(place, _map, _maps);
+          newMarkersMap.set('user', newMarker);
+          updateLocation(_address, _latLng, newMarkersMap);
           setAutocompleteInput(true);
-          getAllBoards();
+          getBoardsByPoint(_latLng);
           (autocompleteBoxRef.current as any).querySelector(
             'input',
           ).value = _address;
           setClearButton(true);
         } else {
-          window.alert('No results found');
+          window.alert('No results found'); // todo: dialog window
         }
       } else {
-        window.alert('Geocoder failed due to: ' + status);
+        window.alert('Geocoder failed due to: ' + status); // todo: dialog window
       }
     });
     resetFindLocation();
@@ -263,7 +245,7 @@ const GoogleMapService: React.FC<IProps> = ({
       return;
     }
     const _latLng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-    reverseGeocoding(map, _latLng);
+    reverseGeocoding(map, _latLng, maps);
   };
 
   return (
@@ -298,6 +280,8 @@ const GoogleMapService: React.FC<IProps> = ({
           autocompleteInput={autocompleteInput}
           clearButton={clearButton}
           setAutocompleteInput={setAutocompleteInput}
+          maps={maps}
+          reverseGeocoding={reverseGeocoding}
         />
       </GoogleMap>
     </div>
@@ -305,7 +289,7 @@ const GoogleMapService: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  marker: state.googleMap.marker,
+  markersMap: state.googleMap.markersMap,
   findLocation: state.map.findLocation,
   latLng: state.map.latLng,
   markerLatLng: state.map.markerLatLng,
@@ -314,12 +298,15 @@ const mapStateToProps = (state: any) => ({
   numOfMarkers: state.map.numOfMarkers,
   bounds: state.map.bounds,
   address: state.map.address,
+  markerAddress: state.map.markerAddress,
   isOpen: state.map.open,
   redirect: state.map.redirect,
+  popstate: state.map.popstate,
   isUpdateLocation: state.map.isUpdateLocation,
   isLogin: state.user.userLogin,
   mapBoards: state.mapBoards.mapBoards,
   map: state.googleMap.map,
+  board: state.mapBoards.board,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -328,11 +315,15 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   addMap: (map: any) => dispatch(addMapAction(map)),
   resetFindLocation: () => dispatch(resetFindLocationAction()),
   getAllBoards: () => dispatch(getAllBoardsAction()),
+  getBoardsByPoint: (latLng: any) => dispatch(getBoardsByPointAction(latLng)),
   resetRedirect: () => dispatch(resetRedirectAction()),
   resetSearch: () => {
     dispatch(resetMarkerAction());
     dispatch(resetMapBoardsDataAction());
   },
+  resetMarker: () => dispatch(resetMarkerAction()),
+  resetPopstate: (boardAddress: any, boardLatLng: any) =>
+    dispatch(resetPopstateAction(boardAddress, boardLatLng)),
   closeDrawer: () => dispatch(closeDrawerAction()),
   openDrawer: () => dispatch(openDrawerAction()),
   resetAddress: () => dispatch(resetAddressAction()),
@@ -340,8 +331,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(addPlaceListenerAction(placeListener)),
   addMarker: (marker: any) => dispatch(addMarkerAction(marker)),
   addLatLng: (latLng: any) => dispatch(addLatLngAction(latLng)),
-  addMarkerLatLng: (latLng: any) => dispatch(addMarkerLatLngAction(latLng)),
-  addMarkers: (marker: any) => dispatch(addMarkersAction(marker)),
+  // addMarkerLatLng: (latLng: any) => dispatch(addMarkerLatLngAction(latLng)),
   updateLocation: (address: string, latLng: any, marker: any) => {
     dispatch(updateLocationAction(address, latLng));
     dispatch(addMarkerAction(marker));

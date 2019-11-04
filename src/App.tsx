@@ -12,7 +12,7 @@ import Header from './components/Header';
 import PostForm from './components/PostForm';
 import Redirect from './components/Redirect';
 import User from './components/User';
-import { loadStateFromLocalStorage } from './helpers/localStorage';
+// import { loadStateFromLocalStorage } from './helpers/localStorage';
 import {
   resetMarkerAction,
   resetStateAction,
@@ -23,7 +23,7 @@ import {
   saveMapDataNowAction,
 } from './store/actions/action.mapDataMiddleware';
 import {
-  resetPopstateAction,
+  // resetPopstateAction,
   setPopstateAction,
 } from './store/actions/action.mapReducer';
 import { getAllUserDataAction } from './store/actions/action.userApiMiddleware';
@@ -36,44 +36,21 @@ interface IProps {
   resetState: Function;
   getAllBoards: Function;
   setPopstate: Function;
-  resetPopstate: Function;
-  marker: any;
   redirect: any;
   placeListener: any;
-  popstate: any;
 }
 
 const App: React.FC<IProps> = ({
-  popstate,
-  // resetPopstate,
-  // setPopstate,
-  // getAllBoards,
   resetState,
   placeListener,
-  // resetMarker,
   loadMapDataNow,
-  // redirect,
-  // marker,
   saveMapDataNow,
   getAllUserData,
 }) => {
   useEffect(() => {
-    if (popstate) {
-      const persistedState = loadStateFromLocalStorage();
-      window.google.maps.event.removeListener(placeListener);
-      // marker.map((marker: any) => marker.setMap(null));
-      resetState();
-      loadMapDataNow(persistedState);
-    }
-    // eslint-disable-next-line
-  }, [popstate]);
-
-  useEffect(() => {
     console.log('app up');
-
     window.addEventListener('beforeunload', saveOnRefresh);
-    window.addEventListener('popstate', saveOnRefresh.bind(null, 'popstate'));
-
+    window.addEventListener('popstate', saveOnRefresh);
     const token = localStorage.getItem('boards-token');
     if (token) {
       getAllUserData(token);
@@ -84,13 +61,14 @@ const App: React.FC<IProps> = ({
       window.removeEventListener('beforeunload', saveOnRefresh);
       window.removeEventListener('popstate', saveOnRefresh);
       window.google.maps.event.removeListener(placeListener);
-      localStorage.removeItem('boardsMapStateLocal');
+      // localStorage.removeItem('boardsMapStateLocal');
     };
     // eslint-disable-next-line
   }, []);
 
-  const saveOnRefresh = (_popstate: any = null) => {
-    saveMapDataNow(_popstate);
+  const saveOnRefresh = () => {
+    console.log('saveOnRefresh');
+    saveMapDataNow();
   };
 
   const theme = createMuiTheme({
@@ -127,14 +105,13 @@ const App: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  marker: state.googleMap.marker,
   placeListener: state.googleMap.placeListener,
   redirect: state.map.redirect,
   popstate: state.map.popstate,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveMapDataNow: (popstate: any) => dispatch(saveMapDataNowAction(popstate)),
+  saveMapDataNow: () => dispatch(saveMapDataNowAction()),
   loadMapDataNow: (persistedState: any) =>
     dispatch(loadMapDataNowAction(persistedState)),
   resetMarker: () => dispatch(resetMarkerAction()),
@@ -142,7 +119,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   getAllUserData: (token: any) => dispatch(getAllUserDataAction(token)),
   getAllBoards: () => dispatch(getAllBoardsAction()),
   setPopstate: () => dispatch(setPopstateAction()),
-  resetPopstate: () => dispatch(resetPopstateAction()),
 });
 
 export default connect(

@@ -79,6 +79,6 @@ export const setPopstateAction = () => {
   return { type: SET_POPSTATE };
 };
 
-export const resetPopstateAction = () => {
-  return { type: RESET_POPSTATE };
+export const resetPopstateAction = (boardAddress: any, boardLatLng: any) => {
+  return { type: RESET_POPSTATE, boardAddress, boardLatLng };
 };

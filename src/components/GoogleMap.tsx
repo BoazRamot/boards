@@ -26,7 +26,7 @@ const Map = () => {
     googleMapsApiKey: keys.googleMapsApiKey,
     version: 'weekly',
     libraries,
-    language: 'en',
+    // language: 'en',
   });
 
   return isLoaded ? (
