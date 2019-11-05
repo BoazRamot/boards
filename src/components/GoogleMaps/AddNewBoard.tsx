@@ -85,7 +85,7 @@ const AddNewBoard: React.FC<IProps> = ({
     event.preventDefault();
 
     const board = {
-      _id: values.name,
+      // _id: values.name,
       name: values.name,
       community: values.community,
       description: values.description,

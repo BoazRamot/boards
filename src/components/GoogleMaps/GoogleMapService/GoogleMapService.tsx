@@ -151,7 +151,8 @@ const GoogleMapService: React.FC<IProps> = ({
       }
       addMarker(_markersMap);
       // if (map && markersMap.size > 1 && !redirect) {
-      if (_map && _markersMap.size > 1) {
+      // if (_map && _markersMap.size > 1) {
+      if (_map && _markersMap.size > 2) {
         _map.fitBounds(bounds);
       }
     }

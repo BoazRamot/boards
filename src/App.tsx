@@ -91,8 +91,8 @@ const App: React.FC<IProps> = ({
               <Switch>
                 <Route path="/redirect/:id" component={Redirect} />
                 <Route path="/boards/:id" component={Board} />
-                <Route path="/boards/:id/posts/:postId" component={PostForm} />
-                <Route path="/users/:id" component={User} />
+                {/*<Route path="/boards/:id/posts/:postId" component={PostForm} />*/}
+                {/*<Route path="/users/:id" component={User} />*/}
                 <Route path="/" component={Map} />
                 <Route render={PageNotFound} />
               </Switch>

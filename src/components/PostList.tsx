@@ -9,15 +9,16 @@ interface IProps {
 }
 
 const PostList: React.FC<IProps> = ({ postList, onPostDelete }) => {
-  return (
-    <section className="post-list">
-      {Object.values(postList)
-        .reverse()
-        .map(post => (
-          <PostCard key={post._id} post={post} onDelete={onPostDelete} />
-        ))}
-    </section>
-  );
+  return null;
+  // return (
+  //   <section className="post-list">
+  //     {Object.values(postList)
+  //       .reverse()
+  //       .map(post => (
+  //         <PostCard key={post._id} post={post} onDelete={onPostDelete} />
+  //       ))}
+  //   </section>
+  // );
 };
 
 export default PostList;

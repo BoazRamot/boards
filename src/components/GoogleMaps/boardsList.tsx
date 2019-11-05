@@ -61,8 +61,8 @@ const boardsList = (list: any, markersMap: any, boardDataSet: Function) => {
         list.map((board: any) => (
           <RouterLink
             key={board._id}
-            // to={`/boards/${board._id}`}
-            to={`/boards/${board.name}`}
+            to={`/boards/${board._id}`}
+            // to={`/boards/${board.name}`}
             onMouseEnter={handleMouseEnter.bind(null, board._id)}
             onMouseLeave={handleMouseLeave.bind(null, board._id)}
             onClick={handleClick.bind(null, board)}
