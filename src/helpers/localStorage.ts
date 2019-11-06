@@ -1,6 +1,5 @@
-export const loadState = () => {
+export const loadStateFromSessionStorage = () => {
   try {
-    // const serializedState = localStorage.getItem('boardsMapState');
     const serializedState = sessionStorage.getItem('boardsMapState');
     if (serializedState === null) {
       return undefined;
@@ -11,13 +10,33 @@ export const loadState = () => {
   }
 };
 
-export const saveState = (state: any) => {
+export const saveStateToSessionStorage = (state: any) => {
   try {
     const serializedState = JSON.stringify(state);
-    // localStorage.setItem('boardsMapState', serializedState);
     sessionStorage.setItem('boardsMapState', serializedState);
   } catch (e) {
-    console.error('boardsMapState saveState Failed', e)
+    console.error('boardsMapState saveState Failed', e);
+  }
+};
+
+export const loadStateFromLocalStorage = () => {
+  try {
+    const serializedState = localStorage.getItem('boardsMapStateLocal');
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+export const saveStateToLocalStorage = (state: any) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('boardsMapStateLocal', serializedState);
+  } catch (e) {
+    console.error('boardsMapState saveState Failed', e);
   }
 };
 

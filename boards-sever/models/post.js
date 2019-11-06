@@ -2,13 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-  board: {
-    type: Schema.Types.ObjectId,
-    ref: 'board',
-  },
+  // board: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'board',
+  // },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'user',
+  },
+  post2post: {
+    type: Schema.Types.ObjectId,
+    ref: 'post',
   },
   title: {
     type: String,
@@ -38,6 +42,7 @@ const postSchema = new Schema({
   },
 });
 
-const Post = mongoose.model('post', postSchema);
+// const Post = mongoose.model('post', postSchema);
 
-module.exports = Post;
+// module.exports = Post;
+module.exports = postSchema;
