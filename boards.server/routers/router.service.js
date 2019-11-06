@@ -141,10 +141,18 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
       }),
     )
 
+    // DELETE *
+    .delete(
+      '*',
+      auth,
+      asyncHandler(async (req, res, next) => {
+        next();
+      }),
+    )
+
     // DELETE
     .delete(
       '/',
-      auth,
       asyncHandler(async (req, res, next) => {
         const result = await dataService.remove(req.query);
         res.json(result);
@@ -154,7 +162,6 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
     // DELETE /:id
     .delete(
       '/:id',
-      auth,
       asyncHandler(async (req, res, next) => {
         const result = await dataService.removeById(req.params.id);
         res.json(result);
@@ -164,7 +171,6 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
     // DELETE /:id/*
     .delete(
       '/:id/*',
-      auth,
       asyncHandler(async (req, res, next) => {
         const result = await dataService.removeSubDocument(
           req.params.id,
