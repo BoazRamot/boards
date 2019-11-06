@@ -7,8 +7,10 @@ import boardsDataReducer from "./reducers/boardsDataReducer";
 import {userMiddleware} from "./middlewares/user.api.middleware";
 import googleMapReducer from "./reducers/googleMapReducer";
 import {mapDataMiddleware} from "./middlewares/map.data.middleware";
+// import {boardMiddleware} from "./middlewares/board.api.middleware";
 
 export default function configureStore() {
+  // const middleware = [...mapBoardsMiddleware, ...userMiddleware, ...mapDataMiddleware, ...boardMiddleware];
   const middleware = [...mapBoardsMiddleware, ...userMiddleware, ...mapDataMiddleware];
   const middlewareEnhancer = applyMiddleware(...middleware);
   const persistedState = loadStateFromSessionStorage();
