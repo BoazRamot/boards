@@ -1,21 +1,120 @@
-import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
-import {store} from "../../index";
-import {setRedirect} from "../actions/action.mapReducer";
-import {MAP_DATA_SET} from "../actions/action.mapDataMiddleware";
+import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import { store } from '../../index';
+import {
+  // mapBoardsDataSetAction,
+  resetMapBoardsDataAction,
+} from '../actions/action.boardsDataReducer';
+// import { resetMarkerAction } from '../actions/action.googleMapReducer';
+import {
+  MAP_DATA_SET,
+  // MAP_LOAD_DATA_SET,
+} from '../actions/action.mapDataMiddleware';
+import {
+  // resetPopstateAction,
+  setPopstateAction,
+  setRedirectAction,
+} from '../actions/action.mapReducer';
 
-const saveMapData: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch) => action => {
+// To save map data if user press refresh or google redirect
+
+const saveMapData: Middleware = ({ dispatch }: MiddlewareAPI) => (
+  next: Dispatch,
+) => action => {
   if (action.type === MAP_DATA_SET) {
+    console.log('saveMapData');
+    // if (action.board) {
+    //   dispatch(setPopstateAction());
+    // }
     const map = store.getState().googleMap.map;
-    const marker = store.getState().googleMap.marker;
-    const address = store.getState().map.address;
-    const currentBounds = map.getBounds();
-    const mapZoom = map.getZoom();
-    const mapCentre = map.getCenter();
-    const latLng = { lat: mapCentre.lat(), lng: mapCentre.lng()};
-    const numOfMarkers = marker.length;
-    dispatch(setRedirect(currentBounds, latLng, mapCentre, mapZoom, numOfMarkers, address));
+    // const marker = store.getState().googleMap.marker;
+    let address = store.getState().map.address;
+    let mapZoom: number;
+    let latLng: { lat: any; lng: any };
+    let mapCentre: { lat: any; lng: any };
+    let numOfMarkers: number;
+    // const currentBounds = map.getBounds();
+    const markersMap = store.getState().googleMap.markersMap;
+    // const address = store.getState().map.address;
+    const board = store.getState().mapBoards.board;
+    const currentBounds = null;
+    if (action.board) {
+      address = board.location.address;
+      mapZoom = 16;
+      latLng = {
+        lat: board.location.latitude as number,
+        lng: board.location.longitude as number,
+      };
+      mapCentre = latLng;
+      numOfMarkers = 1;
+      dispatch(setPopstateAction());
+      dispatch(resetMapBoardsDataAction());
+    } else {
+      address = store.getState().map.address;
+      mapZoom = map.getZoom();
+      mapCentre = map.getCenter();
+      latLng = { lat: mapCentre.lat(), lng: mapCentre.lng() };
+      numOfMarkers = 0;
+    }
+    if (markersMap) {
+      console.log('saveMapData clean');
+      numOfMarkers = markersMap.size;
+      markersMap.forEach((marker: any, user: any) => marker.setMap(null));
+    }
+    dispatch(
+      setRedirectAction(
+        currentBounds,
+        latLng,
+        mapCentre,
+        mapZoom,
+        numOfMarkers,
+        address,
+      ),
+    );
+    // if (action.board) {
+    //   dispatch(setPopstate());
+    // }
   }
   return next(action);
 };
 
-export const mapDataMiddleware = [saveMapData];
+const loadMapData: Middleware = ({ dispatch }: MiddlewareAPI) => (
+  next: Dispatch,
+) => action => {
+  console.log('loadMapData');
+  // if (action.type === MAP_LOAD_DATA_SET) {
+  //   console.log('loadMapData popstate');
+  //   const map = store.getState().googleMap.map;
+  //   const markersMap = store.getState().googleMap.markersMap;
+  //   markersMap.forEach((marker: any, user: any) => marker.setMap(null));
+  //   // window.google.maps.event.trigger(map, 'resize');
+  //   // dispatch(resetMarker());
+
+  //   // const markersMap = store.getState().googleMap.markersMap;
+  //   // markersMap.forEach((marker: any, user: any) => marker.setMap(null));
+  //   // const persistedState = action.persistedState;
+  //   // const {
+  //   //   currentBounds,
+  //   //   latLng,
+  //   //   mapCentre,
+  //   //   mapZoom,
+  //   //   numOfMarkers,
+  //   //   address,
+  //   // } = persistedState.map;
+  //   // const mapBoards = persistedState.mapBoards.mapBoards;
+  //   // dispatch(
+  //   //   setRedirectAction(
+  //   //     currentBounds,
+  //   //     latLng,
+  //   //     mapCentre,
+  //   //     mapZoom,
+  //   //     numOfMarkers,
+  //   //     address,
+  //   //   ),
+  //   // );
+  //   // dispatch(mapBoardsDataSetAction(mapBoards));
+  //   // dispatch(resetPopstateAction());
+  // }
+  return next(action);
+};
+
+export const mapDataMiddleware = [saveMapData, loadMapData];

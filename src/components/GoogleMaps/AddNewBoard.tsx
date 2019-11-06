@@ -1,12 +1,15 @@
-import React, {useRef, useState} from "react";
-import clsx from 'clsx';
 import {
   Button,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Divider, MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
   TextField,
-} from "@material-ui/core";
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+} from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import React, { useRef, useState } from 'react';
 
 const community = [
   { value: 'General Community' },
@@ -37,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface State {
+interface IState {
   address: string;
   name: string;
   info: string;
@@ -46,51 +49,77 @@ interface State {
 }
 
 interface IProps {
-  handleNewBoardClose: any
-  openNewBoard: boolean
-  address: string
-  latLng: any
-  createNewBoard: any
+  handleNewBoardClose: any; // todo: type
+  openNewBoard: boolean;
+  address: string;
+  latLng: any; // todo: type
+  createNewBoard: any; // todo: type
+  handleNewBoardCreatedOpen: any; // todo: type
 }
 
-const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardClose, openNewBoard, address }) => {
+const AddNewBoard: React.FC<IProps> = ({
+  handleNewBoardCreatedOpen,
+  createNewBoard,
+  latLng,
+  handleNewBoardClose,
+  openNewBoard,
+  address,
+}) => {
   const formEl = useRef<HTMLFormElement>(null);
   const classes = useStyles();
-  const [values, setValues] = useState<State>({
-    address: address,
+  const [values, setValues] = useState<IState>({
+    address,
     name: address,
     info: '',
     community: 'General Community',
     description: '',
   });
 
-  const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (name: keyof IState) => (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setValues({ ...values, [name]: event.target.value });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const board = {
+      // _id: values.name,
       name: values.name,
       community: values.community,
       description: values.description,
+      geoLocation: {
+        type: 'Point',
+        coordinates: [latLng.lng, latLng.lat],
+      },
       location: {
         address: values.address,
         info: values.info,
-        latitude: latLng.lat ,
-        longitude: latLng.lng
+        latitude: latLng.lat,
+        longitude: latLng.lng,
       },
     };
-    console.log('board', board)
+    console.log('board', board);
     createNewBoard(board);
+    handleNewBoardClose();
+    handleNewBoardCreatedOpen();
   };
-  
+
   return (
     <div>
-      <Dialog open={openNewBoard} onClose={handleNewBoardClose} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={openNewBoard}
+        onClose={handleNewBoardClose}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
-        <form autoComplete="off" onSubmit={handleSubmit} ref={formEl} className={classes.container}>
+        <form
+          autoComplete="off"
+          onSubmit={handleSubmit}
+          ref={formEl}
+          className={classes.container}
+        >
           <DialogContent>
             <TextField
               id="outlined-read-only-input"
@@ -160,7 +189,7 @@ const AddNewBoard: React.FC<IProps> = ({ createNewBoard, latLng, handleNewBoardC
               value={values.description}
               onChange={handleChange('description')}
             />
-            {/*add static map*/}
+            {/* todo: add static map*/}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleNewBoardClose} color="primary">

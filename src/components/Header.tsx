@@ -1,14 +1,28 @@
-import React, {useState} from 'react';
-import {AppBar, Avatar, Button, createStyles,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  IconButton, makeStyles, Menu, MenuItem,
-  Theme, Toolbar, Typography} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import {
+  AppBar,
+  Avatar,
+  Button,
+  createStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  makeStyles,
+  Menu,
+  MenuItem,
+  Theme,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import {Dispatch} from "redux";
-import {connect} from "react-redux";
-import {resetRedirect} from "../store/actions/action.mapReducer";
-import {logoutUser} from "../store/actions/action.userDataReducer";
+import MenuIcon from '@material-ui/icons/Menu';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { resetRedirectAction } from '../store/actions/action.mapReducer';
+import { logoutUserAction } from '../store/actions/action.userDataReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,27 +37,33 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      position:'fixed',
-      left:0,
-      top:0,
+      position: 'fixed',
+      left: 0,
+      top: 0,
     },
   }),
 );
 
 interface IProps {
-  isLogin: boolean
-  userName: string
-  avatar: string
-  resetRedirect: Function
-  logoutUser: Function
+  isLogin: boolean;
+  userName: string;
+  avatar: string;
+  resetRedirect: Function;
+  logoutUser: Function;
 }
 
-const Header: React.FC<IProps> = ({logoutUser, resetRedirect, isLogin, avatar, userName }) => {
+const Header: React.FC<IProps> = ({
+  logoutUser,
+  resetRedirect,
+  isLogin,
+  avatar,
+  userName,
+}) => {
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
-  
+
   const handleLoginDialogOpen = () => {
     setOpenLoginDialog(true);
   };
@@ -73,7 +93,11 @@ const Header: React.FC<IProps> = ({logoutUser, resetRedirect, isLogin, avatar, u
   const loginDialog = () => {
     return (
       <div>
-        <Dialog open={openLoginDialog} onClose={handleLoginDialogClose} aria-labelledby="form-dialog-title">
+        <Dialog
+          open={openLoginDialog}
+          onClose={handleLoginDialogClose}
+          aria-labelledby="form-dialog-title"
+        >
           <DialogTitle id="form-dialog-title">Logging With</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -99,13 +123,18 @@ const Header: React.FC<IProps> = ({logoutUser, resetRedirect, isLogin, avatar, u
       </div>
     );
   };
-  
+
   return (
     <div className={classes.root}>
       {openLoginDialog && loginDialog()}
       <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
@@ -118,7 +147,11 @@ const Header: React.FC<IProps> = ({logoutUser, resetRedirect, isLogin, avatar, u
             onClick={handleMenu}
             color="inherit"
           >
-            {isLogin ? <Avatar alt={userName} src={avatar} /> : <AccountCircle />}
+            {isLogin ? (
+              <Avatar alt={userName} src={avatar} />
+            ) : (
+              <AccountCircle />
+            )}
           </IconButton>
           <Menu
             id="menu-appbar"
@@ -135,14 +168,18 @@ const Header: React.FC<IProps> = ({logoutUser, resetRedirect, isLogin, avatar, u
             open={open}
             onClose={handleClose}
           >
-            {isLogin ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : <MenuItem onClick={handleLoginDialogOpen}>Login</MenuItem>}
+            {isLogin ? (
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            ) : (
+              <MenuItem onClick={handleLoginDialogOpen}>Login</MenuItem>
+            )}
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
     </div>
-  )
+  );
 };
 
 const mapStateToProps = (state: any) => ({
@@ -152,12 +189,15 @@ const mapStateToProps = (state: any) => ({
   redirect: state.map.redirect,
   isOpen: state.map.open,
   address: state.map.address,
-  mapBoards: state.mapBoards,
+  mapBoards: state.mapBoards.mapBoards,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  logoutUser: () => dispatch(logoutUser()),
-  resetRedirect: () => dispatch(resetRedirect()),
+  logoutUser: () => dispatch(logoutUserAction()),
+  resetRedirect: () => dispatch(resetRedirectAction()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);
