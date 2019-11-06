@@ -45,6 +45,7 @@ const App: React.FC<IProps> = ({ resetState, placeListener, loadMapDataNow, save
       window.google.maps.event.removeListener(placeListener);
       // localStorage.removeItem('boardsMapStateLocal');
     }
+    // eslint-disable-next-line
   }, []);
 
   const saveOnRefresh = () => {
@@ -60,6 +61,8 @@ const App: React.FC<IProps> = ({ resetState, placeListener, loadMapDataNow, save
     },
   });
 
+  const PageNotFound = () => 'Page not found';
+
   return (
     <div>
       <ThemeProvider theme={theme}>
@@ -68,8 +71,9 @@ const App: React.FC<IProps> = ({ resetState, placeListener, loadMapDataNow, save
           <Switch>
             <Route path="/redirect/:id" component={Redirect}/>
             <Route path="/board/:id" component={Board}/>
+            {/*<Route path="/users/:id" component={User} />*/}
             <Route path="/" component={Map}/>
-            <Route render={() => 'Page not found'}/>
+            <Route render={PageNotFound} />
           </Switch>
         </Box>
       </ThemeProvider>

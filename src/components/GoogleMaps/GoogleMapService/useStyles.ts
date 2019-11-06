@@ -5,7 +5,9 @@ const drawerWidth = '35vw';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: 'calc(100vh - 72px)',
+      // height: 'calc(100vh - 72px)',
+      height: 'calc(100vh - 57px)',
+      // height: '100vh',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
