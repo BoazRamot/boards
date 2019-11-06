@@ -1,0 +1,3 @@
+[submodule "boards-server"]
+	path = boards-server
+	url = https://github.com/PrisonerM13/boards-server.git
