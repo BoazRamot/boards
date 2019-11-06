@@ -2,10 +2,84 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9b24acb-17f4-41b6-8df6-7a2df2e60632" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Board.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/BoardDetails.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/BoardFeed.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ErrorBoundary.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/GoogleMap.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Loading.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MenuMoreVertical.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PostForm.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PostFormDialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PostInput.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PostList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Redirect.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/User.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/IBoard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ICategory.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/IComment.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/IDataService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/IImage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ILookup.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/IPost.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/IUser.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/BoundDataService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/cache.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/data.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tslint.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boards-server" beforeDir="false" afterPath="$PROJECT_DIR$/boards-server" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boards-server/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/boards-server/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boards-server/data/models/board.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-server/data/models/board.model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boards-server/routers/board.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-server/routers/board.router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boards-server/routers/router.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards-server/routers/router.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/AddBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/AddBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/AddNewBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/AddNewBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/AutoCompleteInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/AutoCompleteInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/AutocompleteInputDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/AutocompleteInputDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService/GoogleMapService.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService/GoogleMapService.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService/useStyles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService/useStyles.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/MapResultDrawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/MapResultDrawer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GoogleMaps/boardsList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GoogleMaps/boardsList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PostCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PostCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/GoogleMaps/addMarkerToMap.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/GoogleMaps/addMarkerToMap.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/GoogleMaps/autocompleteInit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/GoogleMaps/autocompleteInit.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/GoogleMaps/findGeolocation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/GoogleMaps/findGeolocation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/GoogleMaps/isBoardCloseToUser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/GoogleMaps/isBoardCloseToUser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/localStorage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/localStorage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modles/board.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/App/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/App/App.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.test.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/App/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Board/Board.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/GoogleMap/GoogleMap.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Redirect/Redirect.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.boardApiMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.boardApiMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.boardsDataReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.boardsDataReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.googleMapReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.googleMapReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.mapApiMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.mapApiMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.mapDataMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.mapDataMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.mapReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.mapReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/configureStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/configureStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/middlewares/map.api.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/middlewares/map.api.middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/middlewares/map.data.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/middlewares/map.data.middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducers/boardsDataReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/boardsDataReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducers/googleMapReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/googleMapReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducers/mapReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/mapReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducers/userDataReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/userDataReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/node_modules/" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -19,32 +93,63 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/boards-server/.gitignore">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/store/actions/action.mapReducer.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="66" column="7" selection-start-line="66" selection-start-column="7" selection-end-line="66" selection-end-column="7" />
+            <state relative-caret-position="285">
+              <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/boards-server/config/keys.js">
+        <entry file="file://$PROJECT_DIR$/tslint.json">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+        <entry file="file://$PROJECT_DIR$/src/components/PostFormDialog.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-283" />
+            <state>
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+              </folding>
+            </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/boards-sever/.gitignore">
+        <entry file="file://$PROJECT_DIR$/boards-server/routers/board.router.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="528">
+              <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/boards-server/data/models/board.model.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="264">
-              <caret line="24" selection-start-line="24" selection-end-line="24" selection-end-column="7" />
+              <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/boards-server/routers/router.service.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="166" column="11" selection-start-line="166" selection-start-column="11" selection-end-line="166" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-242">
+              <caret line="1" column="8" lean-forward="true" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -62,9 +167,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts" />
-        <option value="$PROJECT_DIR$/src/store/reducers/userDataReducer.ts" />
-        <option value="$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts" />
         <option value="$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts" />
         <option value="$PROJECT_DIR$/src/App.tsx" />
         <option value="$PROJECT_DIR$/src/components/Redirect.tsx" />
@@ -113,14 +215,17 @@
         <option value="$PROJECT_DIR$/src/components/GoogleMaps/GoogleMapService/useStyles.ts" />
         <option value="$PROJECT_DIR$/boards-sever/config/keys.js" />
         <option value="$PROJECT_DIR$/boards-server/.gitignore" />
+        <option value="$PROJECT_DIR$/boards-server/routers/board.router.js" />
+        <option value="$PROJECT_DIR$/boards-server/routers/router.service.js" />
+        <option value="$PROJECT_DIR$/boards-server/data/models/board.model.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-11" />
-    <option name="y" value="-11" />
-    <option name="width" value="1943" />
-    <option name="height" value="1043" />
+    <option name="x" value="-1928" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -135,6 +240,54 @@
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
               <item name="boards" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards-server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards-server" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards-server" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards-server" type="462c0819:PsiDirectoryNode" />
+              <item name="routers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
+              <item name="middlewares" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -146,30 +299,31 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="10.15.3" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="C:\Users\boazr\dev\boaz-repository\boards\node_modules\prettier" />
     <property name="settings.editor.selected.configurable" value="settings.nodejs" />
     <property name="ts.external.directory.path" value="C:\Users\boazr\dev\boaz-repository\boards\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\boazr\dev\boaz-repository\boards\src" />
-      <recent name="C:\Users\boazr\dev\boaz-repository\boards\boards-sever\routes" />
-      <recent name="C:\Users\boazr\dev\boaz-repository\boards\boards-sever\models" />
-      <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\components" />
-      <recent name="C:\Users\boazr\dev\boaz-repository\boards\boards-sever" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\pages\Redirect" />
       <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\pages\Board" />
       <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\pages\GoogleMap" />
       <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\pages\App" />
       <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\components\GoogleMaps\GoogleMapService" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\boazr\dev\boaz-repository\boards" />
+      <recent name="C:\Users\boazr\dev\boaz-repository\boards\src" />
+      <recent name="C:\Users\boazr\dev\boaz-repository\boards\boards-sever\routes" />
+      <recent name="C:\Users\boazr\dev\boaz-repository\boards\boards-sever\models" />
+      <recent name="C:\Users\boazr\dev\boaz-repository\boards\src\components" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -218,12 +372,12 @@
       <workItem from="1572939907777" duration="6198000" />
       <workItem from="1572950988533" duration="9375000" />
       <workItem from="1572974380335" duration="2822000" />
-      <workItem from="1573023595514" duration="2642000" />
+      <workItem from="1573023595514" duration="3647000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="512045000" />
+    <option name="totallyTimeSpent" value="513050000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -235,9 +389,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2472178" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16385669" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -252,7 +407,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="TypeScript" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.20781527" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.22643554" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -262,44 +417,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/helpers/GoogleMaps/isBoardCloseToUser.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="13" selection-start-column="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/action.mapApiMiddleware.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/helpers/localStorage.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/action.googleMapReducer.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/reducers/googleMapReducer.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="792">
-          <caret line="37" column="44" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#119#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
@@ -334,13 +451,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="49" lean-forward="true" selection-start-line="5" selection-start-column="49" selection-end-line="5" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/action.mapReducer.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1232">
-          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -583,13 +693,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="72" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/store/middlewares/map.data.middleware.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -651,8 +754,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/boards-server/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
+        <state relative-caret-position="254">
           <caret line="66" column="7" selection-start-line="66" selection-start-column="7" selection-end-line="66" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/action.mapReducer.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tslint.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/PostFormDialog.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards-server/routers/router.service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="166" column="11" selection-start-line="166" selection-start-column="11" selection-end-line="166" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-242">
+          <caret line="1" column="8" lean-forward="true" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards-server/routers/board.router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards-server/data/models/board.model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
         </state>
       </provider>
     </entry>

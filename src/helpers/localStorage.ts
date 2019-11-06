@@ -15,7 +15,7 @@ export const saveStateToSessionStorage = (state: any) => {
     const serializedState = JSON.stringify(state);
     sessionStorage.setItem('boardsMapState', serializedState);
   } catch (e) {
-    console.error('boardsMapState saveState Failed', e)
+    console.error('boardsMapState saveState Failed', e);
   }
 };
 
@@ -36,7 +36,7 @@ export const saveStateToLocalStorage = (state: any) => {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('boardsMapStateLocal', serializedState);
   } catch (e) {
-    console.error('boardsMapState saveState Failed', e)
+    console.error('boardsMapState saveState Failed', e);
   }
 };
 

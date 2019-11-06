@@ -1,17 +1,18 @@
 import {
-  ADD_MAP_BOARD_DATA, BOARD_DATA_SET,
+  ADD_BOARD_POST_DATA,
+  ADD_MAP_BOARD_DATA,
+  BOARD_DATA_SET,
   BOARD_POSTS_DATA_SET,
-  MAP_BOARDS_DATA_SET,
-  RESET_MAP_BOARDS_DATA
-} from "../actions/action.boardsDataReducer";
+  MAP_BOARDS_DATA_SET, REMOVE_BOARD_POST_BY_ID,
+  RESET_MAP_BOARDS_DATA,
+} from '../actions/action.boardsDataReducer';
 
 const boardsDataInitState: any = {
   mapBoards: [],
   board: {},
-  posts: []
+  posts: [],
 };
 
-// const boardsDataReducer = (state: Array<any> = [], action: any) => {
 const boardsDataReducer = (state: any = boardsDataInitState, action: any) => {
   switch (action.type) {
     case MAP_BOARDS_DATA_SET:
@@ -19,11 +20,11 @@ const boardsDataReducer = (state: any = boardsDataInitState, action: any) => {
         ...state,
         mapBoards: action.payload,
       };
-      
+
     case RESET_MAP_BOARDS_DATA:
       return {
         ...state,
-        mapBoards: []
+        mapBoards: [],
       };
 
     case ADD_MAP_BOARD_DATA:
@@ -33,16 +34,28 @@ const boardsDataReducer = (state: any = boardsDataInitState, action: any) => {
         board: action.payload,
       };
 
+    case BOARD_DATA_SET:
+      return {
+        ...state,
+        board: action.payload,
+      };
+
     case BOARD_POSTS_DATA_SET:
       return {
         ...state,
         posts: action.payload,
       };
 
-    case BOARD_DATA_SET:
+    case ADD_BOARD_POST_DATA:
       return {
         ...state,
-        board: action.payload,
+        posts: [...state.posts, action.payload],
+      };
+
+    case REMOVE_BOARD_POST_BY_ID:
+      return {
+        ...state,
+        posts: state.posts.filter((post: any) => post._id !== action.payload),
       };
 
     default:

@@ -11,9 +11,8 @@ import {
   SET_FIND_LOCATION,
   SET_POPSTATE,
   SET_REDIRECT,
-  UPDATE_LOCATION
-} from "../actions/action.mapReducer";
-
+  UPDATE_LOCATION,
+} from '../actions/action.mapReducer';
 
 const mapInitState: any = {
   address: '',
@@ -28,7 +27,7 @@ const mapInitState: any = {
   mapZoom: null,
   numOfMarkers: null,
   markerLatLng: {},
-  popstate: false
+  popstate: false,
 };
 
 const mapReducer = (state = mapInitState, action: any) => {
@@ -65,17 +64,17 @@ const mapReducer = (state = mapInitState, action: any) => {
         markerAddress: action.address,
         latLng: action.latLng,
         open: true,
-        isUpdateLocation: true
+        isUpdateLocation: true,
       };
     case OPEN_DRAWER:
       return {
         ...state,
-        open: true
+        open: true,
       };
     case CLOSE_DRAWER:
       return {
         ...state,
-        open: false
+        open: false,
       };
     case SET_REDIRECT:
       return {
@@ -88,7 +87,6 @@ const mapReducer = (state = mapInitState, action: any) => {
         numOfMarkers: action.numOfMarkers,
         address: action.address,
       };
-      
     case RESET_REDIRECT:
       return {
         ...state,

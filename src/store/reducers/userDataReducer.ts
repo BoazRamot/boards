@@ -1,8 +1,12 @@
-import {LOGOUT_USER, RESET_USER_DATA, USER_DATA_SET} from "../actions/action.userDataReducer";
+import {
+  LOGOUT_USER,
+  // RESET_USER_DATA,
+  USER_DATA_SET,
+} from '../actions/action.userDataReducer';
 
 const userDataInitState: any = {
   userData: {},
-  userLogin: false
+  userLogin: false,
 };
 
 const userDataReducer = (state: any = userDataInitState, action: any) => {
@@ -11,7 +15,7 @@ const userDataReducer = (state: any = userDataInitState, action: any) => {
       return {
         ...state,
         userData: action.payload,
-        userLogin: true
+        userLogin: true,
       };
 
     // case RESET_USER_DATA:
@@ -21,9 +25,9 @@ const userDataReducer = (state: any = userDataInitState, action: any) => {
     case LOGOUT_USER:
       return {
         ...state,
-        userLogin: false
+        userLogin: false,
       };
-      
+
     default:
       return state;
   }
