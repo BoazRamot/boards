@@ -11,7 +11,6 @@ import BoardDetails from './BoardDetails';
 import BoardFeed from './BoardFeed';
 import Loading from './Loading';
 import { getBoardByIdAction, getBoardPostsAction } from '../store/actions/action.boardApiMiddleware';
-import { boardDataSetAction } from '../store/actions/action.boardsDataReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,9 +58,7 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
       <Box mt={2}>
         <Grid container spacing={1} >
           <BoardDetails board={board} handleImageClick={handleImageClick} />
-          <Grid item xs={12} sm>
-            <BoardFeed/>
-          </Grid>
+          <BoardFeed/>
         </Grid>
       </Box>
     </div>

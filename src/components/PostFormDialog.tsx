@@ -1,22 +1,13 @@
 import React, { ReactEventHandler, useState } from 'react';
-// import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
-import IPost from '../models/IPost';
-import BoundDataService from '../services/BoundDataService';
-import { apiURL } from '../services/data.service';
 import {
   createStyles,
   Dialog,
-  DialogActions,
-  DialogContent,
   DialogTitle,
   makeStyles,
-  MenuItem,
-  TextField,
   Theme,
 } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
     textField: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
-      // width: '35vw'
     },
     dense: {
       marginTop: theme.spacing(2),
@@ -50,18 +40,9 @@ interface IProps {
   handleNewPostClose: ReactEventHandler;
   createBoardPost: Function;
   boardId: any;
-  // postDataService: BoundDataService<IPost>;
-  // onSubmit: (post: IPost) => void;
 }
 
-// const PostFormDialog: React.FC<IProps & RouteComponentProps> = ({ openNewPost, handleNewPostClose,
-const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, createBoardPost, boardId,
-                                                            // postDataService,
-                                                            // onSubmit,
-                                                            // match,
-                                                            // location,
-                                                          }) => {
-  // const post = location.state as IPost;
+const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, createBoardPost, boardId, }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState();
   const [files, setFiles] = useState([] as File[]);
@@ -222,50 +203,7 @@ const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, cre
       {/*  </DialogActions>*/}
       {/*</form>*/}
     </Dialog>
-
-    // <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
-    //   {/* {post ? <header>Edit Post</header> : <header>Create Post</header>} */}
-    //   <input name="title" value={title} placeholder="What's on your mind?" onChange={onTitleChange} />
-    //   <TextareaAutosize
-    //     name="content"
-    //     minRows={5}
-    //     maxRows={10}
-    //     autoFocus={true}
-    //     spellCheck={true}
-    //     useCacheForDOMMeasurements={true}
-    //     placeholder="Can you elaborate?"
-    //     value={content}
-    //     onChange={onContentChange}
-    //   />
-    //   {filesDataURIs.length > 0 &&
-    //   filesDataURIs.map((dataURI, index) => (
-    //     <img key={index} src={dataURI} alt={`${index}`} />
-    //   ))}
-    //   {filesDataURIs.length === 0 &&
-    //   post &&
-    //   post.images &&
-    //   post.images.map(image => (
-    //     <img
-    //       key={image._id}
-    //       src={`${apiURL}${match.url}/posts/${post._id}/images/${image._id}/image`}
-    //       alt={`${image.description}`}
-    //     />
-    //   ))}
-    //   <input
-    //     type="file"
-    //     name="images"
-    //     accept="image/*"
-    //     onChange={onFileChange}
-    //   />
-    //   <button
-    //     type="submit"
-    //     disabled={!title || (post && post.title === title && !files)}
-    //   >
-    //     Submit
-    //   </button>
-    // </form>
   );
 };
 
-// export default withRouter(PostForm);
 export default PostFormDialog;

@@ -34,7 +34,6 @@ const BoardDetails: React.FC<IProps> = ({ board, handleImageClick }) => {
     <Grid item xs={12} sm >
       <Card className={classes.card}>
         <CardActionArea onClick={handleImageClick}>
-          {/*<CardActionArea >*/}
           <CardMedia
             className={classes.media}
             image={logo}
