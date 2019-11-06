@@ -1,13 +1,11 @@
-import {createStyles, makeStyles, Theme} from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 const drawerWidth = '35vw';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      // height: 'calc(100vh - 72px)',
       height: 'calc(100vh - 57px)',
-      // height: '100vh',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -30,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: `0 12px`,
       textOverflow: `ellipses`,
-      position: "absolute",
+      position: 'absolute',
     },
     hide: {
       display: 'none',
@@ -41,8 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     drawerRoot: {
       height: 'calc(100%)',
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
     },
     drawerPaper: {
       height: 'calc(100% - 64px)',
@@ -64,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
     },
     content: {
-      display: "flex",
+      display: 'flex',
       flex: 1,
       alignSelf: 'stretch',
       padding: theme.spacing(3),
