@@ -35,8 +35,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-/config
-config
+config/
 
 # Typescript v1 declaration files
 typings/
@@ -65,4 +64,3 @@ data/posts.json
 
 # vscode
 .vscode/
-
