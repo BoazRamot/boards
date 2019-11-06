@@ -5,6 +5,8 @@ export const RESET_MAP_BOARDS_DATA = 'RESET_MAP_BOARDS_DATA';
 export const BOARD_POSTS_DATA_SET = 'BOARD_POSTS_DATA_SET';
 export const ADD_MAP_BOARD_DATA = 'ADD_MAP_BOARD_DATA';
 export const BOARD_DATA_SET = 'BOARD_DATA_SET';
+export const ADD_BOARD_POST_DATA = 'ADD_BOARD_POST_DATA';
+export const REMOVE_BOARD_POST_BY_ID = 'REMOVE_BOARD_POST_BY_ID';
 
 // action creators
 
@@ -26,4 +28,12 @@ export const boardPostsDataSetAction = (payload: any) => {
 
 export const boardDataSetAction = (payload: any) => {
   return { type: BOARD_DATA_SET, payload };
+};
+
+export const addBoardPostDataAction = (payload: any) => {
+  return { type: ADD_BOARD_POST_DATA, payload };
+};
+
+export const removeBoardPostDataAction = (payload: any) => {
+  return { type: REMOVE_BOARD_POST_BY_ID, payload };
 };

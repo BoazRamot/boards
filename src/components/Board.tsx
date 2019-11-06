@@ -1,32 +1,17 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import {RouteComponentProps, useHistory} from 'react-router-dom';
-import PostCard from "../components/PostCard";
-import {Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField} from "@material-ui/core";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import logo from "../logo.svg"
 import boardSnapShoot from "../boardSnapShoot.jpg";
 import {saveMapDataNowAction} from "../store/actions/action.mapDataMiddleware";
-// import {getAllPosts} from '../../services/posts.data.service';
-
-import IBoard from '../models/IBoard';
-import BoundDataService from '../services/BoundDataService';
-import { DataCollections } from '../services/data.service';
 import BoardDetails from './BoardDetails';
 import BoardFeed from './BoardFeed';
 import Loading from './Loading';
-// import PostCard from '../../../../boaz-repository/boards/src/components/PostCard';
-
+import { getBoardByIdAction, getBoardPostsAction } from '../store/actions/action.boardApiMiddleware';
+import { boardDataSetAction } from '../store/actions/action.boardsDataReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,86 +19,30 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       padding: theme.spacing(2),
       height: '100vh',
+      backgroundImage: `url(${boardSnapShoot})`,
     },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-
-    card: {
-      maxWidth: 345,
-    },
-    media: {
-      height: 140,
-    },
-
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      // width: '35vw'
-    },
-    dense: {
-      marginTop: theme.spacing(2),
-    },
-    menu: {
-      width: 200,
-    },
-
   }),
 );
 
 interface IProps {
   board: any
   saveMapDataNow: Function
+  getBoardPosts: Function
+  getBoardById: Function
 }
 
-interface State {
-  post: string;
-  category: string;
-}
-
-const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDataNow }) => {
-  const [openNewPost, setOpenNewPost] = useState(false);
-  const [values, setValues] = useState<State>({
-    post: '',
-    category: 'General'
-  });
-  const formEl = useRef<HTMLFormElement>(null);
-  const classes = useStyles();
+const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDataNow, getBoardPosts, getBoardById }) => {
   let history = useHistory();
-
-  const handleChange = (name: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [name]: event.target.value });
-  };
-
-  const category = [
-    { value: 'General' },
-  ];
-
-  const handleNewPostOpen = () => {
-    setOpenNewPost(true);
-  };
-
-  const handleNewPostClose = () => {
-    setOpenNewPost(false);
-  };
-
+  const classes = useStyles();
 
   useEffect(() => {
     const boardId = (match.params as any).id;
-    console.log('boardId', boardId)
-    // getBoardPosts();
-    // const getPosts = async () => {
-    //   const result = await getAllPosts();
-    //   setPosts(result);
-    // };
-    // getPosts();
-    // }, [updateRequired]);
+    (async () => {
+      if (Object.entries(board).length === 0 && board.constructor === Object) {
+        await getBoardById(boardId);
+      }
+      await getBoardPosts(boardId);
+    })();
   }, []);
 
   const handleImageClick = () => {
@@ -121,171 +50,21 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
     history.push("/");
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const post = {
-      post: values.post,
-      category: values.category
-    }
-    console.log('post', post)
-    // const board = {
-    //   name: values.name,
-    //   community: values.community,
-    //   description: values.description,
-    //   geoLocation: {
-    //     type : 'Point',
-    //     coordinates : [latLng.lng, latLng.lat]
-    //   },
-    //   location: {
-    //     address: values.address,
-    //     info: values.info,
-    //     latitude: latLng.lat ,
-    //     longitude: latLng.lng
-    //   },
-    // };
-    // console.log('board', board)
-    // createNewBoard(board);
-    // handleNewBoardClose();
-    // handleNewBoardCreatedOpen();
-  };
-
-  // const [board, setBoard] = useState<IBoard>();
-  // const boardDataService = new BoundDataService<IBoard>(
-  //   '',
-  //   DataCollections.Boards,
-  // );
-  // get data on mount
-  // useEffect(() => {
-  //   const getBoard = async (id: string) => {
-  //     boardDataService.getById(id).then(data => {
-  //       if (data) {
-  //         setBoard(data);
-  //       }
-  //     });
-  //   };
-  //   if (match.params.id) {
-  //     getBoard(match.params.id);
-  //   }
-  //   // eslint-disable-next-line
-  // }, [match.params.id]);
-
-  if (!board) {
+  if (Object.entries(board).length === 0 && board.constructor === Object) {
     return <Loading />;
   }
 
   return (
-    <div className={classes.root} style={{backgroundImage: `url(${boardSnapShoot})`}}>
-      <Dialog open={openNewPost} onClose={handleNewPostClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
-        <form autoComplete="off" onSubmit={handleSubmit} ref={formEl} className={classes.container}>
-          <DialogContent>
-            <TextField
-              required
-              id="outlined-name"
-              label="Board Name"
-              className={classes.textField}
-              value={values.post}
-              onChange={handleChange('post')}
-              margin="normal"
-              variant="outlined"
-              fullWidth
-            />
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="Category"
-              className={classes.textField}
-              value={values.category}
-              onChange={handleChange('category')}
-              SelectProps={{
-                MenuProps: {
-                  className: classes.menu,
-                },
-              }}
-              helperText="Please Select Your Post Category"
-              margin="normal"
-              variant="outlined"
-            >
-              {category.map((option, index) => (
-                <MenuItem key={index} value={option.value}>
-                  {option.value}
-                </MenuItem>
-              ))}
-            </TextField>
-            {/*<TextField*/}
-            {/*  id="outlined-dense-multiline"*/}
-            {/*  label="Board Description"*/}
-            {/*  className={clsx(classes.textField, classes.dense)}*/}
-            {/*  margin="dense"*/}
-            {/*  variant="outlined"*/}
-            {/*  multiline*/}
-            {/*  fullWidth*/}
-            {/*  rowsMax="4"*/}
-            {/*  value={values.description}*/}
-            {/*  onChange={handleChange('description')}*/}
-            {/*/>*/}
-            {/* todo: add static map*/}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleNewPostClose} color="primary">
-              Cancel
-            </Button>
-            <Button variant="contained" color="primary" type="submit">
-              Submit
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
+    <div className={classes.root}>
       <Box mt={2}>
         <Grid container spacing={1} >
-          {/*<Grid item xs={12} sm={4}>*/}
-          <Grid item xs={12} sm >
-            <Card className={classes.card}>
-              <CardActionArea onClick={handleImageClick}>
-                {/*<CardActionArea >*/}
-                <CardMedia
-                  className={classes.media}
-                  image={logo}
-                  title={board.name}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {board.name}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    {board.description}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    {board.location.address}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    {board.location.info}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    {board.community}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  Join Community
-                </Button>
-              </CardActions>
-            </Card>
-            {/*board detail*/}
-            {/*<Paper className={classes.paper}>xs=12</Paper>*/}
-          </Grid>
-          {/*<Grid item xs={12} sm={8}>*/}
+          <BoardDetails board={board} handleImageClick={handleImageClick} />
           <Grid item xs={12} sm>
-            {/*post a post*/}
-            {/*posts*/}
-            <PostCard handleNewPostOpen={handleNewPostOpen}/>
-            {/*<Paper className={classes.paper}>xs=12 sm=6</Paper>*/}
+            <BoardFeed/>
           </Grid>
         </Grid>
       </Box>
     </div>
-
   )
 };
 
@@ -294,21 +73,9 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveMapDataNow: () => {
-    dispatch(saveMapDataNowAction(true));
-    // dispatch(setPopstate());
-  },
-  // setPopstate: () => dispatch(setPopstate()),
+  saveMapDataNow: () => dispatch(saveMapDataNowAction(true)),
+  getBoardPosts: (boardId: any) => dispatch(getBoardPostsAction(boardId)),
+  getBoardById: (boardId: any) => dispatch(getBoardByIdAction(boardId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);
-
-//   return (
-//     <section className="board">
-//       <BoardDetails board={board} />
-//       <BoardFeed board={board} />
-//     </section>
-//   );
-// };
-//
-// export default Board;
