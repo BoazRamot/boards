@@ -6,6 +6,7 @@ const path = require('path');
 const passport = require('passport');
 const { connectDB } = require('./data/services/dbUtils');
 const MongooseDataService = require('./data/services/data.mongoose.service');
+const httpErrors = require('./httpErrors').errors;
 const authRouter = require('./routers/auth.router');
 const router = require('./routers/router.service');
 const userRouter = require('./routers/user.router');
@@ -56,18 +57,16 @@ const userDataService = new MongooseDataService('user');
 app.use('/api/auth', authRouter);
 app.use(
   '/api/boards',
-  boardRouter(uploadMap, boardDataService),
+  boardRouter(boardDataService),
   router(uploadMap, boardDataService),
 );
 app.use('/api/users', [
-  userRouter(uploadMap, userDataService),
+  userRouter(userDataService),
   router(uploadMap, userDataService),
 ]);
 
 app.use((req, res, next) => {
-  let err = new Error('404 Not Found');
-  err.status = 404;
-  next(err);
+  next(httpErrors.notFound('Page'));
 });
 
 // uncaught error handling
