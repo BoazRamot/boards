@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const Router = require('express').Router();
+const Router = require('express').Router;
 const { asyncHandler } = require('./router.utils');
 const keys = require('../config/keys');
 const auth = require('../middleware/auth');

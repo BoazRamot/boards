@@ -54,7 +54,7 @@ const boardDataService = new MongooseDataService('board');
 const userDataService = new MongooseDataService('user');
 
 // routes
-app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter(userDataService));
 app.use(
   '/api/boards',
   boardRouter(boardDataService),
