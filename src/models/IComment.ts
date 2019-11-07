@@ -1,5 +1,3 @@
-'use strict';
-
 import IImage from './IImage';
 import IUser from './IUser';
 

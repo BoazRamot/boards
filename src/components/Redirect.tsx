@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Route, RouteComponentProps, useHistory } from 'react-router-dom';
-import { Dispatch } from 'redux';
 import Map from './GoogleMap';
 
 const Redirect: React.FC<RouteComponentProps> = ({ match }) => {
@@ -24,11 +22,4 @@ const Redirect: React.FC<RouteComponentProps> = ({ match }) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Redirect);
+export default Redirect;

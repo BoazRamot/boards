@@ -34,9 +34,10 @@ interface IProps {
   post: any;
   boardId: any;
   deleteBoardPost: Function;
+  handlePostEdit: Function;
 }
 
-const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost }) => {
+const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost, handlePostEdit }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
@@ -51,6 +52,11 @@ const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost }) => {
 
   const handleDelete = (postId: any) => {
     deleteBoardPost(postId, boardId);
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    handlePostEdit(post);
     setAnchorEl(null);
   };
 
@@ -102,7 +108,7 @@ const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost }) => {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Edit</MenuItem>
+            <MenuItem onClick={handleEdit}>Edit</MenuItem>
             <MenuItem onClick={handleDelete.bind(null, post._id)}>Delete</MenuItem>
           </Menu>
           <CardContent>
