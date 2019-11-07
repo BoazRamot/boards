@@ -1,25 +1,37 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import IUser from '../../models/IUser';
+import DataService from '../../services/data.service';
 import { USER_API_GET_USER } from '../actions/action.userApiMiddleware';
 import { userDataSetAction } from '../actions/action.userDataReducer';
 
+const userDataService = new DataService<IUser>();
+
 const getUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
   next: Dispatch,
-) => action => {
+) => async action => {
   if (action.type === USER_API_GET_USER) {
     const token = action.token;
-    (async () => {
-      try {
-        const url = 'http://localhost:5000/api/auth/login';
-        const res = await fetch(url, {
-          method: 'GET',
-          headers: { 'X-Auth-Token': token },
-        });
-        const userData = await res.json();
-        dispatch(userDataSetAction(userData));
-      } catch (e) {
-        console.error('User Fetch Failed', e);
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     const url = `${apiURL}/auth/login`;
+    //     const res = await fetch(url, {
+    //       method: 'GET',
+    //       headers: { 'X-Auth-Token': token },
+    //     });
+    //     const userData = await res.json();
+    //     dispatch(userDataSetAction(userData));
+    //   } catch (e) {
+    //     console.error('User Fetch Failed', e);
+    //   }
+    // })();
+    try {
+      const userData = await userDataService.get('auth/login', undefined, {
+        'X-Auth-Token': token,
+      });
+      dispatch(userDataSetAction(userData));
+    } catch (error) {
+      console.error('User Fetch Failed', error);
+    }
   }
   return next(action);
 };

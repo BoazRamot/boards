@@ -2,18 +2,36 @@
 
 export default interface IDataService<T> {
   get: (
-    path: string,
-    collectionName: string,
+    collectionPath: string,
     conditions?: object,
-    options?: object,
+    headers?: object,
   ) => Promise<T[]>;
-  getById: (path: string, collectionName: string, id: string) => Promise<T>;
-  insert: (path: string, collectionName: string, data: FormData) => Promise<T>;
-  update: (
-    path: string,
-    collectionName: string,
-    id: string,
+  getById: (collectionPath: string, documentId: string) => Promise<T>;
+  insert: (
+    collectionPath: string,
     data: FormData,
+    headers?: object,
   ) => Promise<T>;
-  remove: (path: string, collectionName: string, id: string) => Promise<boolean>;
+  update: (
+    collectionPath: string,
+    data: FormData,
+    conditions?: object,
+    headers?: object,
+  ) => Promise<object>;
+  updateById: (
+    collectionPath: string,
+    documentId: string,
+    data: FormData,
+    headers?: object,
+  ) => Promise<T>;
+  remove: (
+    collectionPath: string,
+    conditions?: object,
+    headers?: object,
+  ) => Promise<object>;
+  removeById: (
+    collectionPath: string,
+    documentId: string,
+    headers?: object,
+  ) => Promise<boolean>;
 }

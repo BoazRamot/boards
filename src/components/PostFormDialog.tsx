@@ -1,39 +1,38 @@
-import React, { ReactEventHandler, useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import TextareaAutosize from 'react-textarea-autosize';
 import {
-  createStyles,
+  // createStyles,
   Dialog,
   DialogTitle,
-  makeStyles,
-  Theme,
+  // makeStyles,
+  // Theme,
 } from '@material-ui/core';
+import React, { ReactEventHandler, useState } from 'react';
+import { Redirect} from 'react-router-dom';
+import TextareaAutosize from 'react-textarea-autosize';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     paper: {
+//       padding: theme.spacing(2),
+//       textAlign: 'center',
+//       color: theme.palette.text.secondary,
+//     },
 
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-    dense: {
-      marginTop: theme.spacing(2),
-    },
-    menu: {
-      width: 200,
-    },
-
-  }),
-);
+//     container: {
+//       display: 'flex',
+//       flexWrap: 'wrap',
+//     },
+//     textField: {
+//       marginLeft: theme.spacing(1),
+//       marginRight: theme.spacing(1),
+//     },
+//     dense: {
+//       marginTop: theme.spacing(2),
+//     },
+//     menu: {
+//       width: 200,
+//     },
+//   }),
+// );
 
 interface IProps {
   openNewPost: boolean;
@@ -42,12 +41,17 @@ interface IProps {
   boardId: any;
 }
 
-const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, createBoardPost, boardId, }) => {
+const PostFormDialog: React.FC<IProps> = ({
+  openNewPost,
+  handleNewPostClose,
+  createBoardPost,
+  boardId,
+}) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState();
   const [files, setFiles] = useState([] as File[]);
   const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
-  const [isUpdateDone, setIsUpdateDone] = useState(false);
+  const [isUpdateDone /*, setIsUpdateDone*/] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -57,13 +61,13 @@ const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, cre
     //   await postDataService.update(post._id, formData);
     //   setIsUpdateDone(true);
     // } else {
-      createBoardPost(formData, boardId)
-      // const newPost = await postDataService.insert(formData);
-      formElement.reset();
-      setTitle('');
-      setContent('');
-      setFilesDataURIs([]);
-      // onSubmit(newPost);
+    createBoardPost(formData, boardId);
+    // const newPost = await postDataService.insert(formData);
+    formElement.reset();
+    setTitle('');
+    setContent('');
+    setFilesDataURIs([]);
+    // onSubmit(newPost);
     // }
   };
 
@@ -99,14 +103,22 @@ const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, cre
   }
 
   return (
-
-    <Dialog open={openNewPost} onClose={handleNewPostClose} aria-labelledby="form-dialog-title">
+    <Dialog
+      open={openNewPost}
+      onClose={handleNewPostClose}
+      aria-labelledby="form-dialog-title"
+    >
       <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
       <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
         {/* {post ? <header>Edit Post</header> : <header>Create Post</header>} */}
-        <input name="title" value={title} placeholder="What's on your mind?" onChange={onTitleChange} />
+        <input
+          name="title"
+          value={title}
+          placeholder="What's on your mind?"
+          onChange={onTitleChange}
+        />
         <TextareaAutosize
-          name="content"
+          name="body"
           minRows={5}
           maxRows={10}
           autoFocus={true}
@@ -117,9 +129,9 @@ const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, cre
           onChange={onContentChange}
         />
         {filesDataURIs.length > 0 &&
-        filesDataURIs.map((dataURI, index) => (
-          <img key={index} src={dataURI} alt={`${index}`} />
-        ))}
+          filesDataURIs.map((dataURI, index) => (
+            <img key={index} src={dataURI} alt={`${index}`} />
+          ))}
         {/*{filesDataURIs.length === 0 &&*/}
         {/*post &&*/}
         {/*post.images &&*/}
@@ -190,7 +202,7 @@ const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, cre
       {/*    /!*  rowsMax="4"*!/*/}
       {/*    /!*  value={values.description}*!/*/}
       {/*    /!*  onChange={handleChange('description')}*!/*/}
-          {/*/>*/}
+      {/*/>*/}
       {/*    /!* todo: add static map*!/*/}
       {/*  </DialogContent>*/}
       {/*  <DialogActions>*/}

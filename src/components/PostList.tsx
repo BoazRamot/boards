@@ -8,16 +8,20 @@ interface IProps {
 }
 
 const PostList: React.FC<IProps> = ({ posts, boardId, deleteBoardPost }) => {
-
   return (
     <div>
       {Object.values(posts)
         .reverse()
         .map((post: any) => (
-          <PostCard key={post._id} post={post} boardId={boardId} deleteBoardPost={deleteBoardPost}/>
+          <PostCard
+            key={post._id}
+            post={post}
+            boardId={boardId}
+            deleteBoardPost={deleteBoardPost}
+          />
         ))}
     </div>
-  )
+  );
 };
 
 export default PostList;

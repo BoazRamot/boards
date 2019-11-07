@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import IPost from '../models/IPost';
-import BoundDataService from '../services/BoundDataService';
-import { apiURL } from '../services/data.service';
+import DataService, { apiURL, DataCollections } from '../services/data.service';
+
+const postDataService = new DataService<IPost>();
+
+const postsPath = (boardId: any) =>
+  `${DataCollections.Boards}/${boardId}/${DataCollections.Posts}`;
 
 interface IProps {
-  postDataService: BoundDataService<IPost>;
+  boardId: string;
   onSubmit: (post: IPost) => void;
 }
 
 const PostForm: React.FC<IProps & RouteComponentProps> = ({
-  postDataService,
+  boardId,
   onSubmit,
   match,
   location,
 }) => {
-  const post = location.state as IPost;
+  const post = location.state as IPost; // coming from RouteComponentProps
   const [title, setTitle] = useState('');
   const [content, setContent] = useState();
   const [files, setFiles] = useState([] as File[]);
@@ -28,10 +32,10 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
     const formElement = event.target as HTMLFormElement;
     const formData = new FormData(formElement);
     if (post) {
-      await postDataService.update(post._id, formData);
+      await postDataService.updateById(postsPath(boardId), post._id, formData);
       setIsUpdateDone(true);
     } else {
-      const newPost = await postDataService.insert(formData);
+      const newPost = await postDataService.insert(postsPath(boardId), formData);
       formElement.reset();
       setTitle('');
       setContent('');
@@ -74,7 +78,12 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
   return (
     <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
       {/* {post ? <header>Edit Post</header> : <header>Create Post</header>} */}
-      <input name="title" value={title} placeholder="What's on your mind?" onChange={onTitleChange} />
+      <input
+        name="title"
+        value={title}
+        placeholder="What's on your mind?"
+        onChange={onTitleChange}
+      />
       <TextareaAutosize
         name="content"
         minRows={5}

@@ -21,6 +21,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { apiURL } from '../services/data.service';
 import { resetRedirectAction } from '../store/actions/action.mapReducer';
 import { logoutUserAction } from '../store/actions/action.userDataReducer';
 
@@ -73,7 +74,7 @@ const Header: React.FC<IProps> = ({
   };
 
   const handleGoogle = () => {
-    window.location.href = `http://localhost:5000/api/auth/google`;
+    window.location.href = `${apiURL}/auth/google`;
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {

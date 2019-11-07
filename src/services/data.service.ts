@@ -1,6 +1,5 @@
 import * as querystring from 'querystring';
 import IDataService from '../models/IDataService';
-import CacheService from './cache.service';
 
 export enum DataCollections {
   Boards = 'boards',
@@ -14,115 +13,114 @@ const PORT = 5000;
 const baseURL = `http://localhost:${PORT}`;
 export const apiURL = `${baseURL}/api`;
 
-const cacheService = new CacheService();
-
 export default class DataService<T> implements IDataService<T> {
-  public setCache(collectionName: string, idField = '_id') {
-    cacheService.addCollection(collectionName, idField);
-  }
-
-  public removeCache(collectionName: string) {
-    cacheService.removeCollection(collectionName);
-  }
-
   public async get(
-    path: string,
-    collectionName: string,
+    collectionPath: string,
     conditions?: any,
-    options?: any,
+    headers?: any,
   ): Promise<T[]> {
-    if (cacheService.has(collectionName)) {
-      const cachedData = cacheService.get(collectionName) as T[];
-      if (cachedData.length > 0) {
-        return cachedData;
-      }
-    }
-
     const response = await errorHandler(
       fetch(
-        `${collectionUrl(path, collectionName)}${
+        `${apiURL}/${collectionPath}${
           conditions ? `?${querystring.stringify(conditions)}` : ''
         }`,
         {
-          headers: new Headers(options),
+          headers: new Headers(headers),
         },
       ),
     );
-    const result = await response.json();
-    if (cacheService.has(collectionName)) {
-      cacheService.setMany(collectionName, result);
-    }
-    return result;
+    return response.json();
   }
 
-  public async getById(
-    path: string,
-    collectionName: string,
-    id: string,
-  ): Promise<T> {
-    if (cacheService.has(collectionName, id)) {
-      return cacheService.get(collectionName, id) as T;
-    }
+  public async getById(collectionPath: string, documentId: string): Promise<T> {
     const response = await errorHandler(
-      fetch(`${collectionUrl(path, collectionName)}/${id}`),
+      fetch(`${apiURL}/${collectionPath}/${documentId}`),
     );
-    const result = await response.json();
-    if (cacheService.has(collectionName)) {
-      cacheService.setOne(collectionName, result);
-    }
-    return result;
+    return response.json();
   }
 
   public async insert(
-    path: string,
-    collectionName: string,
+    collectionPath: string,
     data: FormData,
+    headers?: any,
   ): Promise<T> {
     const response = await errorHandler(
-      fetch(`${collectionUrl(path, collectionName)}`, {
+      fetch(`${apiURL}/${collectionPath}`, {
         method: 'POST',
         body: data,
+        headers: new Headers(headers),
       }),
     );
-    const result = await response.json();
-    if (cacheService.has(collectionName)) {
-      cacheService.setOne(collectionName, result);
-    }
-    return result;
+    return response.json();
   }
 
   public async update(
-    path: string,
-    collectionName: string,
-    id: string,
+    collectionPath: string,
     data: FormData,
+    conditions?: any,
+    headers?: any,
+  ): Promise<object> {
+    const response = await errorHandler(
+      fetch(
+        `${apiURL}/${collectionPath}${
+          conditions ? `?${querystring.stringify(conditions)}` : ''
+        }`,
+        {
+          method: 'PUT',
+          body: data,
+          headers: new Headers(headers),
+        },
+      ),
+    );
+    return response.json();
+  }
+
+  public async updateById(
+    collectionPath: string,
+    documentId: string,
+    data: FormData,
+    headers?: any,
   ): Promise<T> {
     const response = await errorHandler(
-      fetch(`${collectionUrl(path, collectionName)}/${id}`, {
+      fetch(`${apiURL}/${collectionPath}/${documentId}`, {
         method: 'PUT',
         body: data,
+        headers: new Headers(headers),
       }),
     );
-    const result = await response.json();
-    if (cacheService.has(collectionName)) {
-      cacheService.setOne(collectionName, result);
-    }
-    return result;
+    return response.json();
   }
 
   public async remove(
-    path: string,
-    collectionName: string,
-    id: string,
+    collectionPath: string,
+    conditions?: any,
+    headers?: any,
+  ): Promise<object> {
+    const response = await errorHandler(
+      fetch(
+        `${apiURL}/${collectionPath}${
+          conditions ? `?${querystring.stringify(conditions)}` : ''
+        }`,
+        {
+          method: 'DELETE',
+          headers: new Headers(headers),
+        },
+      ),
+    );
+    return response.json();
+  }
+
+  public async removeById(
+    collectionPath: string,
+    documentId: string,
+    headers?: any,
   ): Promise<boolean> {
     const response = await errorHandler(
-      fetch(`${collectionUrl(path, collectionName)}/${id}`, {
+      fetch(`${apiURL}/${collectionPath}/${documentId}`, {
         method: 'DELETE',
+        headers: new Headers(headers),
       }),
     );
-    if (cacheService.has(collectionName)) {
-      cacheService.delete(collectionName, id);
-    }
     return response.json();
   }
 }
@@ -135,8 +133,4 @@ async function errorHandler(fetch: Promise<Response>) {
     throw result.error.message;
   }
   return response;
-}
-
-function collectionUrl(path: string, collectionName: string) {
-  return `${apiURL}/${path ? `${path}/` : ''}${collectionName}`;
 }

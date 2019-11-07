@@ -9,9 +9,7 @@ import Board from './components/Board';
 import ErrorBoundary from './components/ErrorBoundary';
 import Map from './components/GoogleMap';
 import Header from './components/Header';
-import PostForm from './components/PostForm';
 import Redirect from './components/Redirect';
-import User from './components/User';
 // import { loadStateFromLocalStorage } from './helpers/localStorage';
 import {
   resetMarkerAction,
@@ -41,9 +39,9 @@ interface IProps {
 }
 
 const App: React.FC<IProps> = ({
-  resetState,
+  // resetState,
   placeListener,
-  loadMapDataNow,
+  // loadMapDataNow,
   saveMapDataNow,
   getAllUserData,
 }) => {

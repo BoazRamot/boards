@@ -27,3 +27,4 @@ yarn-error.log*
 /src/config
 /boards-server/config
 /boards.server/config
+.vscode/launch.json

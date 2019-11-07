@@ -1,16 +1,19 @@
-import React, {useEffect} from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import {RouteComponentProps, useHistory} from 'react-router-dom';
-import {Dispatch} from "redux";
-import {connect} from "react-redux";
-import boardSnapShoot from "../boardSnapShoot.jpg";
-import {saveMapDataNowAction} from "../store/actions/action.mapDataMiddleware";
+import Grid from '@material-ui/core/Grid';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { Dispatch } from 'redux';
+import boardSnapShoot from '../boardSnapShoot.jpg';
+import {
+  getBoardByIdAction,
+  getBoardPostsAction,
+} from '../store/actions/action.boardApiMiddleware';
+import { saveMapDataNowAction } from '../store/actions/action.mapDataMiddleware';
 import BoardDetails from './BoardDetails';
 import BoardFeed from './BoardFeed';
 import Loading from './Loading';
-import { getBoardByIdAction, getBoardPostsAction } from '../store/actions/action.boardApiMiddleware';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,29 +27,36 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-  board: any
-  saveMapDataNow: Function
-  getBoardPosts: Function
-  getBoardById: Function
+  board: any;
+  saveMapDataNow: Function;
+  getBoardPosts: Function;
+  getBoardById: Function;
 }
 
-const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDataNow, getBoardPosts, getBoardById }) => {
-  let history = useHistory();
+const Board: React.FC<IProps & RouteComponentProps> = ({
+  match,
+  board,
+  saveMapDataNow,
+  getBoardPosts,
+  getBoardById,
+}) => {
+  const history = useHistory();
   const classes = useStyles();
+  const boardId = (match.params as any).id;
 
   useEffect(() => {
-    const boardId = (match.params as any).id;
     (async () => {
       if (Object.entries(board).length === 0 && board.constructor === Object) {
         await getBoardById(boardId);
       }
       await getBoardPosts(boardId);
     })();
+    // eslint-disable-next-line
   }, []);
 
   const handleImageClick = () => {
     saveMapDataNow();
-    history.push("/");
+    history.push('/');
   };
 
   if (Object.entries(board).length === 0 && board.constructor === Object) {
@@ -56,13 +66,13 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
   return (
     <div className={classes.root}>
       <Box mt={2}>
-        <Grid container spacing={1} >
+        <Grid container spacing={1}>
           <BoardDetails board={board} handleImageClick={handleImageClick} />
-          <BoardFeed/>
+          <BoardFeed />
         </Grid>
       </Box>
     </div>
-  )
+  );
 };
 
 const mapStateToProps = (state: any) => ({
@@ -75,4 +85,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   getBoardById: (boardId: any) => dispatch(getBoardByIdAction(boardId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Board);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Board);
