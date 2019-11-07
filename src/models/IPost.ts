@@ -1,5 +1,3 @@
-'use strict';
-
 import ICategory from './ICategory';
 import IComment from './IComment';
 

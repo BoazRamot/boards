@@ -1,16 +1,14 @@
 import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
 import {
-  BOARD_API_CREATE_POST, BOARD_API_DELETE_POST,
+  BOARD_API_CREATE_POST, BOARD_API_DELETE_POST, BOARD_API_EDIT_POST,
   BOARD_API_GET_BOARDS_BY_ID,
   BOARD_API_GET_POSTS,
 } from '../actions/action.boardApiMiddleware';
 import {
   addBoardPostDataAction,
-  addMapBoardDataAction, boardDataSetAction,
-  boardPostsDataSetAction, mapBoardsDataSetAction, removeBoardPostDataAction,
+  boardDataSetAction,
+  boardPostsDataSetAction, editBoardPostDataAction, removeBoardPostDataAction,
 } from '../actions/action.boardsDataReducer';
-import { MAP_API_CREATE_BOARD, MAP_API_GET_BOARDS_BY_POINT } from '../actions/action.mapApiMiddleware';
-import { store } from '../../index';
 
 const getBoardPosts: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch) => action => {
   if (action.type === BOARD_API_GET_POSTS) {
@@ -48,7 +46,7 @@ const createBoardPost: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispat
         console.log('new post Data: ', postData);
         dispatch(addBoardPostDataAction(postData));
       } catch (e) {
-        console.error('Board Create Failed', e);
+        console.error('Post Create Failed', e);
       }
     })();
   }
@@ -68,7 +66,7 @@ const getBoardById: Middleware = ({ dispatch }: MiddlewareAPI) => (
         console.log('boardsData', boardsData);
         dispatch(boardDataSetAction(boardsData));
       } catch (e) {
-        console.error('Boards Fetch Failed', e);
+        console.error('Board By Id Fetch Failed', e);
       }
     })();
   }
@@ -93,6 +91,36 @@ const deleteBoardPost: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispat
         console.log('new post Data: ', postData);
         dispatch(removeBoardPostDataAction(postId));
       } catch (e) {
+        console.error('Post Delete Failed', e);
+      }
+    })();
+  }
+  return next(action);
+};
+
+const editBoardPost: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch) => action => {
+  if (action.type === BOARD_API_EDIT_POST) {
+    const token = localStorage.getItem('boards-token') || '';
+    const post = action.post;
+    const boardId = action.boardId;
+    const postId = post.get('_id');
+    // console.log('post', post);
+    console.log('boardId', boardId);
+    console.log('postId', postId);
+    (async () => {
+      try {
+        const url = `http://localhost:5000/api/boards/${boardId}/posts/${postId}`;
+        const res = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'X-Auth-Token': token,
+          },
+          body: post,
+        });
+        const postData = await res.json();
+        console.log('new post Data: ', postData);
+        await dispatch(editBoardPostDataAction(postData));
+      } catch (e) {
         console.error('Board Create Failed', e);
       }
     })();
@@ -100,4 +128,4 @@ const deleteBoardPost: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispat
   return next(action);
 };
 
-export const boardMiddleware = [getBoardPosts, createBoardPost, getBoardById, deleteBoardPost];
+export const boardMiddleware = [getBoardPosts, createBoardPost, getBoardById, deleteBoardPost, editBoardPost];
