@@ -9,44 +9,18 @@ import Board from './components/Board';
 import ErrorBoundary from './components/ErrorBoundary';
 import Map from './components/GoogleMap';
 import Header from './components/Header';
-import PostForm from './components/PostForm';
 import Redirect from './components/Redirect';
-import User from './components/User';
-// import { loadStateFromLocalStorage } from './helpers/localStorage';
-import {
-  resetMarkerAction,
-  resetStateAction,
-} from './store/actions/action.googleMapReducer';
-import { getAllBoardsAction } from './store/actions/action.mapApiMiddleware';
-import {
-  loadMapDataNowAction,
-  saveMapDataNowAction,
-} from './store/actions/action.mapDataMiddleware';
-import {
-  // resetPopstateAction,
-  setPopstateAction,
-} from './store/actions/action.mapReducer';
+import { saveMapDataNowAction } from './store/actions/action.mapDataMiddleware';
 import { getAllUserDataAction } from './store/actions/action.userApiMiddleware';
 
 interface IProps {
   getAllUserData: Function;
   saveMapDataNow: Function;
-  loadMapDataNow: Function;
-  resetMarker: Function;
-  resetState: Function;
-  getAllBoards: Function;
-  setPopstate: Function;
-  redirect: any;
   placeListener: any;
 }
 
-const App: React.FC<IProps> = ({
-  resetState,
-  placeListener,
-  loadMapDataNow,
-  saveMapDataNow,
-  getAllUserData,
-}) => {
+const App: React.FC<IProps> = ({ placeListener, saveMapDataNow, getAllUserData }) => {
+
   useEffect(() => {
     console.log('app up');
     window.addEventListener('beforeunload', saveOnRefresh);
@@ -106,19 +80,11 @@ const App: React.FC<IProps> = ({
 
 const mapStateToProps = (state: any) => ({
   placeListener: state.googleMap.placeListener,
-  redirect: state.map.redirect,
-  popstate: state.map.popstate,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveMapDataNow: () => dispatch(saveMapDataNowAction()),
-  loadMapDataNow: (persistedState: any) =>
-    dispatch(loadMapDataNowAction(persistedState)),
-  resetMarker: () => dispatch(resetMarkerAction()),
-  resetState: () => dispatch(resetStateAction()),
   getAllUserData: (token: any) => dispatch(getAllUserDataAction(token)),
-  getAllBoards: () => dispatch(getAllBoardsAction()),
-  setPopstate: () => dispatch(setPopstateAction()),
 });
 
 export default connect(

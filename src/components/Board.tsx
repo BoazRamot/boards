@@ -42,6 +42,7 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
       }
       await getBoardPosts(boardId);
     })();
+    // eslint-disable-next-line
   }, []);
 
   const handleImageClick = () => {

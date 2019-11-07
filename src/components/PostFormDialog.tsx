@@ -1,13 +1,15 @@
-import React, { ReactEventHandler, useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import TextareaAutosize from 'react-textarea-autosize';
+import React, { useEffect, useState } from 'react';
 import {
   createStyles,
-  Dialog,
+  Dialog, DialogActions,
   DialogTitle,
   makeStyles,
   Theme,
 } from '@material-ui/core';
+import TextField from "@material-ui/core/TextField";
+import DialogContent from "@material-ui/core/DialogContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,14 +18,20 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
+    media: {
+      height: 300,
+      width: 'auto',
+      margin: 'auto',
+      marginTop: theme.spacing(2)
+    },
 
     container: {
       display: 'flex',
       flexWrap: 'wrap',
     },
     textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
+      // marginLeft: theme.spacing(1),
+      // marginRight: theme.spacing(1),
     },
     dense: {
       marginTop: theme.spacing(2),
@@ -37,34 +45,54 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
   openNewPost: boolean;
-  handleNewPostClose: ReactEventHandler;
+  handleNewPostClose: any;
   createBoardPost: Function;
+  handlePostEdit: Function;
+  editBoardPost: Function;
   boardId: any;
+  post: any;
 }
 
-const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, createBoardPost, boardId, }) => {
+const PostFormDialog: React.FC<IProps> = ({
+                                            openNewPost,
+                                            handleNewPostClose,
+                                            createBoardPost,
+                                            boardId,
+                                            post,
+                                            handlePostEdit,
+                                            editBoardPost
+}) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState();
   const [files, setFiles] = useState([] as File[]);
   const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
-  const [isUpdateDone, setIsUpdateDone] = useState(false);
+  const classes = useStyles();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title);
+      setContent(post.body);
+      // setFilesDataURIs([]);
+    }
+  }, [post]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formElement = event.target as HTMLFormElement;
     const formData = new FormData(formElement);
-    // if (post) {
-    //   await postDataService.update(post._id, formData);
-    //   setIsUpdateDone(true);
-    // } else {
-      createBoardPost(formData, boardId)
-      // const newPost = await postDataService.insert(formData);
+    if (post) {
+      formData.append('_id', post._id);
+      editBoardPost(formData, boardId);
+      handleNewPostClose();
+      handlePostEdit();
+    } else {
+      createBoardPost(formData, boardId);
       formElement.reset();
       setTitle('');
       setContent('');
       setFilesDataURIs([]);
-      // onSubmit(newPost);
-    // }
+      handleNewPostClose();
+    }
   };
 
   const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,114 +122,91 @@ const PostFormDialog: React.FC<IProps> = ({ openNewPost, handleNewPostClose, cre
     }
   };
 
-  if (isUpdateDone) {
-    return <Redirect push={true} to={`/`} />;
-  }
-
   return (
-
     <Dialog open={openNewPost} onClose={handleNewPostClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
-      <form className="post-form" autoComplete="off" onSubmit={handleSubmit}>
-        {/* {post ? <header>Edit Post</header> : <header>Create Post</header>} */}
-        <input name="title" value={title} placeholder="What's on your mind?" onChange={onTitleChange} />
-        <TextareaAutosize
-          name="content"
-          minRows={5}
-          maxRows={10}
-          autoFocus={true}
-          spellCheck={true}
-          useCacheForDOMMeasurements={true}
-          placeholder="Can you elaborate?"
-          value={content}
-          onChange={onContentChange}
-        />
-        {filesDataURIs.length > 0 &&
-        filesDataURIs.map((dataURI, index) => (
-          <img key={index} src={dataURI} alt={`${index}`} />
-        ))}
-        {/*{filesDataURIs.length === 0 &&*/}
-        {/*post &&*/}
-        {/*post.images &&*/}
-        {/*post.images.map(image => (*/}
-        {/*  <img*/}
-        {/*    key={image._id}*/}
-        {/*    // src={`${apiURL}${match.url}/posts/${post._id}/images/${image._id}/image`}*/}
-        {/*    src={`${apiURL}${match.url}/posts/${post._id}/images/${image._id}/image`}*/}
-        {/*    alt={`${image.description}`}*/}
-        {/*  />*/}
-        {/*))}*/}
-        <input
-          type="file"
-          name="images"
-          accept="image/*"
-          onChange={onFileChange}
-        />
-        <button
-          type="submit"
-          // disabled={!title || (post && post.title === title && !files)}
-        >
-          Submit
-        </button>
-      </form>
-      {/*<form autoComplete="off" onSubmit={handleSubmit} ref={formEl} className={classes.container}>*/}
-      {/*  <DialogContent>*/}
-      {/*    <TextField*/}
-      {/*      required*/}
-      {/*      id="outlined-name"*/}
-      {/*      label="Board Name"*/}
-      {/*      className={classes.textField}*/}
-      {/*      value={values.post}*/}
-      {/*      onChange={handleChange('post')}*/}
-      {/*      margin="normal"*/}
-      {/*      variant="outlined"*/}
-      {/*      fullWidth*/}
-      {/*    />*/}
-      {/*    <TextField*/}
-      {/*      id="outlined-select-currency"*/}
-      {/*      select*/}
-      {/*      label="Category"*/}
-      {/*      className={classes.textField}*/}
-      {/*      value={values.category}*/}
-      {/*      onChange={handleChange('category')}*/}
-      {/*      SelectProps={{*/}
-      {/*        MenuProps: {*/}
-      {/*          className: classes.menu,*/}
-      {/*        },*/}
-      {/*      }}*/}
-      {/*      helperText="Please Select Your Post Category"*/}
-      {/*      margin="normal"*/}
-      {/*      variant="outlined"*/}
-      {/*    >*/}
-      {/*      {category.map((option, index) => (*/}
-      {/*        <MenuItem key={index} value={option.value}>*/}
-      {/*          {option.value}*/}
-      {/*        </MenuItem>*/}
-      {/*      ))}*/}
-      {/*    </TextField>*/}
-      {/*    /!*<TextField*!/*/}
-      {/*    /!*  id="outlined-dense-multiline"*!/*/}
-      {/*    /!*  label="Board Description"*!/*/}
-      {/*    /!*  className={clsx(classes.textField, classes.dense)}*!/*/}
-      {/*    /!*  margin="dense"*!/*/}
-      {/*    /!*  variant="outlined"*!/*/}
-      {/*    /!*  multiline*!/*/}
-      {/*    /!*  fullWidth*!/*/}
-      {/*    /!*  rowsMax="4"*!/*/}
-      {/*    /!*  value={values.description}*!/*/}
-      {/*    /!*  onChange={handleChange('description')}*!/*/}
+      <DialogTitle id="form-dialog-title">{post ? 'Edit Post' : 'Create New Post'}</DialogTitle>
+      <form className={classes.container} autoComplete="off" onSubmit={handleSubmit}>
+        <DialogContent>
+          <TextField
+            required
+            id="outlined-name"
+            label="What's on your mind?"
+            className={classes.textField}
+            value={title}
+            onChange={onTitleChange}
+            margin="normal"
+            variant="outlined"
+            fullWidth
+          />
+          <TextField
+            required
+            id="outlined-name"
+            label="Can you elaborate?"
+            className={classes.textField}
+            value={content}
+            onChange={onContentChange}
+            margin="normal"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={"5"}
+            rowsMax={"10"}
+            // autoFocus={true}
+            spellCheck={true}
+            // useCacheForDOMMeasurements={true}
+          />
+          {filesDataURIs.length > 0 &&
+          filesDataURIs.map((dataURI, index) => (
+            <CardMedia
+              key={index}
+              className={classes.media}
+              image={dataURI}
+              title={`${index}`}
+            />
+          ))}
+          {filesDataURIs.length === 0 &&
+          post &&
+          post.images &&
+          post.images.map((image: any) => (
+            <CardMedia
+              key={image._id}
+              className={classes.media}
+              image={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
+              title={`${image.description}`}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          {/*<input*/}
+          {/*  type="file"*/}
+          {/*  name="images"*/}
+          {/*  accept="image/*"*/}
+          {/*  onChange={onFileChange}*/}
           {/*/>*/}
-      {/*    /!* todo: add static map*!/*/}
-      {/*  </DialogContent>*/}
-      {/*  <DialogActions>*/}
-      {/*    <Button onClick={handleNewPostClose} color="primary">*/}
-      {/*      Cancel*/}
-      {/*    </Button>*/}
-      {/*    <Button variant="contained" color="primary" type="submit">*/}
-      {/*      Submit*/}
-      {/*    </Button>*/}
-      {/*  </DialogActions>*/}
-      {/*</form>*/}
+          <input
+            type="file"
+            name="images"
+            accept="image/*"
+            onChange={onFileChange}
+            // className={classes.input}
+            style={{ display: 'none' }}
+            id="raised-button-file"
+            multiple
+          />
+          <label htmlFor="raised-button-file">
+            <Button variant="outlined" component="span">
+              Upload
+            </Button>
+          </label>
+          <Button variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={!title || (post && post.title === title && !files)}
+          >
+            Submit
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
