@@ -23,17 +23,20 @@ const commentSchema = new Schema(
 // middleware
 setReadonlyMiddleware(commentSchema, USER_ID);
 
-commentSchema.add({ comments: [commentSchema] });
+commentSchema.add({ comments: { type: [commentSchema], select: false } });
 
 commentSchema
   .path('comments')
-  .discriminator('Comment', new Schema({ comments: [commentSchema] }));
+  .discriminator(
+    'Comment',
+    new Schema({ comments: { type: [commentSchema], select: false } }),
+  );
 
 const postSchema = commentSchema.clone();
 
 postSchema.add({
   title: { type: String, required: true },
-  category: { type: String, enum: ['General'], /*required: true*/ },
+  category: { type: String, enum: ['General'] /*required: true*/ },
 });
 
 module.exports = postSchema;

@@ -33,9 +33,12 @@ class MongooseDataService extends IDataService {
     );
     if (targetElement) {
       // => an array item
-      subDocument = subDocument.find(item => item._id === targetElement);
+      return subDocument.find(item => item._id === targetElement);
     } else {
       DocUtils.filter(subDocument, filter);
+      if (options.hasOwnProperty('count')) {
+        return subDocument.length;
+      }
       DocUtils.applyOptions(subDocument, options);
     }
     return subDocument;
