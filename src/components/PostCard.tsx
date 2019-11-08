@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Card,
   CardContent,
@@ -27,6 +27,11 @@ import ListItem from "@material-ui/core/ListItem";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
+import AccountCircle from "@material-ui/core/SvgIcon/SvgIcon";
+import {signInDialogCloseAction} from "../store/actions/action.userDataReducer";
+import {getPostUserDataAction} from "../store/actions/action.userApiMiddleware";
+import IUser from "../models/IUser";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,14 +47,38 @@ const useStyles = makeStyles((theme: Theme) =>
 interface IProps {
   post: any;
   boardId: any;
+  getPostUserData: Function;
   deleteBoardPost: Function;
   handlePostEdit: Function;
+  // userName: string;
+  // avatar: string;
 }
 
-const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost, handlePostEdit }) => {
+const PostCard: React.FC<IProps> = ({
+                                      post,
+                                      boardId,
+                                      deleteBoardPost,
+                                      handlePostEdit,
+                                      getPostUserData,
+                                      // userName,
+                                      // avatar
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [userData, setUserData] = useState<IUser>({
+    _id: '',
+    googleId: '',
+    name: '',
+    email: '',
+    createdAt: '',
+    updatedAt: '',
+    avatar: '',
+  });
   const open = Boolean(anchorEl);
   const classes = useStyles();
+  
+  useEffect(() => {
+    getPostUserData(post.userId, setUserData)
+  }, []);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,6 +108,8 @@ const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost, handlePost
             style={{backgroundColor: "yellow", height: "60px", width: "70px"}}
           />
           <CardHeader
+            avatar={<Avatar alt={userData.name} src={userData.avatar} />}
+            title={userData.name}
             action={
               <IconButton aria-label="settings"
                           aria-controls="menu-appbar"
@@ -89,7 +120,7 @@ const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost, handlePost
                 <MoreVertIcon/>
               </IconButton>
             }
-            title={post.title}
+            // title={post.title}
             subheader={
               new Date(post.createdAt)
                 .toLocaleString('default', {
@@ -121,8 +152,11 @@ const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost, handlePost
             <MenuItem onClick={handleDelete.bind(null, post._id)}>Delete</MenuItem>
           </Menu>
           <CardContent>
+            <Typography variant="h4" color="textPrimary" component="h3">
+              {post.title}
+            </Typography>
             <Typography variant="h5" color="textSecondary" component="p">
-              {post.content}
+              {post.body}
             </Typography>
           </CardContent>
           {post.images && post.images.map((image: any) => (
@@ -178,7 +212,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-
+  getPostUserData: (userId: any, setUserData: any) => dispatch(getPostUserDataAction(userId, setUserData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostCard);

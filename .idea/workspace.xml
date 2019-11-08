@@ -2,20 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9b24acb-17f4-41b6-8df6-7a2df2e60632" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/UserLogonDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards.server/routers/auth.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards.server/routers/auth.router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boards.server/services/googleStrategy.js" beforeDir="false" afterPath="$PROJECT_DIR$/boards.server/services/googleStrategy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/BoardFeed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/BoardFeed.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/PostCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PostCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PostInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PostInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Redirect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Redirect.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/middlewares/map.data.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/middlewares/map.data.middleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/reducers/userDataReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/userDataReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PostFormDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PostFormDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/node_modules/" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -28,35 +19,23 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.7028451">
+    <splitter split-orientation="horizontal" split-proportion="0.59303796">
       <split-first>
         <leaf>
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/components/BoardFeed.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="518">
-                  <caret line="99" column="16" selection-start-line="99" selection-start-column="16" selection-end-line="99" selection-end-column="16" />
+                <state relative-caret-position="342">
+                  <caret line="103" column="16" lean-forward="true" selection-start-line="103" selection-start-column="16" selection-end-line="103" selection-end-column="16" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/components/PostInput.tsx">
+            <entry file="file://$PROJECT_DIR$/src/components/PostFormDialog.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="430">
-                  <caret line="29" column="24" lean-forward="true" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-                  <folding>
-                    <element signature="e#0#49#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/components/Board.tsx">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="702">
-                  <caret line="61" column="17" selection-start-line="61" selection-start-column="17" selection-end-line="61" selection-end-column="17" />
+                <state relative-caret-position="333">
+                  <caret line="84" column="13" lean-forward="true" selection-start-line="84" selection-start-column="13" selection-end-line="84" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -64,7 +43,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/components/PostList.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="308">
+                <state relative-caret-position="374">
                   <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
@@ -76,11 +55,20 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/components/PostCard.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="385">
-                  <caret line="152" column="27" selection-start-line="152" selection-start-column="27" selection-end-line="152" selection-end-column="27" />
+                <state relative-caret-position="575">
+                  <caret line="154" column="35" selection-start-line="154" selection-start-column="35" selection-end-line="154" selection-end-column="35" />
                   <folding>
-                    <element signature="e#0#40#0" expanded="true" />
+                    <element signature="e#0#49#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/boards.server/data/models/user.model.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="352">
+                  <caret line="16" column="9" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
@@ -88,8 +76,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/App.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="176">
-                  <caret line="98" column="26" lean-forward="true" selection-start-line="98" selection-start-column="26" selection-end-line="98" selection-end-column="26" />
+                <state relative-caret-position="484">
+                  <caret line="127" column="63" lean-forward="true" selection-start-line="127" selection-start-column="2" selection-end-line="127" selection-end-column="63" />
                   <folding>
                     <element signature="e#0#186#0" expanded="true" />
                   </folding>
@@ -98,38 +86,36 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/components/UserLogonDialog.tsx">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="67" column="93" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="93" />
-                  <folding>
-                    <element signature="e#0#26#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/boards.server/routers/auth.router.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="528">
-                  <caret line="114" column="70" selection-start-line="114" selection-start-column="70" selection-end-line="114" selection-end-column="70" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/boards.server/routers/user.router.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-355" />
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/boards.server/app.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="-1056" />
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/boards.server/services/googleStrategy.js">
+            <entry file="file://$PROJECT_DIR$/boards.server/routers/router.service.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="253">
-                  <caret line="25" column="39" lean-forward="true" selection-start-line="21" selection-start-column="11" selection-end-line="25" selection-end-column="39" />
+                <state relative-caret-position="-176">
+                  <caret line="13" column="62" selection-start-line="13" selection-start-column="62" selection-end-line="13" selection-end-column="62" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="484">
+                  <caret line="46" column="35" lean-forward="true" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+                  <folding>
+                    <element signature="e#0#60#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -138,20 +124,32 @@
       </split-first>
       <split-second>
         <leaf>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/store/reducers/userDataReducer.ts">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/boards.server/data/models/user.model.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="107">
-                  <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+                <state relative-caret-position="352">
+                  <caret line="16" column="9" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts">
+            <entry file="file://$PROJECT_DIR$/src/components/GoogleMaps/AddNewBoard.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="682">
-                  <caret line="31" column="33" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="33" />
+                <state relative-caret-position="429">
+                  <caret line="77" column="2" lean-forward="true" selection-start-line="77" selection-start-column="2" selection-end-line="81" selection-end-column="4" />
+                  <folding>
+                    <element signature="e#0#130#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/models/IUser.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="242">
+                  <caret line="14" column="18" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="14" selection-end-column="18" />
                 </state>
               </provider>
             </entry>
@@ -171,8 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/components/GoogleMaps/MapResultDrawer.tsx" />
-        <option value="$PROJECT_DIR$/src/store/actions/action.mapReducer.ts" />
         <option value="$PROJECT_DIR$/src/helpers/GoogleMaps/findGeolocation.ts" />
         <option value="$PROJECT_DIR$/src/pages/Board/Board.tsx" />
         <option value="$PROJECT_DIR$/src/store/reducers/mapReducer.ts" />
@@ -206,12 +202,10 @@
         <option value="$PROJECT_DIR$/src/store/actions/action.boardsDataReducer.ts" />
         <option value="$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts" />
         <option value="$PROJECT_DIR$/src/store/reducers/boardsDataReducer.ts" />
-        <option value="$PROJECT_DIR$/src/components/PostFormDialog.tsx" />
         <option value="$PROJECT_DIR$/src/components/GoogleMaps/AddNewBoard.tsx" />
         <option value="$PROJECT_DIR$/src/index.tsx" />
         <option value="$PROJECT_DIR$/src/store/middlewares/map.data.middleware.ts" />
         <option value="$PROJECT_DIR$/src/components/Header.tsx" />
-        <option value="$PROJECT_DIR$/src/components/BoardFeed.tsx" />
         <option value="$PROJECT_DIR$/boards.server/routers/auth.router.js" />
         <option value="$PROJECT_DIR$/src/components/Redirect.tsx" />
         <option value="$PROJECT_DIR$/src/store/actions/action.userDataReducer.ts" />
@@ -221,6 +215,10 @@
         <option value="$PROJECT_DIR$/src/App.tsx" />
         <option value="$PROJECT_DIR$/boards.server/services/googleStrategy.js" />
         <option value="$PROJECT_DIR$/src/components/PostInput.tsx" />
+        <option value="$PROJECT_DIR$/src/components/BoardFeed.tsx" />
+        <option value="$PROJECT_DIR$/src/components/PostFormDialog.tsx" />
+        <option value="$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts" />
+        <option value="$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts" />
         <option value="$PROJECT_DIR$/src/components/PostCard.tsx" />
       </list>
     </option>
@@ -237,7 +235,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -249,6 +246,12 @@
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
               <item name="boards" type="462c0819:PsiDirectoryNode" />
               <item name="boards.server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards.server" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
@@ -267,13 +270,14 @@
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
               <item name="boards" type="462c0819:PsiDirectoryNode" />
               <item name="boards.server" type="462c0819:PsiDirectoryNode" />
-              <item name="routers" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="schemas" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
               <item name="boards" type="462c0819:PsiDirectoryNode" />
               <item name="boards.server" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="routers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
@@ -292,6 +296,12 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
               <item name="GoogleMaps" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="boards" type="b2602c69:ProjectViewProjectNode" />
@@ -319,6 +329,29 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="store" type="462c0819:PsiDirectoryNode" />
               <item name="reducers" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards.server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="boards" type="b2602c69:ProjectViewProjectNode" />
+              <item name="boards" type="462c0819:PsiDirectoryNode" />
+              <item name="boards-sever" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -409,7 +442,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="554288000" />
+    <option name="totallyTimeSpent" value="561664000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -422,9 +455,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.19652265" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16754478" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -454,21 +486,6 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/boards.server/services/localStrategy.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boards.server/.env">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boards-server/package.json" />
-    <entry file="file://$PROJECT_DIR$/boards-server/package-lock.json" />
-    <entry file="file://$PROJECT_DIR$/boards.server/package-lock.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="26" lean-forward="true" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/boards.server/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
@@ -507,20 +524,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/boards.server/data/models/postCategory.model.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/boards-sever/models/post.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="528">
           <caret line="24" column="10" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boards.server/data/schemas/post.schema.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="34" column="7" selection-start-line="34" selection-start-column="2" selection-end-line="34" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -564,13 +571,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/PostFormDialog.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1408">
-          <caret line="75" column="5" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/store/middlewares/board.api.middleware.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2376">
@@ -591,25 +591,8 @@
     <entry file="file://$PROJECT_DIR$/src/App.scss">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/GoogleMaps/AddNewBoard.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#130#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/boards.server/routers/router.utils.js">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boards.server/routers/router.service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1244">
-          <caret line="13" column="62" selection-start-line="13" selection-start-column="62" selection-end-line="13" selection-end-column="62" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/boards.server/data/services/dbUtils.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -712,27 +695,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/reducers/userDataReducer.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/boards.server/services/passport-setup.js">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boards.server/data/models/user.model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" column="9" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boards.server/routers/user.router.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1056" />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/boards.server/routers/auth.router.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -748,47 +712,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="98" column="26" lean-forward="true" selection-start-line="98" selection-start-column="26" selection-end-line="98" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#186#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/PostList.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Board.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="702">
           <caret line="61" column="17" selection-start-line="61" selection-start-column="17" selection-end-line="61" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/PostInput.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="29" column="24" lean-forward="true" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/BoardFeed.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="99" column="16" selection-start-line="99" selection-start-column="16" selection-end-line="99" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -802,12 +729,134 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/config/keys.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/PostInput.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="26" column="99" lean-forward="true" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="99" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/data/models/postCategory.model.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/data/schemas/post.schema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="6" column="23" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/reducers/userDataReducer.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41">
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/PostFormDialog.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="84" column="13" lean-forward="true" selection-start-line="84" selection-start-column="13" selection-end-line="84" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/routers/user.router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-355" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/routers/router.service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-176">
+          <caret line="13" column="62" selection-start-line="13" selection-start-column="62" selection-end-line="13" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1056" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="127" column="63" lean-forward="true" selection-start-line="127" selection-start-column="2" selection-end-line="127" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#186#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/action.userApiMiddleware.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="60" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/BoardFeed.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="103" column="16" lean-forward="true" selection-start-line="103" selection-start-column="16" selection-end-line="103" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/PostList.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.server/data/models/user.model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="9" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/GoogleMaps/AddNewBoard.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="77" column="2" lean-forward="true" selection-start-line="77" selection-start-column="2" selection-end-line="81" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#130#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/middlewares/user.api.middleware.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="46" column="35" lean-forward="true" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/IUser.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="14" column="18" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="14" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/PostCard.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="152" column="27" selection-start-line="152" selection-start-column="27" selection-end-line="152" selection-end-column="27" />
+        <state relative-caret-position="575">
+          <caret line="154" column="35" selection-start-line="154" selection-start-column="35" selection-end-line="154" selection-end-column="35" />
           <folding>
-            <element signature="e#0#40#0" expanded="true" />
+            <element signature="e#0#49#0" expanded="true" />
           </folding>
         </state>
       </provider>

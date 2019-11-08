@@ -51,6 +51,7 @@ interface IProps {
   editBoardPost: Function;
   boardId: any;
   post: any;
+  userId: any;
 }
 
 const PostFormDialog: React.FC<IProps> = ({
@@ -60,7 +61,8 @@ const PostFormDialog: React.FC<IProps> = ({
                                             boardId,
                                             post,
                                             handlePostEdit,
-                                            editBoardPost
+                                            editBoardPost,
+                                            userId
 }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState();
@@ -80,6 +82,8 @@ const PostFormDialog: React.FC<IProps> = ({
     event.preventDefault();
     const formElement = event.target as HTMLFormElement;
     const formData = new FormData(formElement);
+    // userId
+    formData.append('userId', userId);
     if (post) {
       formData.append('_id', post._id);
       editBoardPost(formData, boardId);
@@ -132,6 +136,7 @@ const PostFormDialog: React.FC<IProps> = ({
             id="outlined-name"
             label="What's on your mind?"
             className={classes.textField}
+            name="title"
             value={title}
             onChange={onTitleChange}
             margin="normal"
@@ -143,6 +148,7 @@ const PostFormDialog: React.FC<IProps> = ({
             id="outlined-name"
             label="Can you elaborate?"
             className={classes.textField}
+            name="body"
             value={content}
             onChange={onContentChange}
             margin="normal"

@@ -1,6 +1,8 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
-import { USER_API_GET_USER } from '../actions/action.userApiMiddleware';
+import {USER_API_GET_POST_USER, USER_API_GET_USER} from '../actions/action.userApiMiddleware';
 import { userDataSetAction } from '../actions/action.userDataReducer';
+import React from "react";
+import IUser from "../../models/IUser";
 
 const getUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
   next: Dispatch,
@@ -24,4 +26,31 @@ const getUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
   return next(action);
 };
 
-export const userMiddleware = [getUserData];
+const getPostUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
+  next: Dispatch,
+) => action => {
+  if (action.type === USER_API_GET_POST_USER) {
+    const userId = action.userId;
+    const setUserData = action.setUserData;
+    (async () => {
+      try {
+        const url = `http://localhost:5000/api/users/${userId}`;
+        const res = await fetch(url);
+        const userData = await res.json();
+
+        // const handleChange = (name: keyof IUser) => (
+        //   event: React.ChangeEvent<HTMLInputElement>,
+        // ) => {
+        //   setUserData({ ...userData, [name]: event.target.value });
+        // };
+
+        setUserData({...userData});
+      } catch (e) {
+        console.error('User Fetch Failed', e);
+      }
+    })();
+  }
+  return next(action);
+};
+
+export const userMiddleware = [getUserData, getPostUserData];
