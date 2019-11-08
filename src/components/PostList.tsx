@@ -8,23 +8,27 @@ interface IProps {
   handlePostEdit: Function;
 }
 
-const PostList: React.FC<IProps> = ({ posts, boardId, deleteBoardPost, handlePostEdit }) => {
-
+const PostList: React.FC<IProps> = ({
+  posts,
+  boardId,
+  deleteBoardPost,
+  handlePostEdit,
+}) => {
   return (
     <div>
       {Object.values(posts)
         .reverse()
         .map((post: any) => (
-          <PostCard 
-            key={post._id} 
-            post={post} 
-            boardId={boardId} 
+          <PostCard
+            key={post._id}
+            post={post}
+            boardId={boardId}
             deleteBoardPost={deleteBoardPost}
             handlePostEdit={handlePostEdit}
           />
         ))}
     </div>
-  )
+  );
 };
 
 export default PostList;

@@ -9,7 +9,8 @@ import {
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { objectToFormData } from '../../utils';
 
 const community = [
   { value: 'General Community' },
@@ -65,7 +66,6 @@ const AddNewBoard: React.FC<IProps> = ({
   openNewBoard,
   address,
 }) => {
-  const formEl = useRef<HTMLFormElement>(null);
   const classes = useStyles();
   const [values, setValues] = useState<IState>({
     address,
@@ -101,7 +101,7 @@ const AddNewBoard: React.FC<IProps> = ({
       },
     };
     console.log('board', board);
-    createNewBoard(board);
+    createNewBoard(objectToFormData(board));
     handleNewBoardClose();
     handleNewBoardCreatedOpen();
   };
@@ -117,7 +117,6 @@ const AddNewBoard: React.FC<IProps> = ({
         <form
           autoComplete="off"
           onSubmit={handleSubmit}
-          ref={formEl}
           className={classes.container}
         >
           <DialogContent>

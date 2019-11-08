@@ -9,7 +9,7 @@ export const BOARD_API_EDIT_POST = 'BOARD_API_EDIT_POST';
 // action creators
 
 export const getBoardPostsAction = (boardId: any) => {
-  return { type: BOARD_API_GET_POSTS, boardId }
+  return { type: BOARD_API_GET_POSTS, boardId };
 };
 
 export const createNewPostAction = (post: any, boardId: any) => {
@@ -17,7 +17,7 @@ export const createNewPostAction = (post: any, boardId: any) => {
 };
 
 export const getBoardByIdAction = (boardId: any) => {
-  return { type: BOARD_API_GET_BOARDS_BY_ID, boardId }
+  return { type: BOARD_API_GET_BOARDS_BY_ID, boardId };
 };
 
 export const deleteBoardPostAction = (postId: any, boardId: any) => {

@@ -53,14 +53,14 @@ const boardDataService = new MongooseDataService('board');
 const userDataService = new MongooseDataService('user');
 
 // routes
-app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter(userDataService));
 app.use(
   '/api/boards',
-  boardRouter(uploadMap, boardDataService),
+  boardRouter(boardDataService),
   router(uploadMap, boardDataService),
 );
 app.use('/api/users', [
-  userRouter(uploadMap, userDataService),
+  userRouter(userDataService),
   router(uploadMap, userDataService),
 ]);
 

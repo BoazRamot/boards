@@ -1,11 +1,7 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { store } from '../../index';
-import {
-  resetMapBoardsDataAction,
-} from '../actions/action.boardsDataReducer';
-import {
-  MAP_DATA_SET,
-} from '../actions/action.mapDataMiddleware';
+import { resetMapBoardsDataAction } from '../actions/action.boardsDataReducer';
+import { MAP_DATA_SET } from '../actions/action.mapDataMiddleware';
 import {
   setPopstateAction,
   setRedirectAction,

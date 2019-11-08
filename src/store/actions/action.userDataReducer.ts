@@ -32,4 +32,3 @@ export const signInDialogCloseAction = () => {
 export const setUserAccountAction = (payload: any) => {
   return { type: USER_ACCOUNT, payload };
 };
-

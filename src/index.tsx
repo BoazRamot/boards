@@ -3,9 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
-import {
-  saveStateToSessionStorage,
-} from './helpers/localStorage';
+import { saveStateToSessionStorage } from './helpers/localStorage';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';

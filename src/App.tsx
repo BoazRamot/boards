@@ -1,12 +1,21 @@
 import {
   Box,
-  Button,
-  createMuiTheme, Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle, IconButton, ListItemText, Typography
+  // Button,
+  createMuiTheme,
+  // Dialog,
+  // DialogActions,
+  // DialogContent,
+  // DialogContentText,
+  // DialogTitle,
+  // IconButton,
+  // ListItemText,
+  // Typography,
 } from '@material-ui/core';
+// import Fab from '@material-ui/core/Fab';
+// import Grid from '@material-ui/core/Grid';
+// import List from '@material-ui/core/List';
+// import ListItem from '@material-ui/core/ListItem';
+// import MenuIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import { ThemeProvider } from '@material-ui/styles';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -18,15 +27,13 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Map from './components/GoogleMap';
 import Header from './components/Header';
 import Redirect from './components/Redirect';
+import UserLogonDialog from './components/UserLogonDialog';
 import { saveMapDataNowAction } from './store/actions/action.mapDataMiddleware';
 import { getAllUserDataAction } from './store/actions/action.userApiMiddleware';
-import {setUserAccountAction, signInDialogCloseAction} from "./store/actions/action.userDataReducer";
-import MenuIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import Fab from "@material-ui/core/Fab";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Grid from "@material-ui/core/Grid";
-import UserLogonDialog from "./components/UserLogonDialog";
+import {
+  setUserAccountAction,
+  signInDialogCloseAction,
+} from './store/actions/action.userDataReducer';
 
 interface IProps {
   signInDialogClose: any;
@@ -38,16 +45,15 @@ interface IProps {
   userAccount: string;
 }
 
-const App: React.FC<IProps> = ({ 
-                                 placeListener, 
-                                 saveMapDataNow, 
-                                 getAllUserData,
-                                 userSignInDialog,
-                                 signInDialogClose,
-                                 setUserAccount,
-                                 userAccount
+const App: React.FC<IProps> = ({
+  placeListener,
+  saveMapDataNow,
+  getAllUserData,
+  userSignInDialog,
+  signInDialogClose,
+  setUserAccount,
+  userAccount,
 }) => {
-
   useEffect(() => {
     console.log('app up');
     window.addEventListener('beforeunload', saveOnRefresh);
@@ -83,11 +89,8 @@ const App: React.FC<IProps> = ({
       },
     },
   });
-  
-  const handleSignIn = () => {
-    signInDialogClose();
-  };
 
+  // const handleSignIn = () => signInDialogClose();
   const PageNotFound = () => 'Page not found';
 
   return (

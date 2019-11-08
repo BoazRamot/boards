@@ -1,12 +1,12 @@
+import { Dialog } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import React from 'react';
-import {Dialog} from "@material-ui/core";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Button from "@material-ui/core/Button";
 
 interface IProps {
   signInDialogClose: any;
@@ -14,12 +14,14 @@ interface IProps {
   userAccount: string;
 }
 
-const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, userSignInDialog}) => {
-
+const UserLogonDialog: React.FC<IProps> = ({
+  signInDialogClose,
+  userAccount,
+  userSignInDialog,
+}) => {
   const handleSignIn = () => {
     signInDialogClose();
   };
-
 
   return (
     <div>
@@ -33,11 +35,11 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
           <DialogContentText>
             Please Sign In To Complete Your Action
           </DialogContentText>
-          {userAccount &&
-          <DialogContentText>
-            {`Your Board Account Was Created With ${userAccount}`}
-          </DialogContentText>
-          }
+          {userAccount && (
+            <DialogContentText>
+              {`Your Board Account Was Created With ${userAccount}`}
+            </DialogContentText>
+          )}
         </DialogContent>
         <DialogActions>
           <List>
@@ -46,10 +48,13 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
                 variant="outlined"
                 onClick={handleSignIn}
                 color="primary"
-                style={{minWidth: "300px"}}
+                style={{ minWidth: '300px' }}
                 // disabled={userAccount !== "google"}
               >
-                <img src="https://img.icons8.com/color/48/000000/google-logo.png"/>
+                <img
+                  src="https://img.icons8.com/color/48/000000/google-logo.png"
+                  alt="google-logo"
+                />
                 Continue With Google
               </Button>
             </ListItem>
@@ -58,14 +63,23 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
                 variant="outlined"
                 onClick={handleSignIn}
                 color="primary"
-                style={{minWidth: "300px"}}
+                style={{ minWidth: '300px' }}
                 // disabled={userAccount !== "facebook"}
               >
-                <img src="https://img.icons8.com/color/48/000000/facebook-new.png"/>
+                <img
+                  src="https://img.icons8.com/color/48/000000/facebook-new.png"
+                  alt="facebook-new"
+                />
                 Continue With Facebook
               </Button>
             </ListItem>
-            <ListItem style={{display: "flex", flexFlow: "column", justifyContent: "center"}}>
+            <ListItem
+              style={{
+                display: 'flex',
+                flexFlow: 'column',
+                justifyContent: 'center',
+              }}
+            >
               OR Create New Account
             </ListItem>
             <ListItem>
@@ -73,7 +87,7 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
                 variant="outlined"
                 onClick={handleSignIn}
                 color="primary"
-                style={{minWidth: "300px"}}
+                style={{ minWidth: '300px' }}
               >
                 Sing Up
               </Button>
@@ -89,6 +103,5 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
     </div>
   );
 };
-
 
 export default UserLogonDialog;

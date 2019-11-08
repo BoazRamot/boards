@@ -20,10 +20,11 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router';
 import { Dispatch } from 'redux';
+import { apiURL } from '../services/data.service';
 import { resetRedirectAction } from '../store/actions/action.mapReducer';
 import { logoutUserAction } from '../store/actions/action.userDataReducer';
-import {useHistory} from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,7 +65,7 @@ const Header: React.FC<IProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
-  let history = useHistory();
+  const history = useHistory();
 
   const handleLoginDialogOpen = () => {
     setOpenLoginDialog(true);
@@ -76,7 +77,7 @@ const Header: React.FC<IProps> = ({
 
   const handleGoogle = () => {
     localStorage.setItem('boards-app-location', history.location.pathname);
-    window.location.href = `http://localhost:5000/api/auth/google`;
+    window.location.href = `${apiURL}/auth/google`;
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {

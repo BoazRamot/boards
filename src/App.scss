@@ -34,7 +34,16 @@
 
 /*** Added by Avi ***/
 .App {
-  position: relative;
+  min-height: 100vh;
+}
+
+.parent-center {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .board {
@@ -114,15 +123,12 @@
 }
 
 .loading-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 10vw;
-  height: 10vw;
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
   border-radius: 50%;
+  align-self: center;
+  width: 10vw;
+  height: 10vw;
   animation: spin 2s linear infinite;
 }
 

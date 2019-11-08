@@ -1,27 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import Loading from './Loading';
-import PostList from './PostList';
-import { createStyles, Grid, makeStyles, Theme,} from '@material-ui/core';
-import PostInput from './PostInput';
-import PostFormDialog from './PostFormDialog';
+import { createStyles, Grid, makeStyles, Theme } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   createNewPostAction,
   deleteBoardPostAction,
-  editBoardPostAction, getBoardPostsAction,
+  editBoardPostAction,
+  getBoardPostsAction,
 } from '../store/actions/action.boardApiMiddleware';
-import { connect } from 'react-redux';
-import {signInDialogOpenAction} from "../store/actions/action.userDataReducer";
+import { signInDialogOpenAction } from '../store/actions/action.userDataReducer';
+import Loading from './Loading';
+import PostFormDialog from './PostFormDialog';
+import PostInput from './PostInput';
+import PostList from './PostList';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     boardFeed: {
       height: 'calc(100%)',
-      display: "flex",
-      flexDirection: "column",
-      width: "80vw",
+      display: 'flex',
+      flexDirection: 'column',
+      width: '80vw',
     },
-  })
+  }),
 );
 
 interface IProps {
@@ -39,16 +40,16 @@ interface IProps {
 }
 
 const BoardFeed: React.FC<IProps> = ({
-                                       createBoardPost,
-                                       board,
-                                       posts,
-                                       deleteBoardPost,
-                                       editBoardPost,
-                                       getBoardPosts,
-                                       getPosts,
-                                       userLogin,
-                                       signInDialogOpen,
-                                       userId
+  createBoardPost,
+  board,
+  posts,
+  deleteBoardPost,
+  editBoardPost,
+  getBoardPosts,
+  getPosts,
+  userLogin,
+  signInDialogOpen,
+  userId,
 }) => {
   const [openNewPost, setOpenNewPost] = useState(false);
   const [post, setPost] = useState(null);
@@ -58,18 +59,20 @@ const BoardFeed: React.FC<IProps> = ({
     if (getPosts) {
       getBoardPosts(board._id);
     }
+    // eslint-disable-next-line
   }, [getPosts]);
 
   useEffect(() => {
     if (post) {
       handleNewPostOpen();
     }
+    // eslint-disable-next-line
   }, [post]);
 
-  const handlePostEdit = (post: any = null) => {
-    setPost(post);
+  const handlePostEdit = (postData: any = null) => {
+    setPost(postData);
   };
-  
+
   const handleNewPostOpen = () => {
     if (userLogin) {
       setOpenNewPost(true);
@@ -99,8 +102,16 @@ const BoardFeed: React.FC<IProps> = ({
           editBoardPost={editBoardPost}
           userId={userId}
         />
-        <Grid container style={{flexGrow: 1, display: "flex", flexDirection: "column", minHeight: 0}}>
-          <PostInput handleNewPostOpen={handleNewPostOpen}/>
+        <Grid
+          container
+          style={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+          }}
+        >
+          <PostInput handleNewPostOpen={handleNewPostOpen} />
           <PostList
             posts={posts}
             boardId={board._id}
@@ -122,11 +133,17 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createBoardPost: (post: any, boardId: any) => dispatch(createNewPostAction(post, boardId)),
-  deleteBoardPost: (postId: any, boardId: any) => dispatch(deleteBoardPostAction(postId, boardId)),
-  editBoardPost: (post: any, boardId: any) => dispatch(editBoardPostAction(post, boardId)),
+  createBoardPost: (post: any, boardId: any) =>
+    dispatch(createNewPostAction(post, boardId)),
+  deleteBoardPost: (postId: any, boardId: any) =>
+    dispatch(deleteBoardPostAction(postId, boardId)),
+  editBoardPost: (post: any, boardId: any) =>
+    dispatch(editBoardPostAction(post, boardId)),
   getBoardPosts: (boardId: any) => dispatch(getBoardPostsAction(boardId)),
   signInDialogOpen: () => dispatch(signInDialogOpenAction()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BoardFeed);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(BoardFeed);

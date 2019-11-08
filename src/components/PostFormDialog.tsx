@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import {
   createStyles,
-  Dialog, DialogActions,
+  Dialog,
+  DialogActions,
   DialogTitle,
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import TextField from "@material-ui/core/TextField";
-import DialogContent from "@material-ui/core/DialogContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
+import CardMedia from '@material-ui/core/CardMedia';
+import DialogContent from '@material-ui/core/DialogContent';
+import TextField from '@material-ui/core/TextField';
+import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 300,
       width: 'auto',
       margin: 'auto',
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(2),
     },
 
     container: {
@@ -39,7 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
     menu: {
       width: 200,
     },
-
   }),
 );
 
@@ -55,17 +55,17 @@ interface IProps {
 }
 
 const PostFormDialog: React.FC<IProps> = ({
-                                            openNewPost,
-                                            handleNewPostClose,
-                                            createBoardPost,
-                                            boardId,
-                                            post,
-                                            handlePostEdit,
-                                            editBoardPost,
-                                            userId
+  openNewPost,
+  handleNewPostClose,
+  createBoardPost,
+  boardId,
+  post,
+  handlePostEdit,
+  editBoardPost,
+  userId,
 }) => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState();
+  const [body, setBody] = useState();
   const [files, setFiles] = useState([] as File[]);
   const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
   const classes = useStyles();
@@ -73,7 +73,7 @@ const PostFormDialog: React.FC<IProps> = ({
   useEffect(() => {
     if (post) {
       setTitle(post.title);
-      setContent(post.body);
+      setBody(post.body);
       // setFilesDataURIs([]);
     }
   }, [post]);
@@ -93,7 +93,7 @@ const PostFormDialog: React.FC<IProps> = ({
       createBoardPost(formData, boardId);
       formElement.reset();
       setTitle('');
-      setContent('');
+      setBody('');
       setFilesDataURIs([]);
       handleNewPostClose();
     }
@@ -106,7 +106,7 @@ const PostFormDialog: React.FC<IProps> = ({
 
   const onContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const element = event.target as HTMLTextAreaElement;
-    setContent(element.value);
+    setBody(element.value);
   };
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,9 +127,19 @@ const PostFormDialog: React.FC<IProps> = ({
   };
 
   return (
-    <Dialog open={openNewPost} onClose={handleNewPostClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{post ? 'Edit Post' : 'Create New Post'}</DialogTitle>
-      <form className={classes.container} autoComplete="off" onSubmit={handleSubmit}>
+    <Dialog
+      open={openNewPost}
+      onClose={handleNewPostClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">
+        {post ? 'Edit Post' : 'Create New Post'}
+      </DialogTitle>
+      <form
+        className={classes.container}
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         <DialogContent>
           <TextField
             required
@@ -149,38 +159,38 @@ const PostFormDialog: React.FC<IProps> = ({
             label="Can you elaborate?"
             className={classes.textField}
             name="body"
-            value={content}
+            value={body}
             onChange={onContentChange}
             margin="normal"
             variant="outlined"
             fullWidth
             multiline
-            rows={"5"}
-            rowsMax={"10"}
+            rows={'5'}
+            rowsMax={'10'}
             // autoFocus={true}
             spellCheck={true}
             // useCacheForDOMMeasurements={true}
           />
           {filesDataURIs.length > 0 &&
-          filesDataURIs.map((dataURI, index) => (
-            <CardMedia
-              key={index}
-              className={classes.media}
-              image={dataURI}
-              title={`${index}`}
-            />
-          ))}
+            filesDataURIs.map((dataURI, index) => (
+              <CardMedia
+                key={index}
+                className={classes.media}
+                image={dataURI}
+                title={`${index}`}
+              />
+            ))}
           {filesDataURIs.length === 0 &&
-          post &&
-          post.images &&
-          post.images.map((image: any) => (
-            <CardMedia
-              key={image._id}
-              className={classes.media}
-              image={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
-              title={`${image.description}`}
-            />
-          ))}
+            post &&
+            post.images &&
+            post.images.map((image: any) => (
+              <CardMedia
+                key={image._id}
+                className={classes.media}
+                image={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
+                title={`${image.description}`}
+              />
+            ))}
         </DialogContent>
         <DialogActions>
           {/*<input*/}
@@ -204,10 +214,11 @@ const PostFormDialog: React.FC<IProps> = ({
               Upload
             </Button>
           </label>
-          <Button variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={!title || (post && post.title === title && !files)}
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={!title || (post && post.title === title && !files)}
           >
             Submit
           </Button>

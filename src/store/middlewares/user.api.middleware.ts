@@ -1,54 +1,78 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
-import {USER_API_GET_POST_USER, USER_API_GET_USER} from '../actions/action.userApiMiddleware';
+import IUser from '../../models/IUser';
+import DataService, {
+  // apiURL,
+  DataCollections,
+} from '../../services/data.service';
+import {
+  USER_API_GET_POST_USER,
+  USER_API_GET_USER,
+} from '../actions/action.userApiMiddleware';
 import { userDataSetAction } from '../actions/action.userDataReducer';
-import React from "react";
-import IUser from "../../models/IUser";
+
+const userDataService = new DataService<IUser>();
 
 const getUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
   next: Dispatch,
-) => action => {
+) => async action => {
   if (action.type === USER_API_GET_USER) {
     const token = action.token;
-    (async () => {
-      try {
-        const url = 'http://localhost:5000/api/auth/login';
-        const res = await fetch(url, {
-          method: 'GET',
-          headers: { 'X-Auth-Token': token },
-        });
-        const userData = await res.json();
-        dispatch(userDataSetAction(userData));
-      } catch (e) {
-        console.error('User Fetch Failed', e);
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     const url = `${apiURL}/auth/login`;
+    //     const res = await fetch(url, {
+    //       method: 'GET',
+    //       headers: { 'X-Auth-Token': token },
+    //     });
+    //     const userData = await res.json();
+    //     dispatch(userDataSetAction(userData));
+    //   } catch (e) {
+    //     console.error('User Fetch Failed', e);
+    //   }
+    // })();
+    try {
+      const userData = await userDataService.get('auth/login', undefined, {
+        'X-Auth-Token': token,
+      });
+      dispatch(userDataSetAction(userData));
+    } catch (error) {
+      console.error('User Fetch Failed', error);
+    }
   }
   return next(action);
 };
 
 const getPostUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
   next: Dispatch,
-) => action => {
+) => async action => {
   if (action.type === USER_API_GET_POST_USER) {
-    const userId = action.userId;
-    const setUserData = action.setUserData;
-    (async () => {
-      try {
-        const url = `http://localhost:5000/api/users/${userId}`;
-        const res = await fetch(url);
-        const userData = await res.json();
+    const { userId, setUserData } = action;
+    // (async () => {
+    //   try {
+    //     const url = `${apiURL}/${DataCollections.Users}/${userId}`;
+    //     const res = await fetch(url);
+    //     const userData = await res.json();
 
-        // const handleChange = (name: keyof IUser) => (
-        //   event: React.ChangeEvent<HTMLInputElement>,
-        // ) => {
-        //   setUserData({ ...userData, [name]: event.target.value });
-        // };
+    //     // const handleChange = (name: keyof IUser) => (
+    //     //   event: React.ChangeEvent<HTMLInputElement>,
+    //     // ) => {
+    //     //   setUserData({ ...userData, [name]: event.target.value });
+    //     // };
 
-        setUserData({...userData});
-      } catch (e) {
-        console.error('User Fetch Failed', e);
-      }
-    })();
+    //     setUserData({ ...userData });
+    //   } catch (e) {
+    //     console.error('User Fetch Failed', e);
+    //   }
+    // })();
+    try {
+      const userData = await userDataService.getById(
+        DataCollections.Users,
+        userId,
+      );
+      setUserData({ ...userData });
+    } catch (error) {
+      console.error('User Fetch Failed', error);
+    }
   }
   return next(action);
 };
