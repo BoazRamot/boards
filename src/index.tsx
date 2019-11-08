@@ -1,10 +1,9 @@
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import {
-  // saveStateToLocalStorage,
   saveStateToSessionStorage,
 } from './helpers/localStorage';
 import './index.scss';
@@ -22,15 +21,6 @@ store.subscribe(
     });
   }, 1000),
 );
-
-// store.subscribe(
-//   throttle(() => {
-//     saveStateToLocalStorage({
-//       map: store.getState().map,
-//       mapBoards: store.getState().mapBoards,
-//     });
-//   }, 1000),
-// );
 
 ReactDOM.render(
   <Provider store={store}>

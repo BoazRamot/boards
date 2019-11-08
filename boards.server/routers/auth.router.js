@@ -112,7 +112,7 @@ router
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.redirect(`http://localhost:3000/redirect/${token}`);
+          res.redirect(`http://localhost:3000/redirect/${token}/google`);
         },
       );
     }),

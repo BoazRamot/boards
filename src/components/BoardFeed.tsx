@@ -11,14 +11,15 @@ import {
   editBoardPostAction, getBoardPostsAction,
 } from '../store/actions/action.boardApiMiddleware';
 import { connect } from 'react-redux';
+import {signInDialogOpenAction} from "../store/actions/action.userDataReducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    drawerRoot: {
+    boardFeed: {
       height: 'calc(100%)',
       display: "flex",
       flexDirection: "column",
-      width: "80vw"
+      width: "80vw",
     },
   })
 );
@@ -27,11 +28,13 @@ interface IProps {
   // board: IBoard;
   board: any;
   posts: any;
+  signInDialogOpen: Function;
   createBoardPost: Function;
   deleteBoardPost: Function;
   editBoardPost: Function;
   getBoardPosts: Function;
   getPosts: boolean;
+  userLogin: boolean;
 }
 
 const BoardFeed: React.FC<IProps> = ({
@@ -41,11 +44,12 @@ const BoardFeed: React.FC<IProps> = ({
                                        deleteBoardPost,
                                        editBoardPost,
                                        getBoardPosts,
-                                       getPosts
+                                       getPosts,
+                                       userLogin,
+                                       signInDialogOpen
 }) => {
   const [openNewPost, setOpenNewPost] = useState(false);
   const [post, setPost] = useState(null);
-  const [refresh, setRefresh] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -56,11 +60,7 @@ const BoardFeed: React.FC<IProps> = ({
 
   useEffect(() => {
     if (post) {
-      console.log('post', post)
       handleNewPostOpen();
-      // setRefresh(false);
-    } else {
-      // getBoardPosts(board._id);
     }
   }, [post]);
 
@@ -69,7 +69,11 @@ const BoardFeed: React.FC<IProps> = ({
   };
   
   const handleNewPostOpen = () => {
-    setOpenNewPost(true);
+    if (userLogin) {
+      setOpenNewPost(true);
+    } else {
+      signInDialogOpen();
+    }
   };
 
   const handleNewPostClose = () => {
@@ -82,14 +86,15 @@ const BoardFeed: React.FC<IProps> = ({
 
   return (
     <Grid item xs={12} sm>
-      <div className={classes.drawerRoot}>
-        <PostFormDialog boardId={board._id}
-                        createBoardPost={createBoardPost}
-                        openNewPost={openNewPost}
-                        handleNewPostClose={handleNewPostClose}
-                        post={post}
-                        handlePostEdit={handlePostEdit}
-                        editBoardPost={editBoardPost}
+      <div className={classes.boardFeed}>
+        <PostFormDialog
+          boardId={board._id}
+          createBoardPost={createBoardPost}
+          openNewPost={openNewPost}
+          handleNewPostClose={handleNewPostClose}
+          post={post}
+          handlePostEdit={handlePostEdit}
+          editBoardPost={editBoardPost}
         />
         <Grid container style={{flexGrow: 1, display: "flex", flexDirection: "column", minHeight: 0}}>
           <PostInput handleNewPostOpen={handleNewPostOpen}/>
@@ -109,6 +114,7 @@ const mapStateToProps = (state: any) => ({
   board: state.mapBoards.board,
   posts: state.mapBoards.posts,
   getPosts: state.mapBoards.getPosts,
+  userLogin: state.user.userLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -116,6 +122,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteBoardPost: (postId: any, boardId: any) => dispatch(deleteBoardPostAction(postId, boardId)),
   editBoardPost: (post: any, boardId: any) => dispatch(editBoardPostAction(post, boardId)),
   getBoardPosts: (boardId: any) => dispatch(getBoardPostsAction(boardId)),
+  signInDialogOpen: () => dispatch(signInDialogOpenAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardFeed);

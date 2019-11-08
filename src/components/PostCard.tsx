@@ -18,6 +18,15 @@ import {Dispatch} from "redux";
 import {connect} from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CardActions from "@material-ui/core/CardActions";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import List from "@material-ui/core/List";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItem from "@material-ui/core/ListItem";
+import Paper from "@material-ui/core/Paper";
+import Divider from "@material-ui/core/Divider";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -124,6 +133,38 @@ const PostCard: React.FC<IProps> = ({ post, boardId, deleteBoardPost, handlePost
               title={image.description}
             />
           ))}
+          <CardContent>
+            <List style={{display: "flex", flexFlow: "row"}}>
+              <ListItem>
+                comments {post.comments.length}
+              </ListItem>
+              <ListItem style={{display: "flex", justifyContent: "flex-end"}}>
+                likes {post.likes.length}
+              </ListItem>
+            </List>
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Grid container style={{flexGrow: 1, flexFlow: "row"}} spacing={2} >
+              <Grid item xs={6}>
+                <Paper style={{textAlign: 'center', background: "none"}}>
+                  <Button>
+                    <img src="https://img.icons8.com/ios/50/000000/speech-bubble-with-dots.png"/>
+                    comment
+                  </Button>
+
+                </Paper>
+              </Grid>
+              <Grid item xs={6}>
+                <Paper style={{textAlign: 'center'}}>
+                  <Button>
+                    <img src="https://img.icons8.com/emoji/48/000000/thumbs-up.png"/>
+                    like
+                  </Button>
+                </Paper>
+              </Grid>
+            </Grid>
+          </CardActions>
         </Card>
       </Box>
     </Grid>

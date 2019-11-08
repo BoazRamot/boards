@@ -23,6 +23,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { resetRedirectAction } from '../store/actions/action.mapReducer';
 import { logoutUserAction } from '../store/actions/action.userDataReducer';
+import {useHistory} from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-  isLogin: boolean;
+  userLogin: boolean;
   userName: string;
   avatar: string;
   resetRedirect: Function;
@@ -55,7 +56,7 @@ interface IProps {
 const Header: React.FC<IProps> = ({
   logoutUser,
   resetRedirect,
-  isLogin,
+  userLogin,
   avatar,
   userName,
 }) => {
@@ -63,6 +64,7 @@ const Header: React.FC<IProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
+  let history = useHistory();
 
   const handleLoginDialogOpen = () => {
     setOpenLoginDialog(true);
@@ -73,6 +75,7 @@ const Header: React.FC<IProps> = ({
   };
 
   const handleGoogle = () => {
+    localStorage.setItem('boards-app-location', history.location.pathname);
     window.location.href = `http://localhost:5000/api/auth/google`;
   };
 
@@ -147,7 +150,7 @@ const Header: React.FC<IProps> = ({
             onClick={handleMenu}
             color="inherit"
           >
-            {isLogin ? (
+            {userLogin ? (
               <Avatar alt={userName} src={avatar} />
             ) : (
               <AccountCircle />
@@ -168,7 +171,7 @@ const Header: React.FC<IProps> = ({
             open={open}
             onClose={handleClose}
           >
-            {isLogin ? (
+            {userLogin ? (
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             ) : (
               <MenuItem onClick={handleLoginDialogOpen}>Login</MenuItem>
@@ -183,7 +186,7 @@ const Header: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  isLogin: state.user.userLogin,
+  userLogin: state.user.userLogin,
   userName: state.user.userData.name,
   avatar: state.user.userData.avatar,
   redirect: state.map.redirect,

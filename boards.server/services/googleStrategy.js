@@ -18,6 +18,12 @@ const googleStrategy = new GoogleStrategy(
         console.log('user is: ', currentUser);
         done(null, currentUser);
       } else {
+        // if not check if register with other service
+        // User.findOne({email: email.emails[0].value}).then(currentUser => {
+        //   if (currentUser) {
+        //     // already have this user in other service
+        //     console.log('user is: ', currentUser);
+        //     done(null, currentUser);
         // if not, create user in our db
         console.log('email', email);
         new User({
