@@ -35,6 +35,7 @@ interface IProps {
   getBoardPosts: Function;
   getPosts: boolean;
   userLogin: boolean;
+  userId: any;
 }
 
 const BoardFeed: React.FC<IProps> = ({
@@ -46,7 +47,8 @@ const BoardFeed: React.FC<IProps> = ({
                                        getBoardPosts,
                                        getPosts,
                                        userLogin,
-                                       signInDialogOpen
+                                       signInDialogOpen,
+                                       userId
 }) => {
   const [openNewPost, setOpenNewPost] = useState(false);
   const [post, setPost] = useState(null);
@@ -95,6 +97,7 @@ const BoardFeed: React.FC<IProps> = ({
           post={post}
           handlePostEdit={handlePostEdit}
           editBoardPost={editBoardPost}
+          userId={userId}
         />
         <Grid container style={{flexGrow: 1, display: "flex", flexDirection: "column", minHeight: 0}}>
           <PostInput handleNewPostOpen={handleNewPostOpen}/>
@@ -115,6 +118,7 @@ const mapStateToProps = (state: any) => ({
   posts: state.mapBoards.posts,
   getPosts: state.mapBoards.getPosts,
   userLogin: state.user.userLogin,
+  userId: state.user.userData._id,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
