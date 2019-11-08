@@ -37,13 +37,6 @@ const getPostUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
         const url = `http://localhost:5000/api/users/${userId}`;
         const res = await fetch(url);
         const userData = await res.json();
-
-        // const handleChange = (name: keyof IUser) => (
-        //   event: React.ChangeEvent<HTMLInputElement>,
-        // ) => {
-        //   setUserData({ ...userData, [name]: event.target.value });
-        // };
-
         setUserData({...userData});
       } catch (e) {
         console.error('User Fetch Failed', e);

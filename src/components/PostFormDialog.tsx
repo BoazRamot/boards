@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import DialogContent from "@material-ui/core/DialogContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -183,12 +184,6 @@ const PostFormDialog: React.FC<IProps> = ({
           ))}
         </DialogContent>
         <DialogActions>
-          {/*<input*/}
-          {/*  type="file"*/}
-          {/*  name="images"*/}
-          {/*  accept="image/*"*/}
-          {/*  onChange={onFileChange}*/}
-          {/*/>*/}
           <input
             type="file"
             name="images"
@@ -201,7 +196,7 @@ const PostFormDialog: React.FC<IProps> = ({
           />
           <label htmlFor="raised-button-file">
             <Button variant="outlined" component="span">
-              Upload
+              <AttachFileIcon />
             </Button>
           </label>
           <Button variant="contained"

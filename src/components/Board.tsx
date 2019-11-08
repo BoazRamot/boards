@@ -31,7 +31,6 @@ interface IProps {
 }
 
 const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDataNow, getBoardPosts, getBoardById }) => {
-  let history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
@@ -45,11 +44,6 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
     // eslint-disable-next-line
   }, []);
 
-  const handleImageClick = () => {
-    saveMapDataNow();
-    history.push("/");
-  };
-
   if (Object.entries(board).length === 0 && board.constructor === Object) {
     return <Loading />;
   }
@@ -58,7 +52,7 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
     <div className={classes.root}>
       <Box mt={2}>
         <Grid container spacing={1} >
-          <BoardDetails board={board} handleImageClick={handleImageClick} />
+          <BoardDetails board={board} saveMapDataNow={saveMapDataNow} />
           <BoardFeed/>
         </Grid>
       </Box>

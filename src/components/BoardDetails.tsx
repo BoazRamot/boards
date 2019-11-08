@@ -1,4 +1,4 @@
-import React, { ReactEventHandler } from 'react';
+import React from 'react';
 import IBoard from '../models/IBoard';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -10,6 +10,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import {useHistory} from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,11 +25,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
   board: IBoard;
-  handleImageClick: ReactEventHandler;
+  saveMapDataNow: Function;
 }
 
-const BoardDetails: React.FC<IProps> = ({ board, handleImageClick }) => {
+const BoardDetails: React.FC<IProps> = ({ board, saveMapDataNow }) => {
+  let history = useHistory();
   const classes = useStyles();
+
+  const handleImageClick = () => {
+    saveMapDataNow();
+    history.push("/");
+  };
 
   return (
     <Grid item xs={12} sm >

@@ -83,10 +83,6 @@ const App: React.FC<IProps> = ({
       },
     },
   });
-  
-  const handleSignIn = () => {
-    signInDialogClose();
-  };
 
   const PageNotFound = () => 'Page not found';
 

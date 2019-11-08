@@ -32,6 +32,9 @@ import AccountCircle from "@material-ui/core/SvgIcon/SvgIcon";
 import {signInDialogCloseAction} from "../store/actions/action.userDataReducer";
 import {getPostUserDataAction} from "../store/actions/action.userApiMiddleware";
 import IUser from "../models/IUser";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import CommentIcon from '@material-ui/icons/Comment';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,8 +53,9 @@ interface IProps {
   getPostUserData: Function;
   deleteBoardPost: Function;
   handlePostEdit: Function;
-  // userName: string;
-  // avatar: string;
+  handleCommentsDialogOpen: any;
+  user_id: string;
+  userLogin: boolean;
 }
 
 const PostCard: React.FC<IProps> = ({
@@ -60,8 +64,9 @@ const PostCard: React.FC<IProps> = ({
                                       deleteBoardPost,
                                       handlePostEdit,
                                       getPostUserData,
-                                      // userName,
-                                      // avatar
+                                      user_id,
+                                      userLogin,
+                                      handleCommentsDialogOpen
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userData, setUserData] = useState<IUser>({
@@ -94,8 +99,17 @@ const PostCard: React.FC<IProps> = ({
   };
 
   const handleEdit = () => {
-    handlePostEdit(post);
+    handlePostEdit(post, "post");
     setAnchorEl(null);
+  };
+
+  const handleComment = () => {
+    handlePostEdit(post, "comment");
+    handleCommentsDialogOpen();
+  };
+
+  const handleLike = () => {
+
   };
 
   return (
@@ -116,11 +130,11 @@ const PostCard: React.FC<IProps> = ({
                           aria-haspopup="true"
                           onClick={handleMenu}
                           color="inherit"
+                          disabled={!userLogin || user_id !== post.userId}
               >
-                <MoreVertIcon/>
+                <MoreVertIcon style={{display: userLogin && user_id === post.userId ? '' : 'none'}}/>
               </IconButton>
             }
-            // title={post.title}
             subheader={
               new Date(post.createdAt)
                 .toLocaleString('default', {
@@ -181,19 +195,22 @@ const PostCard: React.FC<IProps> = ({
           <CardActions>
             <Grid container style={{flexGrow: 1, flexFlow: "row"}} spacing={2} >
               <Grid item xs={6}>
-                <Paper style={{textAlign: 'center', background: "none"}}>
-                  <Button>
-                    <img src="https://img.icons8.com/ios/50/000000/speech-bubble-with-dots.png"/>
-                    comment
+                <Paper style={{textAlign: 'center'}}>
+                  <Button style={{width: '100%'}} onClick={handleComment}>
+                    <CommentIcon/>
+                    <Typography variant="h6" style={{marginLeft: "5px"}}>
+                      comment
+                    </Typography>
                   </Button>
-
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper style={{textAlign: 'center'}}>
-                  <Button>
-                    <img src="https://img.icons8.com/emoji/48/000000/thumbs-up.png"/>
-                    like
+                  <Button style={{width: '100%'}} onClick={handleLike}>
+                    <ThumbUpIcon/>
+                    <Typography variant="h6" style={{marginLeft: "5px"}}>
+                      like
+                    </Typography>
                   </Button>
                 </Paper>
               </Grid>
@@ -207,8 +224,8 @@ const PostCard: React.FC<IProps> = ({
 
 
 const mapStateToProps = (state: any) => ({
-  userName: state.user.userData.name,
-  avatar: state.user.userData.avatar,
+  user_id: state.user.userData._id,
+  userLogin: state.user.userLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -216,31 +233,3 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostCard);
-
-//   const [isEditSelected, setIsEditSelected] = useState(false);
-//
-//   const onMenuClick = (key: string) => {
-//     switch (key.toLowerCase()) {
-//       case 'edit':
-//         setIsEditSelected(true);
-//         break;
-//       case 'delete':
-//         onDelete(post._id);
-//         break;
-//       default:
-//         break;
-//     }
-//   };
-//
-//   if (isEditSelected) {
-//     return (
-//       <Redirect
-//         push={true}
-//         to={{
-//           pathname: `${apiURL}${match.url}/posts/${post._id}`,
-//           state: { post },
-//         }}
-//       />
-//     );
-//   }
-

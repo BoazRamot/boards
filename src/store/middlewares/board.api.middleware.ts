@@ -1,12 +1,13 @@
 import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
 import {
-  BOARD_API_CREATE_POST, BOARD_API_DELETE_POST, BOARD_API_EDIT_POST,
+  BOARD_API_CREATE_POST, BOARD_API_CREATE_POST_COMMENT, BOARD_API_DELETE_POST, BOARD_API_EDIT_POST,
   BOARD_API_GET_BOARDS_BY_ID,
-  BOARD_API_GET_POSTS,
+  BOARD_API_GET_POSTS, BOARD_API_GET_POSTS_COMMENTS,
 } from '../actions/action.boardApiMiddleware';
 import {
+  addBoardPostCommentsDataAction,
   addBoardPostDataAction,
-  boardDataSetAction,
+  boardDataSetAction, boardPostCommentsDataSetAction,
   boardPostsDataSetAction, editBoardPostDataAction, removeBoardPostDataAction,
 } from '../actions/action.boardsDataReducer';
 
@@ -128,4 +129,55 @@ const editBoardPost: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch
   return next(action);
 };
 
-export const boardMiddleware = [getBoardPosts, createBoardPost, getBoardById, deleteBoardPost, editBoardPost];
+const createBoardPostComment: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch) => action => {
+  if (action.type === BOARD_API_CREATE_POST_COMMENT) {
+    console.log('createBoardPostComment')
+    const token = localStorage.getItem('boards-token') || '';
+    const comment = action.comment;
+    const postId = action.postId;
+    const boardId = action.boardId;
+    (async () => {
+      try {
+        const url = `http://localhost:5000/api/boards/${boardId}/posts/${postId}/comments`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'X-Auth-Token': token,
+          },
+          body: comment,
+        });
+        const commentData = await res.json();
+        console.log('new post Data: ', commentData);
+        // await dispatch(editBoardPostDataAction(postData));
+        // setComments({...commentData});
+        await dispatch(addBoardPostCommentsDataAction());
+      } catch (e) {
+        console.error('Board Create Failed', e);
+      }
+    })();
+  }
+  return next(action);
+};
+
+const getBoardPostsComments: Middleware = ({dispatch}: MiddlewareAPI) => (next: Dispatch) => action => {
+  if (action.type === BOARD_API_GET_POSTS_COMMENTS) {
+    console.log('getBoardPostsComments')
+    const boardId = action.boardId;
+    const postId = action.postId;
+    const setComments = action.setComments;
+    (async () => {
+      try {
+        const url = `http://localhost:5000/api/boards/${boardId}/posts/${postId}/comments`;
+        let res = await fetch(url);
+        let commentsData = await res.json();
+        setComments(commentsData);
+        dispatch(boardPostCommentsDataSetAction());
+      } catch (e) {
+        console.error('Comments Fetch Failed', e)
+      }
+    })();
+  }
+  return next(action);
+};
+
+export const boardMiddleware = [getBoardPosts, createBoardPost, getBoardById, deleteBoardPost, editBoardPost, createBoardPostComment, getBoardPostsComments];
