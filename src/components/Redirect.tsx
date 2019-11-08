@@ -7,12 +7,15 @@ const Redirect: React.FC<RouteComponentProps> = ({ match }) => {
 
   useEffect(() => {
     console.log('Redirect up');
+    const appLocation = localStorage.getItem('boards-app-location');
     const token = (match.params as any).id;
-    console.log('token Redirect', token);
+    const account = (match.params as any).account;
     if (token) {
       localStorage.setItem('boards-token', token);
+      localStorage.setItem('boards-account', account);
     }
-    history.push('/');
+    history.push(`${appLocation}`);
+    localStorage.removeItem('boards-app-location');
   });
 
   return (

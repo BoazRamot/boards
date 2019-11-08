@@ -4,14 +4,16 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 interface IProps {
-  userName: any,
-  avatar: any
-  handleNewPostOpen: ReactEventHandler
+  userName: any;
+  avatar: any;
+  handleNewPostOpen: ReactEventHandler;
+  userLogin: boolean;
 }
 
-const PostInput: React.FC<IProps> = ({ handleNewPostOpen, userName, avatar }) => {
+const PostInput: React.FC<IProps> = ({ handleNewPostOpen, userName, avatar, userLogin }) => {
 
   return (
     <Grid item>
@@ -22,8 +24,8 @@ const PostInput: React.FC<IProps> = ({ handleNewPostOpen, userName, avatar }) =>
               Create A Post
             </Typography>
             <CardHeader
-              avatar={ <Avatar alt={userName} src={avatar} /> }
-              title={`What's On Your Mind, ${userName}?`}
+              avatar={ userLogin ? (<Avatar alt={userName} src={avatar} />) : (<AccountCircle />) }
+              title={`What's On Your Mind, ${userLogin ? userName : "Guest"}?`}
             />
           </CardContent>
         </Card>
@@ -35,6 +37,7 @@ const PostInput: React.FC<IProps> = ({ handleNewPostOpen, userName, avatar }) =>
 const mapStateToProps = (state: any) => ({
   userName: state.user.userData.name,
   avatar: state.user.userData.avatar,
+  userLogin: state.user.userLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

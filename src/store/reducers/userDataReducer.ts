@@ -1,5 +1,5 @@
 import {
-  LOGOUT_USER,
+  LOGOUT_USER, SIGN_IN_DIALOG_CLOSE, SIGN_IN_DIALOG_OPEN, USER_ACCOUNT,
   // RESET_USER_DATA,
   USER_DATA_SET,
 } from '../actions/action.userDataReducer';
@@ -7,6 +7,8 @@ import {
 const userDataInitState: any = {
   userData: {},
   userLogin: false,
+  userSignInDialog: false,
+  userAccount: null,
 };
 
 const userDataReducer = (state: any = userDataInitState, action: any) => {
@@ -26,6 +28,24 @@ const userDataReducer = (state: any = userDataInitState, action: any) => {
       return {
         ...state,
         userLogin: false,
+      };
+
+    case SIGN_IN_DIALOG_OPEN:
+      return {
+        ...state,
+        userSignInDialog: true,
+      };
+
+    case SIGN_IN_DIALOG_CLOSE:
+      return {
+        ...state,
+        userSignInDialog: false,
+      };
+
+    case USER_ACCOUNT:
+      return {
+        ...state,
+        userAccount: action.payload,
       };
 
     default:

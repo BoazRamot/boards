@@ -1,40 +1,28 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { store } from '../../index';
 import {
-  // mapBoardsDataSetAction,
   resetMapBoardsDataAction,
 } from '../actions/action.boardsDataReducer';
-// import { resetMarkerAction } from '../actions/action.googleMapReducer';
 import {
   MAP_DATA_SET,
-  // MAP_LOAD_DATA_SET,
 } from '../actions/action.mapDataMiddleware';
 import {
-  // resetPopstateAction,
   setPopstateAction,
   setRedirectAction,
 } from '../actions/action.mapReducer';
 
 // To save map data if user press refresh or google redirect
-
 const saveMapData: Middleware = ({ dispatch }: MiddlewareAPI) => (
   next: Dispatch,
 ) => action => {
   if (action.type === MAP_DATA_SET) {
-    console.log('saveMapData');
-    // if (action.board) {
-    //   dispatch(setPopstateAction());
-    // }
     const map = store.getState().googleMap.map;
-    // const marker = store.getState().googleMap.marker;
     let address = store.getState().map.address;
     let mapZoom: number;
     let latLng: { lat: any; lng: any };
     let mapCentre: { lat: any; lng: any };
     let numOfMarkers: number;
-    // const currentBounds = map.getBounds();
     const markersMap = store.getState().googleMap.markersMap;
-    // const address = store.getState().map.address;
     const board = store.getState().mapBoards.board;
     const currentBounds = null;
     if (action.board) {
@@ -70,9 +58,6 @@ const saveMapData: Middleware = ({ dispatch }: MiddlewareAPI) => (
         address,
       ),
     );
-    // if (action.board) {
-    //   dispatch(setPopstate());
-    // }
   }
   return next(action);
 };
