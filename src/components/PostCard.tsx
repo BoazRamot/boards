@@ -13,7 +13,7 @@ import {
 import Box from '@material-ui/core/Box';
 import CardMedia from '@material-ui/core/CardMedia';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import postNotePaperY from "../postNotePaperY.jpg";
+import boardPin from "../boardPin.jpg";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
@@ -34,16 +34,33 @@ import {getPostUserDataAction} from "../store/actions/action.userApiMiddleware";
 import IUser from "../models/IUser";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
+import GridListTileBar from "@material-ui/core/GridListTileBar";
 
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    Media: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      // backgroundColor: theme.palette.background.paper,
+    },
+    gridList: {
+      width: 'auto',
+      height: 'auto',
+    },
     media: {
-      height: 300,
+      // height: 300,
       width: 'auto',
       margin: 'auto',
       marginTop: theme.spacing(2)
     },
+    // gridList: {
+    //   flexWrap: 'nowrap',
+    //   // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    //   transform: 'translateZ(0)',
+    // },
   })
 );
 
@@ -115,11 +132,11 @@ const PostCard: React.FC<IProps> = ({
   return (
     <Grid item >
       <Box mb={2} ml={1}>
-        <Card style={{backgroundColor: "yellow"}}>
+        <Card style={{backgroundColor: "#FEF2F2"}}>
           <CardMedia
             className={classes.media}
-            image={postNotePaperY}
-            style={{backgroundColor: "yellow", height: "60px", width: "70px"}}
+            image={boardPin}
+            style={{backgroundColor: "#FEF2F2", height: "60px", width: "70px"}}
           />
           <CardHeader
             avatar={<Avatar alt={userData.name} src={userData.avatar} />}
@@ -173,14 +190,20 @@ const PostCard: React.FC<IProps> = ({
               {post.body}
             </Typography>
           </CardContent>
-          {post.images && post.images.map((image: any) => (
-            <CardMedia
-              key={image._id}
-              className={classes.media}
-              image={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
-              title={image.description}
-            />
-          ))}
+          <CardMedia className={classes.Media}>
+            {post.images &&
+            <GridList className={classes.gridList}>
+              {post.images.map((image: any) => (
+                <GridListTile key={image._id} style={{ height: '100%', width: '100%'}}>
+                  <img
+                    src={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
+                    alt={image.description}
+                    style={{height: "auto", width: "100%", objectFit: "cover"}}
+                  />
+                </GridListTile>
+              ))}
+            </GridList>}
+          </CardMedia>
           <CardContent>
             <List style={{display: "flex", flexFlow: "row"}}>
               <ListItem>

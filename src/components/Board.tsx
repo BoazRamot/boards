@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import {RouteComponentProps, useHistory} from 'react-router-dom';
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
-import boardSnapShoot from "../boardSnapShoot.jpg";
+import boardBackground from "../boardBackground.jpg";
 import {saveMapDataNowAction} from "../store/actions/action.mapDataMiddleware";
 import BoardDetails from './BoardDetails';
 import BoardFeed from './BoardFeed';
@@ -17,8 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       padding: theme.spacing(2),
-      height: '100vh',
-      backgroundImage: `url(${boardSnapShoot})`,
+      height: '100%',
+      backgroundImage: `url(${boardBackground})`,
+      backgroundSize: "cover",
+
     },
   }),
 );

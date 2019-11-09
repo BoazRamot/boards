@@ -66,6 +66,7 @@ const BoardFeed: React.FC<IProps> = ({
   const [post, setPost] = useState(null);
   const [openCommentsDialog, setOpenCommentsDialog] = React.useState(false);
   const [target, setTarget] = React.useState('');
+  const [comments, setComments] = useState([]);
   const classes = useStyles();
   
   useEffect(() => {
@@ -74,11 +75,11 @@ const BoardFeed: React.FC<IProps> = ({
     }
   }, [getPosts]);
 
-  useEffect(() => {
-    if (post && target === "post") {
-      handleNewPostOpen();
-    }
-  }, [post]);
+  // useEffect(() => {
+  //   if (post && target === "post") {
+  //     handleNewPostOpen();
+  //   }
+  // }, [post]);
 
   const handleCommentsDialogOpen = () => {
     setOpenCommentsDialog(true);
@@ -89,9 +90,15 @@ const BoardFeed: React.FC<IProps> = ({
   };
 
   const handlePostEdit = (post: any = null, targetString: string = '') => {
-    if (targetString === "comment") {
-      setTarget(target)
+    switch (targetString) {
+      case "post":
+        handleNewPostOpen();
+        break;
+      case "comment":
+        getBoardPostsComments(setComments, post._id, board.id);
+        break;
     }
+    setTarget(target);
     setPost(post);
   };
   
@@ -104,6 +111,7 @@ const BoardFeed: React.FC<IProps> = ({
   };
 
   const handleNewPostClose = () => {
+    handlePostEdit();
     setOpenNewPost(false);
   };
 
@@ -124,7 +132,10 @@ const BoardFeed: React.FC<IProps> = ({
           createBoardPostComment={createBoardPostComment}
           getBoardPostsComments={getBoardPostsComments}
           getComments={getComments}
-          boardId={board._id}
+          // boardId={board._id}
+          boardId={board.id}
+          comments={comments}
+          setComments={setComments}
         />
         <PostFormDialog
           boardId={board._id}

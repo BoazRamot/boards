@@ -87,7 +87,7 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
 
     // POST/:id/*
     .post(
-      '/:id/*',() =>
+      '/:id/*',
       asyncHandler(async (req, res, next) => {
         const result = await dataService.insertSubDocument(
           req.params.id,

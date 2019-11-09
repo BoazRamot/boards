@@ -170,6 +170,7 @@ const getBoardPostsComments: Middleware = ({dispatch}: MiddlewareAPI) => (next: 
         const url = `http://localhost:5000/api/boards/${boardId}/posts/${postId}/comments`;
         let res = await fetch(url);
         let commentsData = await res.json();
+        console.log('commentsData', commentsData)
         setComments(commentsData);
         dispatch(boardPostCommentsDataSetAction());
       } catch (e) {

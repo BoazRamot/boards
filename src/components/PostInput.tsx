@@ -18,7 +18,7 @@ const PostInput: React.FC<IProps> = ({ handleNewPostOpen, userName, avatar, user
   return (
     <Grid item>
       <Box mb={2} ml={1}>
-        <Card onClick={handleNewPostOpen} style={{cursor: "pointer"}}>
+        <Card onClick={handleNewPostOpen} style={{cursor: "pointer"}} >
           <CardContent>
             <Typography variant="h5" color="textSecondary" component="p" >
               Create A Post

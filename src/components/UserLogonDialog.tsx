@@ -7,6 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
+import {useHistory} from "react-router";
 
 interface IProps {
   signInDialogClose: any;
@@ -15,12 +16,14 @@ interface IProps {
 }
 
 const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, userSignInDialog}) => {
+  let history = useHistory();
 
   const handleSignIn = () => {
+    localStorage.setItem('boards-app-location', history.location.pathname);
+    window.location.href = `http://localhost:5000/api/auth/google`;
     signInDialogClose();
   };
-
-
+  
   return (
     <div>
       <Dialog
@@ -33,11 +36,11 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
           <DialogContentText>
             Please Sign In To Complete Your Action
           </DialogContentText>
-          {userAccount &&
-          <DialogContentText>
-            {`Your Board Account Was Created With ${userAccount}`}
-          </DialogContentText>
-          }
+          {/*{userAccount &&*/}
+          {/*<DialogContentText>*/}
+          {/*  {`Your Board Account Was Created With ${userAccount}`}*/}
+          {/*</DialogContentText>*/}
+          {/*}*/}
         </DialogContent>
         <DialogActions>
           <List>
@@ -56,7 +59,7 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
             <ListItem>
               <Button
                 variant="outlined"
-                onClick={handleSignIn}
+                // onClick={handleSignIn}
                 color="primary"
                 style={{minWidth: "300px"}}
                 // disabled={userAccount !== "facebook"}
@@ -71,7 +74,7 @@ const UserLogonDialog: React.FC<IProps> = ({signInDialogClose, userAccount, user
             <ListItem>
               <Button
                 variant="outlined"
-                onClick={handleSignIn}
+                // onClick={handleSignIn}
                 color="primary"
                 style={{minWidth: "300px"}}
               >

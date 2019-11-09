@@ -1,11 +1,6 @@
 import {
   Box,
-  Button,
-  createMuiTheme, Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle, IconButton, ListItemText, Typography
+  createMuiTheme,
 } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import React, { useEffect } from 'react';
@@ -21,11 +16,6 @@ import Redirect from './components/Redirect';
 import { saveMapDataNowAction } from './store/actions/action.mapDataMiddleware';
 import { getAllUserDataAction } from './store/actions/action.userApiMiddleware';
 import {setUserAccountAction, signInDialogCloseAction} from "./store/actions/action.userDataReducer";
-import MenuIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import Fab from "@material-ui/core/Fab";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Grid from "@material-ui/core/Grid";
 import UserLogonDialog from "./components/UserLogonDialog";
 
 interface IProps {

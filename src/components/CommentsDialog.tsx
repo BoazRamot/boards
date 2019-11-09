@@ -22,16 +22,7 @@ import IUser from "../models/IUser";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import Comment from "./Comment"
-
-const messages = [
-  {
-    id: 7,
-    primary: 'Summer BBQ',
-    secondary: `Who wants to have a cookout this weekend? I just got some furniture
-      for my backyard and would love to fire up the grill.`,
-    person: '/static/images/avatar/1.jpg',
-  },
-];
+import CommentList from "./CommentList";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -106,6 +97,8 @@ interface IProps {
   post: any;
   createBoardPostComment: Function;
   getBoardPostsComments: Function;
+  comments: any;
+  setComments: any;
 }
 
 const CommentsDialog: React.FC<IProps> = ({ 
@@ -118,18 +111,19 @@ const CommentsDialog: React.FC<IProps> = ({
                                             getBoardPostsComments,
                                             createBoardPostComment,
                                             getComments,
-                                            boardId
+                                            boardId,
+                                            comments,
+                                            setComments
 }) => {
   const [body, setBody] = useState<string>('');
   const [files, setFiles] = useState([] as File[]);
   const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
-  const [comments, setComments] = useState([]);
-  
+
   const classes = useStyles();
   
   useEffect(() => {
-    if (getComments && post) {
-      getBoardPostsComments(boardId, post._id, setComments);
+    if (post) {
+      getBoardPostsComments(setComments, post._id, boardId);
     }
   }, [getComments]);
 
@@ -182,12 +176,11 @@ const CommentsDialog: React.FC<IProps> = ({
     //   handlePostEdit();
     // } else {
 
-      createBoardPostComment(formData, boardId, post._id);
-
-      // formElement.reset();
-      // setBody('');
-      // setFilesDataURIs([] as any[]);
-      // setFiles([] as File[]);
+      createBoardPostComment(formData, post._id, boardId);
+      formElement.reset();
+      setBody('');
+      setFilesDataURIs([] as any[]);
+      setFiles([] as File[]);
     // }
   };
 
@@ -206,72 +199,71 @@ const CommentsDialog: React.FC<IProps> = ({
           </Button>
         </Toolbar>
       </AppBar>
+      {post &&
       <Paper square className={classes.paper}>
         <List className={classes.list}>
-          {comments.map((item: any) => (
-            <React.Fragment key={item._id}>
-              <p>test</p>
-              <Comment comment={item}/>
-            </React.Fragment>
-          ))}
+          <CommentList comments={comments} postId={post._id}/>
         </List>
       </Paper>
-      <AppBar position="fixed" color="default" className={classes.appBarBottom}>
-        <Toolbar>
-          <Avatar alt={userName} src={userAvatar} style={{marginRight: "15px"}}/>
-          <form autoComplete="off" onSubmit={handleSubmit}>
-            <TextField
-              label="Write Your Comment..."
-              value={body}
-              name="body"
-              onChange={onCommentChange}
-              margin="normal"
-              variant="outlined"
-              fullWidth
-              multiline
-              rowsMax="4"
-            />
-            <div className={classes.grow} />
-            <label htmlFor="raised-button-file">
-              <Button component="span">
-                <AttachFileIcon />
-              </Button>
-            </label>
-            <input
-              type="file"
-              name="images"
-              accept="image/*"
-              onChange={onFileChange}
-              style={{ display: 'none' }}
-              id="raised-button-file"
-              multiple
-            />
-            <IconButton edge="end" color="inherit" disabled={!body} type="submit">
-              <SendIcon />
-            </IconButton>
-          </form>
-        </Toolbar>
-        {filesDataURIs.length > 0 &&
-        <GridList className={classes.gridList} cols={4}>
-          {filesDataURIs.map((dataURI, index) => (
-            <GridListTile key={index} style={{height: "100px"}}>
-              <img src={dataURI} alt={`${index}`} style={{maxWidth: "100%", height: "80px", objectFit: "cover"}}/>
-              <GridListTileBar
-                // title={index}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.titleGrid,
-                }}
-                actionIcon={
-                  <IconButton aria-label={`star ${index}`} onClick={handleRemoveImg.bind(null, index)}>
-                    <CancelSharpIcon className={classes.titleGrid}/>
-                  </IconButton>
-                }
+      }
+      <form autoComplete="off" onSubmit={handleSubmit}>
+        <AppBar position="fixed" color="default" className={classes.appBarBottom}>
+          <Toolbar>
+            <Avatar alt={userName} src={userAvatar} style={{marginRight: "15px"}}/>
+            {/*<form autoComplete="off" onSubmit={handleSubmit} style={{display: 'flex', flexFlow: "row"}}>*/}
+              <TextField
+                label="Write Your Comment..."
+                value={body}
+                name="body"
+                onChange={onCommentChange}
+                margin="normal"
+                variant="outlined"
+                fullWidth
+                multiline
+                rowsMax="4"
               />
-            </GridListTile>
-          ))}
-        </GridList>}
-      </AppBar>
+              <div className={classes.grow} />
+              <label htmlFor="raised-button-file">
+                <Button component="span">
+                  <AttachFileIcon />
+                </Button>
+              </label>
+              <input
+                type="file"
+                name="images"
+                accept="image/*"
+                onChange={onFileChange}
+                style={{ display: 'none' }}
+                id="raised-button-file"
+                multiple
+              />
+              <IconButton edge="end" color="inherit" disabled={!body} type="submit">
+                <SendIcon />
+              </IconButton>
+            {/*</form>*/}
+          </Toolbar>
+          {filesDataURIs.length > 0 &&
+          <GridList className={classes.gridList} cols={4}>
+            {filesDataURIs.map((dataURI, index) => (
+              <GridListTile key={index} style={{height: "100px"}}>
+                <img src={dataURI} alt={`${index}`} style={{maxWidth: "100%", height: "80px", objectFit: "cover"}}/>
+                <GridListTileBar
+                  // title={index}
+                  classes={{
+                    root: classes.titleBar,
+                    title: classes.titleGrid,
+                  }}
+                  actionIcon={
+                    <IconButton aria-label={`star ${index}`} onClick={handleRemoveImg.bind(null, index)}>
+                      <CancelSharpIcon className={classes.titleGrid}/>
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>}
+        </AppBar>
+      </form>
     </Dialog>
   );
 };
