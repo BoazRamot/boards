@@ -136,6 +136,7 @@ const BoardFeed: React.FC<IProps> = ({
           boardId={board.id}
           comments={comments}
           setComments={setComments}
+          userLogin={userLogin}
         />
         <PostFormDialog
           boardId={board._id}

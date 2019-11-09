@@ -29,7 +29,7 @@ import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
 import AccountCircle from "@material-ui/core/SvgIcon/SvgIcon";
-import {signInDialogCloseAction} from "../store/actions/action.userDataReducer";
+import {signInDialogCloseAction, signInDialogOpenAction} from "../store/actions/action.userDataReducer";
 import {getPostUserDataAction} from "../store/actions/action.userApiMiddleware";
 import IUser from "../models/IUser";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -70,6 +70,7 @@ interface IProps {
   getPostUserData: Function;
   deleteBoardPost: Function;
   handlePostEdit: Function;
+  signInDialogOpen: Function;
   handleCommentsDialogOpen: any;
   user_id: string;
   userLogin: boolean;
@@ -83,7 +84,8 @@ const PostCard: React.FC<IProps> = ({
                                       getPostUserData,
                                       user_id,
                                       userLogin,
-                                      handleCommentsDialogOpen
+                                      handleCommentsDialogOpen,
+                                      signInDialogOpen
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userData, setUserData] = useState<IUser>({
@@ -120,9 +122,13 @@ const PostCard: React.FC<IProps> = ({
     setAnchorEl(null);
   };
 
-  const handleComment = () => {
-    handlePostEdit(post, "comment");
-    handleCommentsDialogOpen();
+  const handleComment = (view: boolean = false) => {
+    if (userLogin || view) {
+      handlePostEdit(post, "comment");
+      handleCommentsDialogOpen();
+    } else {
+      signInDialogOpen()
+    }
   };
 
   const handleLike = () => {
@@ -207,10 +213,18 @@ const PostCard: React.FC<IProps> = ({
           <CardContent>
             <List style={{display: "flex", flexFlow: "row"}}>
               <ListItem>
-                comments {post.comments.length}
+                <Button onClick={handleComment.bind(null, true)}>
+                  <Typography variant="h5" color="textSecondary" component="p" >
+                    comments {post.comments.length}
+                  </Typography>
+                </Button>
               </ListItem>
               <ListItem style={{display: "flex", justifyContent: "flex-end"}}>
-                likes {post.likes.length}
+                <Button>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    likes {post.likes.length}
+                  </Typography>
+                </Button>
               </ListItem>
             </List>
           </CardContent>
@@ -219,7 +233,7 @@ const PostCard: React.FC<IProps> = ({
             <Grid container style={{flexGrow: 1, flexFlow: "row"}} spacing={2} >
               <Grid item xs={6}>
                 <Paper style={{textAlign: 'center'}}>
-                  <Button style={{width: '100%'}} onClick={handleComment}>
+                  <Button style={{width: '100%'}} onClick={handleComment.bind(null, false)}>
                     <CommentIcon/>
                     <Typography variant="h6" style={{marginLeft: "5px"}}>
                       comment
@@ -253,6 +267,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   getPostUserData: (userId: any, setUserData: any) => dispatch(getPostUserDataAction(userId, setUserData)),
+  signInDialogOpen: () => dispatch(signInDialogOpenAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostCard);

@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
-import {ListItem, Paper, TextField} from "@material-ui/core";
+import {Paper, TextField} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from '@material-ui/icons/Send';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
@@ -18,10 +18,6 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import CancelSharpIcon from '@material-ui/icons/CancelSharp';
-import IUser from "../models/IUser";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import Comment from "./Comment"
 import CommentList from "./CommentList";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1,
     },
     paper: {
-      paddingBottom: 50,
+      paddingBottom: "100vh",
     },
     appBarBottom: {
       top: 'auto',
@@ -99,6 +95,7 @@ interface IProps {
   getBoardPostsComments: Function;
   comments: any;
   setComments: any;
+  userLogin: boolean;
 }
 
 const CommentsDialog: React.FC<IProps> = ({ 
@@ -113,7 +110,8 @@ const CommentsDialog: React.FC<IProps> = ({
                                             getComments,
                                             boardId,
                                             comments,
-                                            setComments
+                                            setComments,
+                                            userLogin
 }) => {
   const [body, setBody] = useState<string>('');
   const [files, setFiles] = useState([] as File[]);
@@ -192,11 +190,8 @@ const CommentsDialog: React.FC<IProps> = ({
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Sound
+            Close Comments
           </Typography>
-          <Button color="inherit" onClick={handleCommentsDialogClose}>
-            save
-          </Button>
         </Toolbar>
       </AppBar>
       {post &&
@@ -204,42 +199,42 @@ const CommentsDialog: React.FC<IProps> = ({
         <List className={classes.list}>
           <CommentList comments={comments} postId={post._id}/>
         </List>
-      </Paper>
-      }
+      </Paper>}
+      {userLogin &&
       <form autoComplete="off" onSubmit={handleSubmit}>
         <AppBar position="fixed" color="default" className={classes.appBarBottom}>
           <Toolbar>
             <Avatar alt={userName} src={userAvatar} style={{marginRight: "15px"}}/>
             {/*<form autoComplete="off" onSubmit={handleSubmit} style={{display: 'flex', flexFlow: "row"}}>*/}
-              <TextField
-                label="Write Your Comment..."
-                value={body}
-                name="body"
-                onChange={onCommentChange}
-                margin="normal"
-                variant="outlined"
-                fullWidth
-                multiline
-                rowsMax="4"
-              />
-              <div className={classes.grow} />
-              <label htmlFor="raised-button-file">
-                <Button component="span">
-                  <AttachFileIcon />
-                </Button>
-              </label>
-              <input
-                type="file"
-                name="images"
-                accept="image/*"
-                onChange={onFileChange}
-                style={{ display: 'none' }}
-                id="raised-button-file"
-                multiple
-              />
-              <IconButton edge="end" color="inherit" disabled={!body} type="submit">
-                <SendIcon />
-              </IconButton>
+            <TextField
+              label="Write Your Comment..."
+              value={body}
+              name="body"
+              onChange={onCommentChange}
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              multiline
+              rowsMax="4"
+            />
+            <div className={classes.grow} />
+            <label htmlFor="raised-button-file">
+              <Button component="span">
+                <AttachFileIcon />
+              </Button>
+            </label>
+            <input
+              type="file"
+              name="images"
+              accept="image/*"
+              onChange={onFileChange}
+              style={{ display: 'none' }}
+              id="raised-button-file"
+              multiple
+            />
+            <IconButton edge="end" color="inherit" disabled={!body} type="submit">
+              <SendIcon />
+            </IconButton>
             {/*</form>*/}
           </Toolbar>
           {filesDataURIs.length > 0 &&
@@ -263,7 +258,7 @@ const CommentsDialog: React.FC<IProps> = ({
             ))}
           </GridList>}
         </AppBar>
-      </form>
+      </form>}
     </Dialog>
   );
 };

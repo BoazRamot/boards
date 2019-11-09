@@ -60,7 +60,6 @@ const Header: React.FC<IProps> = ({
   const classes = useStyles();
 
   const handleLoginDialogOpen = () => {
-    // setOpenLoginDialog(true);
     signInDialogOpen();
   };
 
@@ -80,7 +79,6 @@ const Header: React.FC<IProps> = ({
 
   return (
     <div className={classes.root}>
-      {/*{openLoginDialog && loginDialog()}*/}
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton
