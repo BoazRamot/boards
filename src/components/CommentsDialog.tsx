@@ -182,7 +182,7 @@ const CommentsDialog: React.FC<IProps> = ({
     //   handlePostEdit();
     // } else {
 
-      createBoardPostComment(formData, boardId, post._id);
+      createBoardPostComment(formData, post._id, boardId);
 
       // formElement.reset();
       // setBody('');
