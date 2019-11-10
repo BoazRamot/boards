@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import IPost from '../models/IPost';
-import DataService, { apiURL, DataCollections } from '../services/data.service';
+import DataService, { DataCollections, serverUrl } from '../services/data.service';
 
 const postDataService = new DataService<IPost>();
 
@@ -108,7 +108,7 @@ const PostForm: React.FC<IProps & RouteComponentProps> = ({
         post.images.map(image => (
           <img
             key={image._id}
-            src={`${apiURL}${match.url}/posts/${post._id}/images/${image._id}/image`}
+            src={`${serverUrl}${match.url}/posts/${post._id}/images/${image._id}/image`}
             alt={`${image.description}`}
           />
         ))}

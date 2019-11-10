@@ -8,6 +8,8 @@ export const BOARD_DATA_SET = 'BOARD_DATA_SET';
 export const ADD_BOARD_POST_DATA = 'ADD_BOARD_POST_DATA';
 export const REMOVE_BOARD_POST_BY_ID = 'REMOVE_BOARD_POST_BY_ID';
 export const EDIT_BOARD_POST_BY_ID = 'EDIT_BOARD_POST_BY_ID';
+export const BOARD_POSTS_COMMENTS_DATA_SET = 'BOARD_POSTS_COMMENTS_DATA_SET';
+export const ADD_BOARD_POSTS_COMMENTS_DATA = 'ADD_BOARD_POSTS_COMMENTS_DATA';
 
 // action creators
 
@@ -41,4 +43,12 @@ export const removeBoardPostDataAction = (payload: any) => {
 
 export const editBoardPostDataAction = (payload: any) => {
   return { type: EDIT_BOARD_POST_BY_ID, payload };
+};
+
+export const boardPostCommentsDataSetAction = () => {
+  return { type: BOARD_POSTS_COMMENTS_DATA_SET };
+};
+
+export const addBoardPostCommentsDataAction = () => {
+  return { type: ADD_BOARD_POSTS_COMMENTS_DATA };
 };

@@ -2,7 +2,7 @@ import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { store } from '../../index';
 import IBoard from '../../models/IBoard';
 import DataService, {
-  // apiURL,
+  // serverUrl,
   DataCollections,
 } from '../../services/data.service';
 import {
@@ -24,7 +24,7 @@ const getMapBoards: Middleware = ({ dispatch }: MiddlewareAPI) => (
   if (action.type === MAP_API_GET_BOARDS) {
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/boards`;
+    //     const url = `${serverUrl}/boards`;
     //     const res = await fetch(url);
     //     const boardsData = await res.json();
     //     dispatch(mapBoardsDataSetAction(boardsData));
@@ -51,8 +51,8 @@ const getMapBoardsByPoint: Middleware = ({ dispatch }: MiddlewareAPI) => (
     // (async () => {
     //   try {
     //     console.log('getMapBoardsByPoint latLng', latLng);
-    //     const url = `${apiURL}/boards/${latLng}`;
-    //     // const url = `${apiURL}/boards/latLng`;
+    //     const url = `${serverUrl}/boards/${latLng}`;
+    //     // const url = `${serverUrl}/boards/latLng`;
     //     const res = await fetch(url);
     //     // let res = await fetch(url, {method: 'GET', headers: {'X-Auth-Token': latLng}});
     //     const boardsData = await res.json();
@@ -84,7 +84,7 @@ const createMapBoard: Middleware = ({ dispatch }: MiddlewareAPI) => (
     // const board = JSON.stringify(action.board);
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/boards`;
+    //     const url = `${serverUrl}/boards`;
     //     const res = await fetch(url, {
     //       method: 'POST',
     //       headers: {

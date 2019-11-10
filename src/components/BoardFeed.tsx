@@ -2,17 +2,27 @@ import { createStyles, Grid, makeStyles, Theme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import socketIOClient from 'socket.io-client';
+import { serverUrl } from '../services/data.service';
 import {
+  createBoardPostCommentAction,
   createNewPostAction,
   deleteBoardPostAction,
   editBoardPostAction,
   getBoardPostsAction,
+  getBoardPostsCommentsAction,
 } from '../store/actions/action.boardApiMiddleware';
 import { signInDialogOpenAction } from '../store/actions/action.userDataReducer';
+import CommentsDialog from './CommentsDialog';
 import Loading from './Loading';
 import PostFormDialog from './PostFormDialog';
 import PostInput from './PostInput';
 import PostList from './PostList';
+
+const socket = socketIOClient(serverUrl);
+socket.on('new_data', (data: any) => {
+  // dispatch(addBoardPostDataAction(data)),
+});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 'calc(100%)',
       display: 'flex',
       flexDirection: 'column',
-      width: '80vw',
+      width: '70vw',
     },
   }),
 );
@@ -35,8 +45,13 @@ interface IProps {
   editBoardPost: Function;
   getBoardPosts: Function;
   getPosts: boolean;
+  getComments: boolean;
   userLogin: boolean;
   userId: any;
+  userAvatar: string;
+  userName: string;
+  createBoardPostComment: Function;
+  getBoardPostsComments: Function;
 }
 
 const BoardFeed: React.FC<IProps> = ({
@@ -50,9 +65,17 @@ const BoardFeed: React.FC<IProps> = ({
   userLogin,
   signInDialogOpen,
   userId,
+  userName,
+  userAvatar,
+  createBoardPostComment,
+  getBoardPostsComments,
+  getComments,
 }) => {
   const [openNewPost, setOpenNewPost] = useState(false);
   const [post, setPost] = useState(null);
+  const [openCommentsDialog, setOpenCommentsDialog] = React.useState(false);
+  const [target, setTarget] = React.useState('');
+  const [comments, setComments] = useState([]);
   const classes = useStyles();
 
   useEffect(() => {
@@ -62,15 +85,32 @@ const BoardFeed: React.FC<IProps> = ({
     // eslint-disable-next-line
   }, [getPosts]);
 
-  useEffect(() => {
-    if (post) {
-      handleNewPostOpen();
-    }
-    // eslint-disable-next-line
-  }, [post]);
+  // useEffect(() => {
+  //   if (post && target === 'post') {
+  //     handleNewPostOpen();
+  //   }
+  //   // eslint-disable-next-line
+  // }, [post]);
 
-  const handlePostEdit = (postData: any = null) => {
-    setPost(postData);
+  const handleCommentsDialogOpen = () => {
+    setOpenCommentsDialog(true);
+  };
+
+  const handleCommentsDialogClose = () => {
+    setOpenCommentsDialog(false);
+  };
+
+  const handlePostEdit = (post: any = null, targetString: string = '') => {
+    switch (targetString) {
+      case 'post':
+        handleNewPostOpen();
+        break;
+      case 'comment':
+        getBoardPostsComments(setComments, post._id, board.id);
+        break;
+    }
+    setTarget(target);
+    setPost(post);
   };
 
   const handleNewPostOpen = () => {
@@ -82,6 +122,7 @@ const BoardFeed: React.FC<IProps> = ({
   };
 
   const handleNewPostClose = () => {
+    handlePostEdit();
     setOpenNewPost(false);
   };
 
@@ -92,6 +133,22 @@ const BoardFeed: React.FC<IProps> = ({
   return (
     <Grid item xs={12} sm>
       <div className={classes.boardFeed}>
+        <CommentsDialog
+          openCommentsDialog={openCommentsDialog}
+          handleCommentsDialogClose={handleCommentsDialogClose}
+          userAvatar={userAvatar}
+          userName={userName}
+          userId={userId}
+          post={post}
+          createBoardPostComment={createBoardPostComment}
+          getBoardPostsComments={getBoardPostsComments}
+          getComments={getComments}
+          // boardId={board._id}
+          boardId={board.id}
+          comments={comments}
+          setComments={setComments}
+          userLogin={userLogin}
+        />
         <PostFormDialog
           boardId={board._id}
           createBoardPost={createBoardPost}
@@ -117,6 +174,7 @@ const BoardFeed: React.FC<IProps> = ({
             boardId={board._id}
             deleteBoardPost={deleteBoardPost}
             handlePostEdit={handlePostEdit}
+            handleCommentsDialogOpen={handleCommentsDialogOpen}
           />
         </Grid>
       </div>
@@ -128,8 +186,11 @@ const mapStateToProps = (state: any) => ({
   board: state.mapBoards.board,
   posts: state.mapBoards.posts,
   getPosts: state.mapBoards.getPosts,
+  getComments: state.mapBoards.getComments,
   userLogin: state.user.userLogin,
   userId: state.user.userData._id,
+  userAvatar: state.user.userData.avatar,
+  userName: state.user.userData.name,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -141,6 +202,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(editBoardPostAction(post, boardId)),
   getBoardPosts: (boardId: any) => dispatch(getBoardPostsAction(boardId)),
   signInDialogOpen: () => dispatch(signInDialogOpenAction()),
+  createBoardPostComment: (comment: any, postId: any, boardId: any) =>
+    dispatch(createBoardPostCommentAction(comment, postId, boardId)),
+  getBoardPostsComments: (setComments: any, postId: any, boardId: any) =>
+    dispatch(getBoardPostsCommentsAction(setComments, postId, boardId)),
 });
 
 export default connect(

@@ -2,14 +2,14 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
 const logger = require('morgan');
-const path = require('path');
 const passport = require('passport');
-const { connectDB } = require('./data/services/dbUtils');
+const path = require('path');
 const MongooseDataService = require('./data/services/data.mongoose.service');
+const { connectDB } = require('./data/services/dbUtils');
 const authRouter = require('./routers/auth.router');
+const boardRouter = require('./routers/board.router');
 const router = require('./routers/router.service');
 const userRouter = require('./routers/user.router');
-const boardRouter = require('./routers/board.router');
 
 require('./services/passport-setup');
 require('./prototypes');
@@ -25,7 +25,7 @@ app.use(passport.initialize());
 // middlewares
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 

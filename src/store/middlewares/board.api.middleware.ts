@@ -2,19 +2,23 @@ import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import IBoard from '../../models/IBoard';
 import IPost from '../../models/IPost';
 import DataService, {
-  // apiURL,
+  // serverUrl,
   DataCollections,
 } from '../../services/data.service';
 import {
   BOARD_API_CREATE_POST,
+  BOARD_API_CREATE_POST_COMMENT,
   BOARD_API_DELETE_POST,
   BOARD_API_EDIT_POST,
   BOARD_API_GET_BOARDS_BY_ID,
   BOARD_API_GET_POSTS,
+  BOARD_API_GET_POSTS_COMMENTS,
 } from '../actions/action.boardApiMiddleware';
 import {
+  addBoardPostCommentsDataAction,
   addBoardPostDataAction,
   boardDataSetAction,
+  boardPostCommentsDataSetAction,
   boardPostsDataSetAction,
   editBoardPostDataAction,
   removeBoardPostDataAction,
@@ -25,6 +29,9 @@ const postDataService = new DataService<IPost>();
 
 const postsPath = (boardId: any) =>
   `${DataCollections.Boards}/${boardId}/${DataCollections.Posts}`;
+
+const commentsPath = (boardId: any, postId: any) =>
+  `${postsPath(boardId)}/${postId}/${DataCollections.Comments}`;
 
 const getBoardPosts: Middleware = ({ dispatch }: MiddlewareAPI) => (
   next: Dispatch,
@@ -56,8 +63,7 @@ const createBoardPost: Middleware = ({ dispatch }: MiddlewareAPI) => (
 ) => async action => {
   if (action.type === BOARD_API_CREATE_POST) {
     const token = localStorage.getItem('boards-token') || '';
-    // const post = action.post;
-    // const boardId = action.boardId;
+    const {post, boardId} = action;
     // (async () => {
     //   try {
     //     const url = `http://localhost:5000/api/boards/${boardId}/posts`;
@@ -77,8 +83,8 @@ const createBoardPost: Middleware = ({ dispatch }: MiddlewareAPI) => (
     // })();
     try {
       const postData = await postDataService.insert(
-        postsPath(action.boardId),
-        action.post,
+        postsPath(boardId),
+        post,
         { 'X-Auth-Token': token },
       );
       console.log('new post Data: ', postData);
@@ -97,7 +103,7 @@ const getBoardById: Middleware = ({ dispatch }: MiddlewareAPI) => (
     // const id = action.boardId;
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/boards/${id}`;
+    //     const url = `${serverUrl}/boards/${id}`;
     //     const res = await fetch(url);
     //     const boardsData = await res.json();
     //     console.log('boardsData', boardsData);
@@ -125,11 +131,10 @@ const deleteBoardPost: Middleware = ({ dispatch }: MiddlewareAPI) => (
 ) => async action => {
   if (action.type === BOARD_API_DELETE_POST) {
     const token = localStorage.getItem('boards-token') || '';
-    // const postId = action.postId;
-    // const boardId = action.boardId;
+    const {postId, boardId} = action;
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/${DataCollections.Boards}/${boardId}/${DataCollections.Posts}/${postId}`;
+    //     const url = `${serverUrl}/${DataCollections.Boards}/${boardId}/${DataCollections.Posts}/${postId}`;
     //     const res = await fetch(url, {
     //       method: 'DELETE',
     //       headers: {
@@ -145,14 +150,14 @@ const deleteBoardPost: Middleware = ({ dispatch }: MiddlewareAPI) => (
     // })();
     try {
       const result = await postDataService.removeById(
-        postsPath(action.boardId),
-        action.postId,
+        postsPath(boardId),
+        postId,
         {
           'X-Auth-Token': token,
         },
       );
       console.log('new post Data: ', result);
-      dispatch(removeBoardPostDataAction(action.postId));
+      dispatch(removeBoardPostDataAction(postId));
     } catch (error) {
       console.error('Board Create Failed', error);
     }
@@ -172,7 +177,7 @@ const editBoardPost: Middleware = ({ dispatch }: MiddlewareAPI) => (
     console.log('postId', postId);
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/${boardId}/posts/${postId}`;
+    //     const url = `${serverUrl}/${boardId}/posts/${postId}`;
     //     const res = await fetch(url, {
     //       method: 'PUT',
     //       headers: {
@@ -205,10 +210,85 @@ const editBoardPost: Middleware = ({ dispatch }: MiddlewareAPI) => (
   return next(action);
 };
 
+const createBoardPostComment: Middleware = ({ dispatch }: MiddlewareAPI) => (
+  next: Dispatch,
+) => async action => {
+  if (action.type === BOARD_API_CREATE_POST_COMMENT) {
+    console.log('createBoardPostComment');
+    const token = localStorage.getItem('boards-token') || '';
+    const { comment, postId, boardId } = action;
+    // (async () => {
+    //   try {
+    //     const url = `${serverUrl}/boards/${boardId}/posts/${postId}/comments`;
+    //     const res = await fetch(url, {
+    //       method: 'POST',
+    //       headers: {
+    //         'X-Auth-Token': token,
+    //       },
+    //       body: comment,
+    //     });
+    //     const commentData = await res.json();
+    //     console.log('new post Data: ', commentData);
+    //     // await dispatch(editBoardPostDataAction(postData));
+    //     // setComments({...commentData});
+    //     await dispatch(addBoardPostCommentsDataAction());
+    //   } catch (e) {
+    //     console.error('Board Create Failed', e);
+    //   }
+    // })();
+    try {
+      const commentData = await postDataService.insert(
+        commentsPath(boardId, postId),
+        comment,
+        { 'X-Auth-Token': token },
+      );
+      console.log('new comment Data: ', commentData);
+      // await dispatch(editBoardPostDataAction(postData));
+      // setComments({...commentData});
+      dispatch(addBoardPostCommentsDataAction());
+    } catch (error) {
+      console.error('Comment Create Failed', error);
+    }
+  }
+  return next(action);
+};
+
+const getBoardPostsComments: Middleware = ({ dispatch }: MiddlewareAPI) => (
+  next: Dispatch,
+) => async action => {
+  if (action.type === BOARD_API_GET_POSTS_COMMENTS) {
+    console.log('getBoardPostsComments');
+    const {boardId, postId, setComments} = action;
+    // (async () => {
+    //   try {
+    //     const url = `${serverUrl}/boards/${boardId}/posts/${postId}/comments`;
+    //     let res = await fetch(url);
+    //     const commentsData = await res.json();
+    //     console.log('commentsData', commentsData);
+    //     setComments(commentsData);
+    //     dispatch(boardPostCommentsDataSetAction());
+    //   } catch (e) {
+    //     console.error('Comments Fetch Failed', e);
+    //   }
+    // })();
+    try {
+      const commentsData = await postDataService.get(commentsPath(boardId, postId));
+      console.log('commentsData', commentsData);
+      setComments(commentsData);
+      dispatch(boardPostCommentsDataSetAction());
+    } catch (error) {
+      console.error('Comments Fetch Failed', error);
+    }
+  }
+  return next(action);
+};
+
 export const boardMiddleware = [
   getBoardPosts,
   createBoardPost,
   getBoardById,
   deleteBoardPost,
   editBoardPost,
+  createBoardPostComment,
+  getBoardPostsComments,
 ];

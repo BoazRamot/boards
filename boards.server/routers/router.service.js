@@ -33,7 +33,7 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
     .get(
       '/',
       asyncHandler(async (req, res, next) => {
-        const result = await dataService.get(req.query, req.header.options);
+        const result = await dataService.get(req.query, req.headers);
         res.json(result);
       }),
     )
@@ -55,7 +55,7 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
           req.params.id,
           pathHierarchy(req.path),
           req.query,
-          req.headers.options,
+          req.headers,
         );
         if ([...uploadMap.values()].includes(req.params[0].split('/').pop())) {
           res.send(new Buffer.from(result, 'binary'));
@@ -80,7 +80,7 @@ const router = (uploadMap = new Map(), dataService = new DataService()) => {
     .post(
       '/',
       asyncHandler(async (req, res, next) => {
-        const result = await dataService.insert(req.body, req.headers.options);
+        const result = await dataService.insert(req.body, req.headers);
         res.json(result);
       }),
     )

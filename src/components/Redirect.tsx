@@ -1,8 +1,20 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Route, RouteComponentProps, useHistory } from 'react-router-dom';
+import { Dispatch } from 'redux';
+import { signInDialogCloseAction } from '../store/actions/action.userDataReducer';
 import Map from './GoogleMap';
 
-const Redirect: React.FC<RouteComponentProps> = ({ match }) => {
+interface IProps {
+  signInDialogClose: any;
+  userSignInDialog: boolean;
+}
+
+const Redirect: React.FC<IProps & RouteComponentProps> = ({
+  match,
+  userSignInDialog,
+  signInDialogClose,
+}) => {
   const history = useHistory();
 
   useEffect(() => {
@@ -13,6 +25,9 @@ const Redirect: React.FC<RouteComponentProps> = ({ match }) => {
     if (token) {
       localStorage.setItem('boards-token', token);
       localStorage.setItem('boards-account', account);
+    }
+    if (userSignInDialog) {
+      signInDialogClose();
     }
     history.push(`${appLocation}`);
     localStorage.removeItem('boards-app-location');
@@ -25,4 +40,15 @@ const Redirect: React.FC<RouteComponentProps> = ({ match }) => {
   );
 };
 
-export default Redirect;
+const mapStateToProps = (state: any) => ({
+  userSignInDialog: state.user.userSignInDialog,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  signInDialogClose: () => dispatch(signInDialogCloseAction()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Redirect);

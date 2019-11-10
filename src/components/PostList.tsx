@@ -6,6 +6,7 @@ interface IProps {
   boardId: any;
   deleteBoardPost: Function;
   handlePostEdit: Function;
+  handleCommentsDialogOpen: Function;
 }
 
 const PostList: React.FC<IProps> = ({
@@ -13,6 +14,7 @@ const PostList: React.FC<IProps> = ({
   boardId,
   deleteBoardPost,
   handlePostEdit,
+  handleCommentsDialogOpen,
 }) => {
   return (
     <div>
@@ -25,6 +27,7 @@ const PostList: React.FC<IProps> = ({
             boardId={boardId}
             deleteBoardPost={deleteBoardPost}
             handlePostEdit={handlePostEdit}
+            handleCommentsDialogOpen={handleCommentsDialogOpen}
           />
         ))}
     </div>

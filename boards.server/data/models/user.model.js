@@ -10,16 +10,14 @@ const userSchema = new Schema(
     googleId: {
       type: String,
       lowercase: true,
-      // unique: true,
-      validate: Validate.unique('googleId', 'User'),
+      validate: Validate.unique('User', 'googleId'),
     },
     name: { type: String, required: true },
     email: {
       type: String,
       lowercase: true,
       required: true,
-      // unique: true,
-      validate: Validate.unique('email', 'User'),
+      validate: Validate.unique('User', 'email'),
     },
     // password: { type: String, required: true },
     avatar: String,

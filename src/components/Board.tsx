@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import boardSnapShoot from '../boardSnapShoot.jpg';
+import boardBackground from '../boardBackground.jpg';
 import {
   getBoardByIdAction,
   getBoardPostsAction,
@@ -20,8 +20,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       padding: theme.spacing(2),
-      height: '100vh',
-      backgroundImage: `url(${boardSnapShoot})`,
+      height: '100%',
+      backgroundImage: `url(${boardBackground})`,
+      backgroundSize: 'cover',
     },
   }),
 );
@@ -40,7 +41,6 @@ const Board: React.FC<IProps & RouteComponentProps> = ({
   getBoardPosts,
   getBoardById,
 }) => {
-  const history = useHistory();
   const classes = useStyles();
   const boardId = (match.params as any).id;
 
@@ -54,11 +54,6 @@ const Board: React.FC<IProps & RouteComponentProps> = ({
     // eslint-disable-next-line
   }, []);
 
-  const handleImageClick = () => {
-    saveMapDataNow();
-    history.push('/');
-  };
-
   if (Object.entries(board).length === 0 && board.constructor === Object) {
     return <Loading />;
   }
@@ -67,7 +62,7 @@ const Board: React.FC<IProps & RouteComponentProps> = ({
     <div className={classes.root}>
       <Box mt={2}>
         <Grid container spacing={1}>
-          <BoardDetails board={board} handleImageClick={handleImageClick} />
+          <BoardDetails board={board} saveMapDataNow={saveMapDataNow} />
           <BoardFeed />
         </Grid>
       </Box>

@@ -10,7 +10,11 @@ const IMAGES_COUNT_LIMIT = 4;
 const boardSchema = new Schema(
   {
     // _id: { type: String, lowercase: true }, // URI of the board
-    name: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+      validate: Validate.uniqueGroup('Board', 'name', 'location.address'),
+    },
     geoLocation: {
       type: { type: String, enum: ['Point'], required: true },
       coordinates: { type: [Number], required: true },

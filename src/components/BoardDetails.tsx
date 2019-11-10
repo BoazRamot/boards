@@ -1,15 +1,16 @@
-import React, { ReactEventHandler } from 'react';
-import IBoard from '../models/IBoard';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
-import logo from '../logo.svg';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import logo from '../logo.svg';
+import IBoard from '../models/IBoard';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,14 +25,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
   board: IBoard;
-  handleImageClick: ReactEventHandler;
+  saveMapDataNow: Function;
 }
 
-const BoardDetails: React.FC<IProps> = ({ board, handleImageClick }) => {
+const BoardDetails: React.FC<IProps> = ({ board, saveMapDataNow }) => {
+  const history = useHistory();
   const classes = useStyles();
 
+  const handleImageClick = () => {
+    saveMapDataNow();
+    history.push('/');
+  };
+
   return (
-    <Grid item xs={12} sm >
+    <Grid item xs={12} sm>
       <Card className={classes.card}>
         <CardActionArea onClick={handleImageClick}>
           <CardMedia

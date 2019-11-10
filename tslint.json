@@ -27,6 +27,8 @@
         "jsx-boolean-value": false,
         "ban-types": false,
         "array-callback-return": false,
-        "only-arrow-functions": false
+        "only-arrow-functions": false,
+        "no-var-requires": false,
+        "no-shadowed-variable": false
     }
 }

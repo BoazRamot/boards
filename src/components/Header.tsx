@@ -1,13 +1,7 @@
 import {
   AppBar,
   Avatar,
-  Button,
   createStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
   makeStyles,
   Menu,
@@ -20,11 +14,13 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
 import { Dispatch } from 'redux';
-import { apiURL } from '../services/data.service';
+import { serverUrl } from '../services/data.service';
 import { resetRedirectAction } from '../store/actions/action.mapReducer';
-import { logoutUserAction } from '../store/actions/action.userDataReducer';
+import {
+  logoutUserAction,
+  signInDialogOpenAction,
+} from '../store/actions/action.userDataReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +48,7 @@ interface IProps {
   avatar: string;
   resetRedirect: Function;
   logoutUser: Function;
+  signInDialogOpen: Function;
 }
 
 const Header: React.FC<IProps> = ({
@@ -60,24 +57,14 @@ const Header: React.FC<IProps> = ({
   userLogin,
   avatar,
   userName,
+  signInDialogOpen,
 }) => {
-  const [openLoginDialog, setOpenLoginDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
-  const history = useHistory();
 
   const handleLoginDialogOpen = () => {
-    setOpenLoginDialog(true);
-  };
-
-  const handleLoginDialogClose = () => {
-    setOpenLoginDialog(false);
-  };
-
-  const handleGoogle = () => {
-    localStorage.setItem('boards-app-location', history.location.pathname);
-    window.location.href = `${apiURL}/auth/google`;
+    signInDialogOpen();
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -94,43 +81,8 @@ const Header: React.FC<IProps> = ({
     resetRedirect();
   };
 
-  const loginDialog = () => {
-    return (
-      <div>
-        <Dialog
-          open={openLoginDialog}
-          onClose={handleLoginDialogClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Logging With</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Choose a service to logon with
-            </DialogContentText>
-            <DialogContentText>
-              <Button onClick={handleGoogle} color="primary">
-                google
-              </Button>
-            </DialogContentText>
-            <DialogContentText>
-              <Button onClick={handleLoginDialogClose} color="primary">
-                FaceBook
-              </Button>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleLoginDialogClose} color="primary">
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  };
-
   return (
     <div className={classes.root}>
-      {openLoginDialog && loginDialog()}
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -177,8 +129,18 @@ const Header: React.FC<IProps> = ({
             ) : (
               <MenuItem onClick={handleLoginDialogOpen}>Login</MenuItem>
             )}
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem
+              style={{ display: userLogin ? '' : 'none' }}
+              onClick={handleClose}
+            >
+              Profile
+            </MenuItem>
+            <MenuItem
+              style={{ display: userLogin ? '' : 'none' }}
+              onClick={handleClose}
+            >
+              My account
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
@@ -199,6 +161,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   logoutUser: () => dispatch(logoutUserAction()),
   resetRedirect: () => dispatch(resetRedirectAction()),
+  signInDialogOpen: () => dispatch(signInDialogOpenAction()),
 });
 
 export default connect(

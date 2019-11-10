@@ -9,9 +9,9 @@ export enum DataCollections {
   Users = 'users',
 }
 
-const PORT = 5000;
-const baseURL = `http://localhost:${PORT}`;
-export const apiURL = `${baseURL}/api`;
+const port = process.env.PORT || 5000;
+export const serverUrl =
+  process.env.SERVER_URL || `http://localhost:${port}/api`;
 
 export default class DataService<T> implements IDataService<T> {
   public async get(
@@ -21,7 +21,7 @@ export default class DataService<T> implements IDataService<T> {
   ): Promise<T[]> {
     const response = await errorHandler(
       fetch(
-        `${apiURL}/${collectionPath}${
+        `${serverUrl}/${collectionPath}${
           conditions ? `?${querystring.stringify(conditions)}` : ''
         }`,
         {
@@ -34,7 +34,7 @@ export default class DataService<T> implements IDataService<T> {
 
   public async getById(collectionPath: string, documentId: string): Promise<T> {
     const response = await errorHandler(
-      fetch(`${apiURL}/${collectionPath}/${documentId}`),
+      fetch(`${serverUrl}/${collectionPath}/${documentId}`),
     );
     return response.json();
   }
@@ -45,7 +45,7 @@ export default class DataService<T> implements IDataService<T> {
     headers?: any,
   ): Promise<T> {
     const response = await errorHandler(
-      fetch(`${apiURL}/${collectionPath}`, {
+      fetch(`${serverUrl}/${collectionPath}`, {
         method: 'POST',
         body: data,
         headers: new Headers(headers),
@@ -62,7 +62,7 @@ export default class DataService<T> implements IDataService<T> {
   ): Promise<object> {
     const response = await errorHandler(
       fetch(
-        `${apiURL}/${collectionPath}${
+        `${serverUrl}/${collectionPath}${
           conditions ? `?${querystring.stringify(conditions)}` : ''
         }`,
         {
@@ -82,7 +82,7 @@ export default class DataService<T> implements IDataService<T> {
     headers?: any,
   ): Promise<T> {
     const response = await errorHandler(
-      fetch(`${apiURL}/${collectionPath}/${documentId}`, {
+      fetch(`${serverUrl}/${collectionPath}/${documentId}`, {
         method: 'PUT',
         body: data,
         headers: new Headers(headers),
@@ -98,7 +98,7 @@ export default class DataService<T> implements IDataService<T> {
   ): Promise<object> {
     const response = await errorHandler(
       fetch(
-        `${apiURL}/${collectionPath}${
+        `${serverUrl}/${collectionPath}${
           conditions ? `?${querystring.stringify(conditions)}` : ''
         }`,
         {
@@ -116,7 +116,7 @@ export default class DataService<T> implements IDataService<T> {
     headers?: any,
   ): Promise<boolean> {
     const response = await errorHandler(
-      fetch(`${apiURL}/${collectionPath}/${documentId}`, {
+      fetch(`${serverUrl}/${collectionPath}/${documentId}`, {
         method: 'DELETE',
         headers: new Headers(headers),
       }),

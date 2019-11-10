@@ -1,21 +1,7 @@
 import {
   Box,
-  // Button,
   createMuiTheme,
-  // Dialog,
-  // DialogActions,
-  // DialogContent,
-  // DialogContentText,
-  // DialogTitle,
-  // IconButton,
-  // ListItemText,
-  // Typography,
 } from '@material-ui/core';
-// import Fab from '@material-ui/core/Fab';
-// import Grid from '@material-ui/core/Grid';
-// import List from '@material-ui/core/List';
-// import ListItem from '@material-ui/core/ListItem';
-// import MenuIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import { ThemeProvider } from '@material-ui/styles';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -90,7 +76,6 @@ const App: React.FC<IProps> = ({
     },
   });
 
-  // const handleSignIn = () => signInDialogClose();
   const PageNotFound = () => 'Page not found';
 
   return (

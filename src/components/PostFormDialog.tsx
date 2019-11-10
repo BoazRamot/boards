@@ -7,9 +7,14 @@ import {
   Theme,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import CardMedia from '@material-ui/core/CardMedia';
 import DialogContent from '@material-ui/core/DialogContent';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import CancelSharpIcon from '@material-ui/icons/CancelSharp';
 import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,7 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 'auto',
       marginTop: theme.spacing(2),
     },
-
     container: {
       display: 'flex',
       flexWrap: 'wrap',
@@ -39,6 +43,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menu: {
       width: 200,
+    },
+    gridList: {
+      flexWrap: 'nowrap',
+      // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+      transform: 'translateZ(0)',
+    },
+    titleGrid: {
+      color: '#FF3333',
+    },
+    titleBar: {
+      background:
+        'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
     },
   }),
 );
@@ -68,21 +84,24 @@ const PostFormDialog: React.FC<IProps> = ({
   const [body, setBody] = useState();
   const [files, setFiles] = useState([] as File[]);
   const [filesDataURIs, setFilesDataURIs] = useState([] as any[]);
+  const [postImages, setPostImages] = useState([]);
+
   const classes = useStyles();
 
   useEffect(() => {
     if (post) {
+      const images: any = [...post.images];
+      setPostImages(images);
       setTitle(post.title);
       setBody(post.body);
-      // setFilesDataURIs([]);
     }
   }, [post]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log('event.target', event.target);
     const formElement = event.target as HTMLFormElement;
     const formData = new FormData(formElement);
-    // userId
     formData.append('userId', userId);
     if (post) {
       formData.append('_id', post._id);
@@ -110,6 +129,7 @@ const PostFormDialog: React.FC<IProps> = ({
   };
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('onFileChange', event.target);
     const element = event.target as HTMLInputElement;
     if (element.files && element.files.length > 0) {
       // convert to data URI for preview
@@ -124,12 +144,51 @@ const PostFormDialog: React.FC<IProps> = ({
         reader.readAsDataURL(file);
       });
     }
+    console.log('filesDataURIs', filesDataURIs);
+    console.log('files', files);
+  };
+
+  const handleRemoveImg = (index: number) => {
+    const filesDataURIsList = [] as any[];
+    const filesList = [] as File[];
+    const postImagesList: any = [];
+    filesDataURIs.map((item, i) => {
+      if (i !== index) {
+        filesDataURIsList.push(item);
+      }
+    });
+    files.map((item, i) => {
+      if (i !== index) {
+        filesList.push(item);
+      }
+    });
+    postImages.map((item, i) => {
+      if (i !== index) {
+        postImagesList.push(item);
+      }
+    });
+    if (filesDataURIsList.length > 0 && filesList.length > 0) {
+      setFilesDataURIs(filesDataURIsList);
+      setFiles(filesList as File[]);
+      setPostImages(postImagesList);
+    } else {
+      setFilesDataURIs([] as any[]);
+      setFiles([] as File[]);
+      setPostImages(postImagesList);
+    }
+  };
+
+  const onClose = () => {
+    setTitle('');
+    setBody('');
+    setFilesDataURIs([]);
+    handleNewPostClose();
   };
 
   return (
     <Dialog
       open={openNewPost}
-      onClose={handleNewPostClose}
+      onClose={onClose}
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">
@@ -171,34 +230,71 @@ const PostFormDialog: React.FC<IProps> = ({
             spellCheck={true}
             // useCacheForDOMMeasurements={true}
           />
-          {filesDataURIs.length > 0 &&
-            filesDataURIs.map((dataURI, index) => (
-              <CardMedia
-                key={index}
-                className={classes.media}
-                image={dataURI}
-                title={`${index}`}
-              />
-            ))}
-          {filesDataURIs.length === 0 &&
-            post &&
-            post.images &&
-            post.images.map((image: any) => (
-              <CardMedia
-                key={image._id}
-                className={classes.media}
-                image={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
-                title={`${image.description}`}
-              />
-            ))}
+          {filesDataURIs.length > 0 && (
+            <GridList className={classes.gridList} cols={4}>
+              {filesDataURIs.map((dataURI, index) => (
+                <GridListTile key={index} style={{ height: '100px' }}>
+                  <img
+                    src={dataURI}
+                    alt={`${index}`}
+                    style={{
+                      maxWidth: '100%',
+                      height: '80px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                  <GridListTileBar
+                    classes={{
+                      root: classes.titleBar,
+                      title: classes.titleGrid,
+                    }}
+                    actionIcon={
+                      <IconButton
+                        aria-label={`star ${index}`}
+                        onClick={handleRemoveImg.bind(null, index)}
+                      >
+                        <CancelSharpIcon className={classes.titleGrid} />
+                      </IconButton>
+                    }
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
+          )}
+          {filesDataURIs.length === 0 && post && post.images && postImages && (
+            <GridList className={classes.gridList} cols={4}>
+              {/*{{post.images.map((image: any, index: any) => (}*/}
+              {postImages.map((image: any, index: any) => (
+                <GridListTile key={image._id} style={{ height: '100px' }}>
+                  <img
+                    src={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
+                    alt={image.description}
+                    style={{
+                      maxWidth: '100%',
+                      height: '80px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                  <GridListTileBar
+                    classes={{
+                      root: classes.titleBar,
+                      title: classes.titleGrid,
+                    }}
+                    actionIcon={
+                      <IconButton
+                        aria-label={`star ${index}`}
+                        onClick={handleRemoveImg.bind(null, index)}
+                      >
+                        <CancelSharpIcon className={classes.titleGrid} />
+                      </IconButton>
+                    }
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
+          )}
         </DialogContent>
         <DialogActions>
-          {/*<input*/}
-          {/*  type="file"*/}
-          {/*  name="images"*/}
-          {/*  accept="image/*"*/}
-          {/*  onChange={onFileChange}*/}
-          {/*/>*/}
           <input
             type="file"
             name="images"
@@ -211,7 +307,7 @@ const PostFormDialog: React.FC<IProps> = ({
           />
           <label htmlFor="raised-button-file">
             <Button variant="outlined" component="span">
-              Upload
+              <AttachFileIcon />
             </Button>
           </label>
           <Button

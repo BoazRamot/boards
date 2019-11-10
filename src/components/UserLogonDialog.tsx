@@ -7,6 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import React from 'react';
+import { useHistory } from 'react-router';
+import { serverUrl } from '../services/data.service';
 
 interface IProps {
   signInDialogClose: any;
@@ -19,7 +21,10 @@ const UserLogonDialog: React.FC<IProps> = ({
   userAccount,
   userSignInDialog,
 }) => {
+  const history = useHistory();
   const handleSignIn = () => {
+    localStorage.setItem('boards-app-location', history.location.pathname);
+    window.location.href = `${serverUrl}/auth/google`;
     signInDialogClose();
   };
 
@@ -35,11 +40,11 @@ const UserLogonDialog: React.FC<IProps> = ({
           <DialogContentText>
             Please Sign In To Complete Your Action
           </DialogContentText>
-          {userAccount && (
+          {/* {userAccount && (
             <DialogContentText>
               {`Your Board Account Was Created With ${userAccount}`}
             </DialogContentText>
-          )}
+          )} */}
         </DialogContent>
         <DialogActions>
           <List>
@@ -61,7 +66,7 @@ const UserLogonDialog: React.FC<IProps> = ({
             <ListItem>
               <Button
                 variant="outlined"
-                onClick={handleSignIn}
+                // onClick={handleSignIn}
                 color="primary"
                 style={{ minWidth: '300px' }}
                 // disabled={userAccount !== "facebook"}
@@ -85,7 +90,7 @@ const UserLogonDialog: React.FC<IProps> = ({
             <ListItem>
               <Button
                 variant="outlined"
-                onClick={handleSignIn}
+                // onClick={handleSignIn}
                 color="primary"
                 style={{ minWidth: '300px' }}
               >

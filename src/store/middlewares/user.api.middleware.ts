@@ -1,7 +1,7 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import IUser from '../../models/IUser';
 import DataService, {
-  // apiURL,
+  // serverUrl,
   DataCollections,
 } from '../../services/data.service';
 import {
@@ -19,7 +19,7 @@ const getUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
     const token = action.token;
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/auth/login`;
+    //     const url = `${serverUrl}/auth/login`;
     //     const res = await fetch(url, {
     //       method: 'GET',
     //       headers: { 'X-Auth-Token': token },
@@ -49,16 +49,9 @@ const getPostUserData: Middleware = ({ dispatch }: MiddlewareAPI) => (
     const { userId, setUserData } = action;
     // (async () => {
     //   try {
-    //     const url = `${apiURL}/${DataCollections.Users}/${userId}`;
+    //     const url = `${serverUrl}/${DataCollections.Users}/${userId}`;
     //     const res = await fetch(url);
     //     const userData = await res.json();
-
-    //     // const handleChange = (name: keyof IUser) => (
-    //     //   event: React.ChangeEvent<HTMLInputElement>,
-    //     // ) => {
-    //     //   setUserData({ ...userData, [name]: event.target.value });
-    //     // };
-
     //     setUserData({ ...userData });
     //   } catch (e) {
     //     console.error('User Fetch Failed', e);

@@ -69,21 +69,58 @@ function clearBuffers(obj) {
 }
 
 const Validate = {
-  unique: function(fieldName, model) {
+  unique: function(model, fieldName) {
     return {
       validator: async function(value) {
         if (!this.isNew) {
           return true;
         }
-        if (typeof value === 'string') {
-          value = value.toLowerCase();
-        }
         const count = await this.model(model)
-          .estimatedDocumentCount({ [fieldName]: value })
+          .estimatedDocumentCount({
+            [fieldName]: new RegExp(`^${value}$`, 'i'),
+          })
           .catch(err => err);
-        return count <= 1; // If `count` is not zero, "invalidate"
+        return count <= 1; // If `count` is greater than 1, "invalidate"
       },
       message: props => `${props.value} already exists.`,
+    };
+  },
+  uniqueGroup: function(model, modifiedField, ...groupFields) {
+    return {
+      validator: async function(value) {
+        if (!this.isNew) {
+          return true;
+        }
+        const result = await this.model(model)
+          .aggregate([
+            {
+              $match: {
+                [modifiedField]: new RegExp(`^${value}$`, 'i'),
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  [modifiedField]: `$${modifiedField}`,
+                  ...groupFields.reduce(
+                    (acc, cur) => ({
+                      ...acc,
+                      [cur.split('.').pop()]: `$${cur}`,
+                    }),
+                    {},
+                  ),
+                },
+                count: { $sum: 1 },
+              },
+            },
+          ])
+          .exec();
+        return result.length === 0 || result[0].count === 0;
+      },
+      message: props =>
+        `${props.value} already exists for the specified ${groupFields.map(
+          field => field.split('.').pop(),
+        )}.`,
     };
   },
   get uniqueArrayItem() {

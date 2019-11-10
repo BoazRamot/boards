@@ -3,6 +3,7 @@ const DocUtils = require('./DocUtils');
 const IDataService = require('./IDataService');
 const QueryProxy = require('./QueryProxy');
 const { clearBuffers } = require('./dbUtils');
+const socketIo = require('../../services/socket.service');
 
 class MongooseDataService extends IDataService {
   constructor(entityName) {
@@ -43,9 +44,13 @@ class MongooseDataService extends IDataService {
 
   async insert(data) {
     const result = await this._model.create(data);
+    
     // TODO: check which return option is faster (both work)
-    return this.getById(result._id);
-    // return clearBuffers(result._doc);
+    const newDoc = this.getById(result._id);
+    // const newDoc = clearBuffers(result._doc);;
+    
+    socketIo.emit('new-doc', newDoc);
+    return newDoc;
   }
 
   // insert data to a subDocument array
@@ -58,9 +63,13 @@ class MongooseDataService extends IDataService {
 
     const result = DocUtils.insert(subDocument, data);
     await document.save();
+
     // TODO: check which return option is faster (both work)
-    return clearBuffers(result._doc);
-    // return this.getSubDocument(ownerId, [...pathHierarchy, result.id]);
+    const newDoc = clearBuffers(result._doc);
+    // const newDoc = this.getSubDocument(ownerId, [...pathHierarchy, result.id]);
+    
+    socketIo.emit('new_data', newDoc);
+    return newDoc;
   }
 
   async update(filter, data) {

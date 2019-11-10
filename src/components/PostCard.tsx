@@ -15,33 +15,55 @@ import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
-// import GridList from '@material-ui/core/GridList';
-// import GridListTile from '@material-ui/core/GridListTile';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-// import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-// import AccountCircle from '@material-ui/core/SvgIcon/SvgIcon';
+import AccountCircle from '@material-ui/core/SvgIcon/SvgIcon';
+import CommentIcon from '@material-ui/icons/Comment';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import boardPin from '../boardPin.jpg';
 import IUser from '../models/IUser';
-import postNotePaperY from '../postNotePaperY.jpg';
-import { apiURL, DataCollections } from '../services/data.service';
+import { DataCollections, serverUrl } from '../services/data.service';
 import { getPostUserDataAction } from '../store/actions/action.userApiMiddleware';
-// import { signInDialogCloseAction } from '../store/actions/action.userDataReducer';
+import {
+  signInDialogCloseAction,
+  signInDialogOpenAction,
+} from '../store/actions/action.userDataReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    Media: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      // backgroundColor: theme.palette.background.paper,
+    },
+    gridList: {
+      width: 'auto',
+      height: 'auto',
+    },
     media: {
       height: 300,
       width: 'auto',
       margin: 'auto',
       marginTop: theme.spacing(2),
     },
+    // gridList: {
+    //   flexWrap: 'nowrap',
+    //   // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    //   transform: 'translateZ(0)',
+    // },
   }),
 );
 
@@ -51,8 +73,10 @@ interface IProps {
   getPostUserData: Function;
   deleteBoardPost: Function;
   handlePostEdit: Function;
-  // userName: string;
-  // avatar: string;
+  signInDialogOpen: Function;
+  handleCommentsDialogOpen: any;
+  user_id: string;
+  userLogin: boolean;
 }
 
 const PostCard: React.FC<IProps> = ({
@@ -61,8 +85,10 @@ const PostCard: React.FC<IProps> = ({
   deleteBoardPost,
   handlePostEdit,
   getPostUserData,
-  // userName,
-  // avatar
+  user_id,
+  userLogin,
+  handleCommentsDialogOpen,
+  signInDialogOpen,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userData, setUserData] = useState<IUser>({
@@ -96,18 +122,33 @@ const PostCard: React.FC<IProps> = ({
   };
 
   const handleEdit = () => {
-    handlePostEdit(post);
+    handlePostEdit(post, 'post');
     setAnchorEl(null);
   };
+
+  const handleComment = (view: boolean = false) => {
+    if (userLogin || view) {
+      handlePostEdit(post, 'comment');
+      handleCommentsDialogOpen();
+    } else {
+      signInDialogOpen();
+    }
+  };
+
+  const handleLike = () => {};
 
   return (
     <Grid item>
       <Box mb={2} ml={1}>
-        <Card style={{ backgroundColor: 'yellow' }}>
+        <Card style={{ backgroundColor: '#FEF2F2' }}>
           <CardMedia
             className={classes.media}
-            image={postNotePaperY}
-            style={{ backgroundColor: 'yellow', height: '60px', width: '70px' }}
+            image={boardPin}
+            style={{
+              backgroundColor: '#FEF2F2',
+              height: '60px',
+              width: '70px',
+            }}
           />
           <CardHeader
             avatar={<Avatar alt={userData.name} src={userData.avatar} />}
@@ -120,7 +161,11 @@ const PostCard: React.FC<IProps> = ({
                 onClick={handleMenu}
                 color="inherit"
               >
-                <MoreVertIcon />
+                <MoreVertIcon
+                  style={{
+                    display: userLogin && user_id === post.userId ? '' : 'none',
+                  }}
+                />
               </IconButton>
             }
             // title={post.title}
@@ -162,20 +207,43 @@ const PostCard: React.FC<IProps> = ({
               {post.body}
             </Typography>
           </CardContent>
-          {post.images &&
-            post.images.map((image: any) => (
-              <CardMedia
-                key={image._id}
-                className={classes.media}
-                image={`${apiURL}/${DataCollections.Boards}/${boardId}/${DataCollections.Posts}/${post._id}/images/${image._id}/image`}
-                title={image.description}
-              />
-            ))}
+          <CardMedia className={classes.Media}>
+            {post.images && (
+              <GridList className={classes.gridList}>
+                {post.images.map((image: any) => (
+                  <GridListTile
+                    key={image._id}
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <img
+                      src={`http://localhost:5000/api/boards/${boardId}/posts/${post._id}/images/${image._id}/image`}
+                      alt={image.description}
+                      style={{
+                        height: 'auto',
+                        width: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </GridListTile>
+                ))}
+              </GridList>
+            )}
+          </CardMedia>
           <CardContent>
             <List style={{ display: 'flex', flexFlow: 'row' }}>
-              <ListItem>comments {post.comments.length}</ListItem>
+              <ListItem>
+                <Button onClick={handleComment.bind(null, true)}>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    comments {post.comments.length}
+                  </Typography>
+                </Button>
+              </ListItem>
               <ListItem style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                likes {post.likes.length}
+                <Button>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    likes {post.likes.length}
+                  </Typography>
+                </Button>
               </ListItem>
             </List>
           </CardContent>
@@ -187,24 +255,25 @@ const PostCard: React.FC<IProps> = ({
               spacing={2}
             >
               <Grid item xs={6}>
-                <Paper style={{ textAlign: 'center', background: 'none' }}>
-                  <Button>
-                    <img
-                      src="https://img.icons8.com/ios/50/000000/speech-bubble-with-dots.png"
-                      alt="speech bubble with dots"
-                    />
-                    comment
+                <Paper style={{ textAlign: 'center' }}>
+                  <Button
+                    style={{ width: '100%' }}
+                    onClick={handleComment.bind(null, false)}
+                  >
+                    <CommentIcon />
+                    <Typography variant="h6" style={{ marginLeft: '5px' }}>
+                      comment
+                    </Typography>
                   </Button>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper style={{ textAlign: 'center' }}>
-                  <Button>
-                    <img
-                      src="https://img.icons8.com/emoji/48/000000/thumbs-up.png"
-                      alt="thumbs up"
-                    />
-                    like
+                  <Button style={{ width: '100%' }} onClick={handleLike}>
+                    <ThumbUpIcon />
+                    <Typography variant="h6" style={{ marginLeft: '5px' }}>
+                      like
+                    </Typography>
                   </Button>
                 </Paper>
               </Grid>
@@ -217,43 +286,17 @@ const PostCard: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  userName: state.user.userData.name,
-  avatar: state.user.userData.avatar,
+  user_id: state.user.userData._id,
+  userLogin: state.user.userLogin,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   getPostUserData: (userId: any, setUserData: any) =>
     dispatch(getPostUserDataAction(userId, setUserData)),
+  signInDialogOpen: () => dispatch(signInDialogOpenAction()),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(PostCard);
-
-//   const [isEditSelected, setIsEditSelected] = useState(false);
-//
-//   const onMenuClick = (key: string) => {
-//     switch (key.toLowerCase()) {
-//       case 'edit':
-//         setIsEditSelected(true);
-//         break;
-//       case 'delete':
-//         onDelete(post._id);
-//         break;
-//       default:
-//         break;
-//     }
-//   };
-//
-//   if (isEditSelected) {
-//     return (
-//       <Redirect
-//         push={true}
-//         to={{
-//           pathname: `${apiURL}${match.url}/posts/${post._id}`,
-//           state: { post },
-//         }}
-//       />
-//     );
-//   }

@@ -17,6 +17,7 @@
     "react-scripts": "3.0.1",
     "react-textarea-autosize": "^7.1.0",
     "redux": "^4.0.4",
+    "socket.io-client": "^2.3.0",
     "typescript": "3.5.2"
   },
   "scripts": {
@@ -51,6 +52,7 @@
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^5.1.0",
     "@types/react-textarea-autosize": "^4.3.4",
+    "@types/socket.io-client": "^1.4.32",
     "prettier": "^1.18.2",
     "tslint": "^5.20.0",
     "tslint-react": "^4.1.0"
