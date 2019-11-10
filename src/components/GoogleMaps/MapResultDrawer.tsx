@@ -28,6 +28,8 @@ import AddBoard from './AddBoard';
 import AddNewBoard from './AddNewBoard';
 import { boardsAtThisLocation, boardsCloseToThisLocation } from './boardsList';
 import useStyles from './GoogleMapService/useStyles';
+import boardBackground from "../../boardBackground.jpg";
+import Typography from "@material-ui/core/Typography";
 
 interface IProps {
   markersMap: any; // todo: type
@@ -135,7 +137,8 @@ const MapResultDrawer: React.FC<IProps> = ({
       >
         <div
           className={classes.drawerRoot}
-          style={{ backgroundImage: `url(${boardImg})` }}
+          style={{ backgroundImage: `url(${boardBackground})` }}
+          // backgroundImage: `url(${boardBackground})`,
         >
           <AppBar
             position="static"
@@ -173,7 +176,12 @@ const MapResultDrawer: React.FC<IProps> = ({
             >
               <Box m={2}>
                 <ListItemText
-                  secondary={'Boards Community at this location:'}
+                  style={{color: 'white'}}
+                  secondary={
+                    <Typography>
+                      Boards Community at this location:
+                    </Typography>
+                  }
                 />
                 <List>
                   {boardsAtThisLocation(
@@ -186,7 +194,12 @@ const MapResultDrawer: React.FC<IProps> = ({
                 </List>
                 <br />
                 <ListItemText
-                  secondary={'Boards Community close to this location:'}
+                  style={{color: 'white'}}
+                  secondary={
+                    <Typography>
+                      Boards Community close to this location:
+                    </Typography>
+                  }
                 />
                 <List>
                   {boardsCloseToThisLocation(

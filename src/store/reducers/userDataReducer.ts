@@ -1,5 +1,5 @@
 import {
-  LOGOUT_USER, SIGN_IN_DIALOG_CLOSE, SIGN_IN_DIALOG_OPEN, USER_ACCOUNT,
+  LOGOUT_USER, RESET_PAGE_NOT_FOUND, SET_PAGE_NOT_FOUND, SIGN_IN_DIALOG_CLOSE, SIGN_IN_DIALOG_OPEN, USER_ACCOUNT,
   // RESET_USER_DATA,
   USER_DATA_SET,
 } from '../actions/action.userDataReducer';
@@ -9,6 +9,7 @@ const userDataInitState: any = {
   userLogin: false,
   userSignInDialog: false,
   userAccount: null,
+  pageNotFound: false,
 };
 
 const userDataReducer = (state: any = userDataInitState, action: any) => {
@@ -46,6 +47,18 @@ const userDataReducer = (state: any = userDataInitState, action: any) => {
       return {
         ...state,
         userAccount: action.payload,
+      };
+
+    case SET_PAGE_NOT_FOUND:
+      return {
+        ...state,
+        pageNotFound: true,
+      };
+
+    case RESET_PAGE_NOT_FOUND:
+      return {
+        ...state,
+        pageNotFound: false,
       };
 
     default:

@@ -11,6 +11,8 @@ import BoardDetails from './BoardDetails';
 import BoardFeed from './BoardFeed';
 import Loading from './Loading';
 import { getBoardByIdAction, getBoardPostsAction } from '../store/actions/action.boardApiMiddleware';
+import {resetPageNotFoundAction} from "../store/actions/action.userDataReducer";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,6 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       backgroundImage: `url(${boardBackground})`,
       backgroundSize: "cover",
+      // paddingBottom: "30vh",
+      paddingBottom: "40%",
 
     },
   }),
@@ -27,16 +31,33 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
   board: any
+  resetPageNotFound: Function
   saveMapDataNow: Function
   getBoardPosts: Function
   getBoardById: Function
+  pageNotFound: boolean
 }
 
-const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDataNow, getBoardPosts, getBoardById }) => {
+const Board: React.FC<IProps & RouteComponentProps> = ({
+                                                         match,
+                                                         board,
+                                                         saveMapDataNow,
+                                                         getBoardPosts,
+                                                         getBoardById,
+                                                         pageNotFound,
+                                                         resetPageNotFound
+}) => {
   const classes = useStyles();
 
   useEffect(() => {
+    if (pageNotFound) {
+      resetPageNotFound();
+    }
     const boardId = (match.params as any).id;
+    if (boardId.length !== 24) {
+      return;
+    }
+    // 5dc2a9cb01cb7805a8a2b579
     (async () => {
       if (Object.entries(board).length === 0 && board.constructor === Object) {
         await getBoardById(boardId);
@@ -64,12 +85,14 @@ const Board: React.FC<IProps & RouteComponentProps> = ({ match, board, saveMapDa
 
 const mapStateToProps = (state: any) => ({
   board: state.mapBoards.board,
+  pageNotFound: state.user.pageNotFound,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveMapDataNow: () => dispatch(saveMapDataNowAction(true)),
   getBoardPosts: (boardId: any) => dispatch(getBoardPostsAction(boardId)),
   getBoardById: (boardId: any) => dispatch(getBoardByIdAction(boardId)),
+  resetPageNotFound: () => dispatch(resetPageNotFoundAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

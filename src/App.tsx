@@ -17,6 +17,8 @@ import { saveMapDataNowAction } from './store/actions/action.mapDataMiddleware';
 import { getAllUserDataAction } from './store/actions/action.userApiMiddleware';
 import {setUserAccountAction, signInDialogCloseAction} from "./store/actions/action.userDataReducer";
 import UserLogonDialog from "./components/UserLogonDialog";
+import Home from "./components/Home";
+import PageNotFound from "./components/PageNotFound";
 
 interface IProps {
   signInDialogClose: any;
@@ -25,6 +27,7 @@ interface IProps {
   setUserAccount: Function;
   placeListener: any;
   userSignInDialog: boolean;
+  pageNotFound: boolean;
   userAccount: string;
 }
 
@@ -35,7 +38,8 @@ const App: React.FC<IProps> = ({
                                  userSignInDialog,
                                  signInDialogClose,
                                  setUserAccount,
-                                 userAccount
+                                 userAccount,
+                                 pageNotFound
 }) => {
 
   useEffect(() => {
@@ -74,7 +78,7 @@ const App: React.FC<IProps> = ({
     },
   });
 
-  const PageNotFound = () => 'Page not found';
+  // const PageNotFound = () => 'Page not found';
 
   return (
     <div className="App">
@@ -87,14 +91,16 @@ const App: React.FC<IProps> = ({
               userAccount={userAccount}
               signInDialogClose={signInDialogClose}
             />
-            <Box pt={7}>
+            <Box pt={pageNotFound ? 0 : 7}>
               <Switch>
                 <Route path="/redirect/:id/:account" component={Redirect} />
-                <Route path="/boards/:id" component={Board} />
+                <Route exact path="/boards/:id" component={Board} />
                 {/*<Route path="/boards/:id/posts/:postId" component={PostForm} />*/}
                 {/*<Route path="/users/:id" component={User} />*/}
-                <Route path="/" component={Map} />
-                <Route render={PageNotFound} />
+                <Route exact path="/map" component={Map} />
+                <Route exact path="/" component={Home} />
+                <Route path="/" component={PageNotFound} />
+                {/*<Route render={PageNotFound} />*/}
               </Switch>
             </Box>
           </Router>
@@ -108,6 +114,7 @@ const mapStateToProps = (state: any) => ({
   placeListener: state.googleMap.placeListener,
   userSignInDialog: state.user.userSignInDialog,
   userAccount: state.user.userAccount,
+  pageNotFound: state.user.pageNotFound,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

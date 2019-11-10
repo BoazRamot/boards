@@ -1,4 +1,4 @@
-import { ListItem, ListItemText } from '@material-ui/core';
+import {ListItem, ListItemText, Typography} from '@material-ui/core';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -67,10 +67,15 @@ const boardsList = (list: any, markersMap: any, boardDataSet: Function) => {
             onMouseLeave={handleMouseLeave.bind(null, board._id)}
             onClick={handleClick.bind(null, board)}
           >
-            <ListItem button>
+            <ListItem button style={{color: 'white'}}>
               <ListItemText
                 primary={board.name}
-                secondary={board.location.address}
+                secondary={
+                  <Typography variant={"subtitle2"} component={'p'}>
+                    {board.location.address}
+                  </Typography>
+                }
+                // secondary={board.location.address}
               />
             </ListItem>
           </RouterLink>
@@ -78,3 +83,6 @@ const boardsList = (list: any, markersMap: any, boardDataSet: Function) => {
     </div>
   );
 };
+{/*<Typography variant="h5" color="textSecondary" component="p">*/}
+{/*  likes {post.likes.length}*/}
+{/*</Typography>*/}

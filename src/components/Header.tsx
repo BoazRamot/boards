@@ -17,6 +17,9 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { resetRedirectAction } from '../store/actions/action.mapReducer';
 import {logoutUserAction, signInDialogOpenAction} from '../store/actions/action.userDataReducer';
+import boardsLogo from "../boardsLogo.jpg";
+import {Link as RouterLink} from "react-router-dom";
+// boardsLogo
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
+  pageNotFound: boolean;
   userLogin: boolean;
   userName: string;
   avatar: string;
@@ -53,7 +57,8 @@ const Header: React.FC<IProps> = ({
                                     userLogin,
                                     avatar,
                                     userName,
-                                    signInDialogOpen
+                                    signInDialogOpen,
+                                    pageNotFound
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -77,22 +82,37 @@ const Header: React.FC<IProps> = ({
     resetRedirect();
   };
 
+  // const handleHome = () => {
+  //   setAnchorEl(null);
+  // };
+
   return (
-    <div className={classes.root}>
+    <div style={{display: pageNotFound ? 'none' : '',}} className={classes.root}>
       <AppBar className={classes.appBar}>
         <Toolbar>
+          <RouterLink to={`/`}>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              // onClick={handleHome}
+            >
+              {/*<RouterLink to={`/`}>*/}
+              <Typography variant="h6" className={classes.title} style={{color: "white", marginRight: '7px'}}>
+                Boards
+              </Typography>
+              <img src={boardsLogo}/>
+
+              {/*</RouterLink>*/}
+
+            </IconButton>
+          </RouterLink>
+
+          <div className={classes.title}></div>
           <IconButton
-            edge="start"
+            edge="end"
             className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Boards
-          </Typography>
-          <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
@@ -135,6 +155,7 @@ const Header: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: any) => ({
+  pageNotFound: state.user.pageNotFound,
   userLogin: state.user.userLogin,
   userName: state.user.userData.name,
   avatar: state.user.userData.avatar,

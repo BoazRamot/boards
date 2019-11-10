@@ -101,7 +101,9 @@ const PostCard: React.FC<IProps> = ({
   const classes = useStyles();
   
   useEffect(() => {
-    getPostUserData(post.userId, setUserData)
+    if (post.userId) {
+      getPostUserData(post.userId, setUserData)
+    }
   }, []);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -197,7 +199,7 @@ const PostCard: React.FC<IProps> = ({
             </Typography>
           </CardContent>
           <CardMedia className={classes.Media}>
-            {post.images &&
+            {post.images.length !== 0 &&
             <GridList className={classes.gridList}>
               {post.images.map((image: any) => (
                 <GridListTile key={image._id} style={{ height: '100%', width: '100%'}}>

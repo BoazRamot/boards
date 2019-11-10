@@ -115,14 +115,19 @@ const BoardFeed: React.FC<IProps> = ({
     setOpenNewPost(false);
   };
 
-  if (!posts) {
+  // if (!posts) {
+  //   return <Loading />;
+  // }
+
+  if (posts.length === 0) {
     return <Loading />;
   }
 
   return (
     <Grid item xs={12} sm>
       <div className={classes.boardFeed}>
-        <CommentsDialog 
+        {post &&
+        <CommentsDialog
           openCommentsDialog={openCommentsDialog}
           handleCommentsDialogClose={handleCommentsDialogClose}
           userAvatar={userAvatar}
@@ -137,7 +142,8 @@ const BoardFeed: React.FC<IProps> = ({
           comments={comments}
           setComments={setComments}
           userLogin={userLogin}
-        />
+        />}
+        {post &&
         <PostFormDialog
           boardId={board._id}
           createBoardPost={createBoardPost}
@@ -147,7 +153,7 @@ const BoardFeed: React.FC<IProps> = ({
           handlePostEdit={handlePostEdit}
           editBoardPost={editBoardPost}
           userId={userId}
-        />
+        />}
         <Grid container style={{flexGrow: 1, display: "flex", flexDirection: "column", minHeight: 0}}>
           <PostInput handleNewPostOpen={handleNewPostOpen}/>
           <PostList
